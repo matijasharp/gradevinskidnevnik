@@ -1,0 +1,123 @@
+{
+  "entities": {
+    "Company": {
+      "title": "Company",
+      "description": "Represents a company or a solo electrician.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "ownerEmail": { "type": "string" },
+        "brandColor": { "type": "string" },
+        "street": { "type": "string" },
+        "city": { "type": "string" },
+        "address": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "website": { "type": "string" }
+      },
+      "required": ["name", "ownerEmail"]
+    },
+    "User": {
+      "title": "User",
+      "description": "A user within a company (admin or worker).",
+      "type": "object",
+      "properties": {
+        "companyId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "worker"] }
+      },
+      "required": ["companyId", "name", "email", "role"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "A construction site or job location.",
+      "type": "object",
+      "properties": {
+        "companyId": { "type": "string" },
+        "clientName": { "type": "string" },
+        "projectName": { "type": "string" },
+        "street": { "type": "string" },
+        "city": { "type": "string" },
+        "objectType": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "completed", "archived"] },
+        "phase": { "type": "string", "enum": ["Priprema", "Razvod", "Kabliranje", "Montaža", "Testiranje", "Sanacija", "Završeno"] },
+        "startDate": { "type": "string", "format": "date" },
+        "notes": { "type": "string" }
+      },
+      "required": ["companyId", "clientName", "projectName", "status"]
+    },
+    "DiaryEntry": {
+      "title": "DiaryEntry",
+      "description": "A daily report entry for a project.",
+      "type": "object",
+      "properties": {
+        "companyId": { "type": "string" },
+        "projectId": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "entryDate": { "type": "string", "format": "date" },
+        "title": { "type": "string" },
+        "phase": { "type": "string", "enum": ["Priprema", "Razvod", "Kabliranje", "Montaža", "Sanacija", "Testiranje", "Završeno"] },
+        "workType": { "type": "string" },
+        "zone": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string", "enum": ["završeno", "djelomično završeno", "čeka materijal", "blokirano", "potrebno dodatno"] },
+        "hours": { "type": "number" },
+        "workersCount": { "type": "number" },
+        "materialsUsed": { "type": "string" },
+        "lineItems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "quantity": { "type": "number" },
+              "unit": { "type": "string", "enum": ["kom", "m", "cm", "kg", "set"] }
+            }
+          }
+        },
+        "missingItems": { "type": "string" },
+        "returnVisitNeeded": { "type": "boolean" },
+        "issueNote": { "type": "string" },
+        "aiSummary": { "type": "string" },
+        "signatureUrl": { "type": "string" }
+      },
+      "required": ["companyId", "projectId", "createdBy", "entryDate", "status"]
+    },
+    "DiaryPhoto": {
+      "title": "DiaryPhoto",
+      "description": "A photo attached to a diary entry.",
+      "type": "object",
+      "properties": {
+        "entryId": { "type": "string" },
+        "storagePath": { "type": "string" },
+        "url": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["entryId", "url"]
+    }
+  },
+  "firestore": {
+    "/companies/{companyId}": {
+      "schema": "Company",
+      "description": "Company details."
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile and role."
+    },
+    "/projects/{projectId}": {
+      "schema": "Project",
+      "description": "Project details."
+    },
+    "/diaryEntries/{entryId}": {
+      "schema": "DiaryEntry",
+      "description": "Daily diary entries."
+    },
+    "/diaryPhotos/{photoId}": {
+      "schema": "DiaryPhoto",
+      "description": "Photos for diary entries."
+    }
+  }
+}
