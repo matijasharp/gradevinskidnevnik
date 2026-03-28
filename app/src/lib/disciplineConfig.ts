@@ -1,9 +1,10 @@
-export type Discipline = 'electro' | 'water' | 'klima';
+export type Discipline = 'electro' | 'water' | 'klima' | 'general';
 
 export const DISCIPLINE_LABELS: Record<Discipline, string> = {
   electro: 'Elektro',
   water: 'Vodoinstalacije',
   klima: 'Klima / Ventilacija',
+  general: 'Opći izvođač',
 };
 
 // Phase options — value and label are the same (display strings)
@@ -11,6 +12,7 @@ export const DISCIPLINE_PHASES: Record<Discipline, string[]> = {
   electro: ['Priprema', 'Razvod', 'Kabliranje', 'Montaža', 'Sanacija', 'Testiranje', 'Završeno'],
   water:   ['Priprema', 'Iskop', 'Razvod cijevi', 'Ugradnja armatura', 'Testiranje', 'Sanacija', 'Završeno'],
   klima:   ['Priprema', 'Montaža kanala', 'Ugradnja jedinica', 'Spajanje', 'Testiranje', 'Sanacija', 'Završeno'],
+  general: [],
 };
 
 // Work type options — separate value/label
@@ -36,6 +38,7 @@ export const DISCIPLINE_WORK_TYPES: Record<Discipline, { value: string; label: s
     { value: 'testiranje-sustava', label: 'Testiranje sustava' },
     { value: 'sanacija',           label: 'Sanacija' },
   ],
+  general: [],
 };
 
 export const getPhases = (discipline?: string | null): string[] =>
@@ -54,6 +57,7 @@ export const DISCIPLINE_SUBTITLES: Record<Discipline, string> = {
   electro: 'Profesionalni dnevni izvještaji za električare u manje od 2 minute.',
   water:   'Profesionalni dnevni izvještaji za vodoinstalatera u manje od 2 minute.',
   klima:   'Profesionalni dnevni izvještaji za klimatičare u manje od 2 minute.',
+  general: 'Upravljanje i koordinacija projektima.',
 };
 
 export const detectDisciplineFromSubdomain = (): Discipline => {

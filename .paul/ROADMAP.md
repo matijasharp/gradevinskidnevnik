@@ -7,8 +7,8 @@ Start from the electrician prototype, deliver a Supabase-backed MVP with full UI
 ## Current Milestone
 
 **v1.0 MVP** (v1.0)
-Status: In progress
-Phases: 3 of 4 complete
+Status: ✅ Complete
+Phases: 4 of 4 complete
 
 ## Phases
 
@@ -21,7 +21,7 @@ Phases: 3 of 4 complete
 | 1 | Contractor MVP (Electro) | 3 | ✅ Complete | 2026-03-28 |
 | 2 | Multi-tenant + Sharing | 3 | ✅ Complete | 2026-03-28 |
 | 3 | Vertical Expansion + Subdomains | 2 | ✅ Complete | 2026-03-28 |
-| 4 | Master Project Workspace | 2 | Not started | - |
+| 4 | Master Project Workspace | 4 | ✅ Complete | 2026-03-28 |
 
 ## Phase Details
 
@@ -84,8 +84,10 @@ Phases: 3 of 4 complete
 - Timeline and issue tracking
 
 **Plans:**
-- [ ] 04-01: Master workspace data model + views
-- [ ] 04-02: Aggregated status, timeline, and issue workflows
+- [x] 04-01: Master workspace data model + views
+- [x] 04-02: Aggregated stats per discipline card + cross-discipline activity feed
+- [x] 04-03: "Dodaj organizaciju" search-and-link modal
+- [x] 04-04: Issue tracking (master_project_issues table + data layer + UI)
 
 ---
 *Roadmap created: 2026-03-27*

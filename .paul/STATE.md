@@ -5,34 +5,34 @@
 See: .paul/PROJECT.md (updated 2026-03-28)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.0 MVP — Phase 4 Master Project Workspace
+**Current focus:** v1.0 MVP — COMPLETE. All 4 phases shipped.
 
 ## Current Position
 
-Milestone: v1.0 MVP (v1.0)
-Phase: 4 of 4 (Master Project Workspace) — Not started
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-03-28 — Phase 3 complete, transitioned to Phase 4
+Milestone: v1.0 MVP (v1.0) — ✅ COMPLETE
+Phase: 4 of 4 (Master Project Workspace) — ✅ Complete
+Plan: 04-04 complete
+Status: Milestone complete — all phases shipped
+Last activity: 2026-03-28 — Unified 04-04, Phase 4 complete, v1.0 MVP shipped
 
 Progress:
-- Milestone: [████████░░] 75%
-- Phase 4: [░░░░░░░░░░] 0%
+- Milestone: [██████████] 100%
+- Phase 4: [██████████] 100%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Loop complete — ready for next PLAN]
+  ✓        ✓        ✓     [Loop complete — milestone complete]
 ```
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 55 min
-- Total execution time: ~7.5 hours
+- Total plans completed: 14
+- Average duration: ~46 min
+- Total execution time: ~10.8 hours
 
 **By Phase:**
 
@@ -41,10 +41,11 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | 01-contractor-mvp | 3/3 ✅ | ~210 min | 70 min |
 | 02-multi-tenant | 3/3 ✅ | ~180 min | 60 min |
 | 03-vertical-expansion-subdomains | 2/2 ✅ | ~55 min | 28 min |
+| 04-master-project-workspace | 4/4 ✅ | ~195 min | 49 min |
 
 **Recent Trend:**
-- Last 5 plans: 60m, 60m, 90m, 35m, 20m
-- Trend: Accelerating — smaller scoped plans executing faster
+- Last 5 plans: 35m, 20m, 25m, 25m, 25m
+- Trend: Consistently fast — well-scoped plans
 
 ## Accumulated Context
 
@@ -67,13 +68,20 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | Phase type widened to string | Phase 3 | Discipline determines valid phases at runtime via disciplineConfig.ts |
 | detectDisciplineFromSubdomain: hostname then ?discipline= param | Phase 3 | Prod subdomain routing + dev testing without DNS setup |
 | discipline typed inline in createOrganizationWithOwner | Phase 3 | Avoids circular import between data.ts and disciplineConfig.ts |
+| Separate master_projects table (not reusing projects) | Phase 4 | Clean separation — master projects have no diary entries or org-level phases |
+| RLS on master_project_organizations: owner OR direct org_id | Phase 4 | Avoids self-referencing recursive subquery that would infinite-loop in Postgres |
+| createMasterProject auto-links owner org as lead | Phase 4 | Every master project starts with at least one participant; no manual step needed |
+| 'general' discipline for PM/coordinator orgs | Phase 4 | Master project owners are not specialty trades; prevents misclassification |
+| master_project_issues INSERT allows all participants | Phase 4 | Any linked org can report issues; cross-discipline collaboration |
+| Issue status cycle on badge click | Phase 4 | Mobile-friendly; no dropdown needed for MVP |
 
 ### Deferred Issues
 
 | Issue | Origin | Effort | Revisit |
 |-------|--------|--------|---------|
-| Audit log (activity feed) | Phase 2 | Medium | Phase 4 (Master Workspace) |
+| Audit log (activity feed) | Phase 2 | Medium | Post-MVP |
 | DNS/subdomain production setup | Phase 3 | Low | Deployment (post-MVP) |
+| Issue edit/delete/comments | Phase 4 | Low | Post-MVP |
 
 ### Blockers/Concerns
 
@@ -83,7 +91,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: (Phase 3 commit — see below)
+Last commit: 773cac1 — feat(03-vertical-expansion-subdomains): Phase 3 complete
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -96,8 +104,8 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-03-28
-Stopped at: Phase 3 complete — all 2 plans unified
-Next action: /paul:plan for Phase 4 (Master Project Workspace)
+Stopped at: v1.0 MVP complete — Phase 4 unified, milestone closed
+Next action: /paul:milestone to define next milestone, or deploy v1.0
 Resume file: .paul/ROADMAP.md
 
 ---

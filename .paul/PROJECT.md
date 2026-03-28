@@ -13,8 +13,8 @@ Contractors log site progress fast while project leads see shared, audited statu
 | Attribute | Value |
 |-----------|-------|
 | Type | Application |
-| Version | 1.0-alpha |
-| Status | MVP (Phase 3 complete) |
+| Version | 1.0 |
+| Status | MVP complete (all 4 phases shipped) |
 | Last Updated | 2026-03-28 |
 
 **Production URLs:**
@@ -35,14 +35,17 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 1: Prototype parity in main app with Supabase backend — Phase 1
 - ✓ Phase 2: Multi-tenant sharing — invitations, project membership, task checklist, file documents — Phase 2
 - ✓ Phase 3: Vertical subdomains and discipline-specific templates — Phase 3
+- ✓ Phase 4: Master project workspace — cross-discipline overview, org linking, issue tracking — Phase 4
 
 ### Active (In Progress)
 
-- [ ] Phase 4: Master project workspace
+- None — v1.0 MVP complete
 
 ### Planned (Next)
 
-- [ ] Phase 4: Master project workspace
+- Post-MVP: DNS/subdomain production setup
+- Post-MVP: Audit log (activity feed, deferred from Phase 2)
+- Post-MVP: Issue edit/delete and comments
 
 ### Out of Scope
 
@@ -97,6 +100,9 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | Audit log deferred to Phase 4 | MVP value delivered without it; fits master workspace scope better | 2026-03-28 | Active |
 | detectDisciplineFromSubdomain reads hostname then ?discipline= param | Enables prod subdomain routing and local dev testing without DNS setup | 2026-03-28 | Active |
 | discipline typed inline in createOrganizationWithOwner | Avoids circular import between data.ts and disciplineConfig.ts | 2026-03-28 | Active |
+| 'general' discipline for PM/general contractor orgs | Master project owners are coordinators, not specialty trades; separate discipline value prevents misclassification | 2026-03-28 | Active |
+| master_project_issues INSERT allows all participants | Any linked org can report issues, not just the owner; enables cross-discipline collaboration | 2026-03-28 | Active |
+| Issue status cycle on badge click | Minimal mobile-friendly UX; no dropdown needed for MVP | 2026-03-28 | Active |
 
 ## Success Metrics
 
@@ -127,4 +133,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-28 after Phase 3*
+*Last updated: 2026-03-28 after Phase 4 — v1.0 MVP complete*
