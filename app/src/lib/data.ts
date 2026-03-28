@@ -848,6 +848,376 @@ export const cancelInvitation = async (invitationId: string): Promise<void> => {
   if (error) throw error;
 };
 
+// ─── Project Membership & Cross-org Invitations ──────────────────────────────
+
+export interface ProjectMember {
+  id: string;
+  projectId: string;
+  userId: string;
+  role: 'lead' | 'contributor' | 'viewer';
+  invitedBy?: string;
+  createdAt: string;
+  name?: string;
+  email?: string;
+}
+
+export interface ProjectInvitation {
+  id: string;
+  projectId: string;
+  email: string;
+  name?: string;
+  role: 'lead' | 'contributor' | 'viewer';
+  createdBy?: string;
+  createdAt: string;
+}
+
+const mapProjectMember = (row: any): ProjectMember => ({
+  id: row.id,
+  projectId: row.project_id,
+  userId: row.user_id,
+  role: row.role ?? 'viewer',
+  invitedBy: row.invited_by ?? undefined,
+  createdAt: row.created_at ?? '',
+  name: row.profiles?.name ?? undefined,
+  email: row.profiles?.email ?? undefined
+});
+
+const mapProjectInvitation = (row: any): ProjectInvitation => ({
+  id: row.id,
+  projectId: row.project_id,
+  email: row.email,
+  name: row.name ?? undefined,
+  role: row.role ?? 'viewer',
+  createdBy: row.created_by ?? undefined,
+  createdAt: row.created_at ?? ''
+});
+
+export const fetchProjectMembers = async (projectId: string): Promise<ProjectMember[]> => {
+  ensureSupabase();
+  const { data, error } = await supabase
+    .from('project_members')
+    .select('*, profiles(name, email)')
+    .eq('project_id', projectId);
+  if (error) throw error;
+  return (data ?? []).map(mapProjectMember);
+};
+
+export const addProjectMember = async (params: {
+  projectId: string;
+  userId: string;
+  role: 'lead' | 'contributor' | 'viewer';
+  invitedBy: string;
+}): Promise<void> => {
+  ensureSupabase();
+  const { error } = await supabase
+    .from('project_members')
+    .upsert(
+      {
+        project_id: params.projectId,
+        user_id: params.userId,
+        role: params.role,
+        invited_by: params.invitedBy
+      },
+      { onConflict: 'project_id,user_id' }
+    );
+  if (error) throw error;
+};
+
+export const removeProjectMember = async (params: {
+  projectId: string;
+  userId: string;
+}): Promise<void> => {
+  ensureSupabase();
+  const { error } = await supabase
+    .from('project_members')
+    .delete()
+    .eq('project_id', params.projectId)
+    .eq('user_id', params.userId);
+  if (error) throw error;
+};
+
+export const updateProjectMemberRole = async (params: {
+  projectId: string;
+  userId: string;
+  role: 'lead' | 'contributor' | 'viewer';
+}): Promise<void> => {
+  ensureSupabase();
+  const { error } = await supabase
+    .from('project_members')
+    .update({ role: params.role })
+    .eq('project_id', params.projectId)
+    .eq('user_id', params.userId);
+  if (error) throw error;
+};
+
+export const fetchProjectInvitations = async (projectId: string): Promise<ProjectInvitation[]> => {
+  ensureSupabase();
+  const { data, error } = await supabase
+    .from('project_invitations')
+    .select('*')
+    .eq('project_id', projectId);
+  if (error) throw error;
+  return (data ?? []).map(mapProjectInvitation);
+};
+
+export const createProjectInvitation = async (params: {
+  projectId: string;
+  email: string;
+  name?: string;
+  role: 'lead' | 'contributor' | 'viewer';
+  createdBy: string;
+}): Promise<ProjectInvitation> => {
+  ensureSupabase();
+  const { data, error } = await supabase
+    .from('project_invitations')
+    .insert({
+      project_id: params.projectId,
+      email: params.email,
+      name: params.name ?? null,
+      role: params.role,
+      created_by: params.createdBy
+    })
+    .select()
+    .single();
+  if (error) throw error;
+  return mapProjectInvitation(data);
+};
+
+export const cancelProjectInvitation = async (invitationId: string): Promise<void> => {
+  ensureSupabase();
+  const { error } = await supabase
+    .from('project_invitations')
+    .delete()
+    .eq('id', invitationId);
+  if (error) throw error;
+};
+
+export const fetchProjectInvitationByEmail = async (email: string): Promise<ProjectInvitation | null> => {
+  ensureSupabase();
+  const { data, error } = await supabase
+    .from('project_invitations')
+    .select('*')
+    .ilike('email', email)
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? mapProjectInvitation(data) : null;
+};
+
+export const acceptProjectInvitation = async (params: {
+  invitation: ProjectInvitation;
+  userId: string;
+}): Promise<void> => {
+  ensureSupabase();
+  const { invitation, userId } = params;
+  const { error: memberError } = await supabase
+    .from('project_members')
+    .upsert(
+      {
+        project_id: invitation.projectId,
+        user_id: userId,
+        role: invitation.role,
+        invited_by: invitation.createdBy ?? null
+      },
+      { onConflict: 'project_id,user_id' }
+    );
+  if (memberError) throw memberError;
+  const { error: deleteError } = await supabase
+    .from('project_invitations')
+    .delete()
+    .eq('id', invitation.id);
+  if (deleteError) throw deleteError;
+};
+
+export const fetchSharedProjects = async (
+  userId: string,
+  myOrgId: string
+): Promise<Project[]> => {
+  ensureSupabase();
+  // Get all project_ids where user is a project_member
+  const { data: memberships, error: memberError } = await supabase
+    .from('project_members')
+    .select('project_id')
+    .eq('user_id', userId);
+  if (memberError) throw memberError;
+  if (!memberships || memberships.length === 0) return [];
+
+  const projectIds = memberships.map((m: any) => m.project_id);
+
+  // Fetch those projects that belong to a DIFFERENT org (cross-org sharing)
+  const { data, error } = await supabase
+    .from('projects')
+    .select('*')
+    .in('id', projectIds)
+    .neq('organization_id', myOrgId);
+  if (error) throw error;
+  return (data ?? []).map(mapProject);
+};
+
+// ─── Project Tasks ───────────────────────────────────────────────────────────
+
+export interface ProjectTask {
+  id: string;
+  projectId: string;
+  title: string;
+  done: boolean;
+  assignedTo?: string;
+  assignedToName?: string;
+  createdBy?: string;
+  createdAt: string;
+}
+
+const mapProjectTask = (row: any): ProjectTask => ({
+  id: row.id,
+  projectId: row.project_id,
+  title: row.title,
+  done: row.done ?? false,
+  assignedTo: row.assigned_to ?? undefined,
+  assignedToName: row.profiles?.name ?? undefined,
+  createdBy: row.created_by ?? undefined,
+  createdAt: row.created_at ?? ''
+});
+
+export const fetchProjectTasks = async (projectId: string): Promise<ProjectTask[]> => {
+  ensureSupabase();
+  const { data, error } = await supabase
+    .from('project_tasks')
+    .select('*, profiles!project_tasks_assigned_to_fkey(name)')
+    .eq('project_id', projectId)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map(mapProjectTask);
+};
+
+export const createProjectTask = async (params: {
+  projectId: string;
+  title: string;
+  assignedTo?: string;
+  createdBy: string;
+}): Promise<ProjectTask> => {
+  ensureSupabase();
+  const { data, error } = await supabase
+    .from('project_tasks')
+    .insert({
+      project_id: params.projectId,
+      title: params.title,
+      assigned_to: params.assignedTo ?? null,
+      created_by: params.createdBy
+    })
+    .select('*, profiles!project_tasks_assigned_to_fkey(name)')
+    .single();
+  if (error) throw error;
+  return mapProjectTask(data);
+};
+
+export const toggleProjectTask = async (params: { taskId: string; done: boolean }): Promise<void> => {
+  ensureSupabase();
+  const { error } = await supabase
+    .from('project_tasks')
+    .update({ done: params.done })
+    .eq('id', params.taskId);
+  if (error) throw error;
+};
+
+export const deleteProjectTask = async (taskId: string): Promise<void> => {
+  ensureSupabase();
+  const { error } = await supabase
+    .from('project_tasks')
+    .delete()
+    .eq('id', taskId);
+  if (error) throw error;
+};
+
+export const updateProjectTaskTitle = async (params: { taskId: string; title: string }): Promise<void> => {
+  ensureSupabase();
+  const { error } = await supabase
+    .from('project_tasks')
+    .update({ title: params.title })
+    .eq('id', params.taskId);
+  if (error) throw error;
+};
+
+// ─── Project Documents ───────────────────────────────────────────────────────
+
+export interface ProjectDocument {
+  id: string;
+  projectId: string;
+  organizationId: string;
+  name: string;
+  filePath: string;
+  fileUrl: string;
+  fileSize?: number;
+  fileType?: string;
+  uploadedBy?: string;
+  createdAt: string;
+}
+
+const mapProjectDocument = (row: any): ProjectDocument => ({
+  id: row.id,
+  projectId: row.project_id,
+  organizationId: row.organization_id,
+  name: row.name,
+  filePath: row.file_path,
+  fileUrl: row.file_url,
+  fileSize: row.file_size ?? undefined,
+  fileType: row.file_type ?? undefined,
+  uploadedBy: row.uploaded_by ?? undefined,
+  createdAt: row.created_at ?? ''
+});
+
+export const fetchProjectDocuments = async (projectId: string): Promise<ProjectDocument[]> => {
+  ensureSupabase();
+  const { data, error } = await supabase
+    .from('project_documents')
+    .select('*')
+    .eq('project_id', projectId)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map(mapProjectDocument);
+};
+
+export const uploadProjectDocument = async (params: {
+  projectId: string;
+  orgId: string;
+  file: File;
+  uploadedBy: string;
+}): Promise<ProjectDocument> => {
+  ensureSupabase();
+  const ext = params.file.name.split('.').pop() ?? 'bin';
+  const filePath = `${params.orgId}/${params.projectId}/${crypto.randomUUID()}.${ext}`;
+  const { error: uploadError } = await supabase.storage
+    .from('project-documents')
+    .upload(filePath, params.file, { upsert: false, contentType: params.file.type });
+  if (uploadError) throw uploadError;
+  const { data: urlData } = supabase.storage.from('project-documents').getPublicUrl(filePath);
+  const { data, error } = await supabase
+    .from('project_documents')
+    .insert({
+      project_id: params.projectId,
+      organization_id: params.orgId,
+      name: params.file.name,
+      file_path: filePath,
+      file_url: urlData.publicUrl,
+      file_size: params.file.size,
+      file_type: params.file.type,
+      uploaded_by: params.uploadedBy
+    })
+    .select('*')
+    .single();
+  if (error) throw error;
+  return mapProjectDocument(data);
+};
+
+export const deleteProjectDocument = async (docId: string, filePath: string): Promise<void> => {
+  ensureSupabase();
+  const { error } = await supabase
+    .from('project_documents')
+    .delete()
+    .eq('id', docId);
+  if (error) throw error;
+  supabase.storage.from('project-documents').remove([filePath]).catch(() => null);
+};
+
 export const subscribeDiaryPhotos = (
   entryId: string,
   onChange: (photos: DiaryPhoto[]) => void,

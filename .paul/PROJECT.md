@@ -33,21 +33,21 @@ Contractors log site progress fast while project leads see shared, audited statu
 ### Validated (Shipped)
 
 - ✓ Phase 1: Prototype parity in main app with Supabase backend — Phase 1
+- ✓ Phase 2: Multi-tenant sharing — invitations, project membership, task checklist, file documents — Phase 2
 
 ### Active (In Progress)
 
-- [ ] Phase 2: Multi-tenant sharing, invitations, documents, tasks, audit log
+- [ ] Phase 3: Vertical subdomains and discipline-specific templates
 
 ### Planned (Next)
 
-- [ ] Phase 2: Multi-tenant sharing, invitations, documents, tasks, audit log
-- [ ] Phase 3: Vertical subdomains and discipline-specific templates
 - [ ] Phase 4: Master project workspace
 
 ### Out of Scope
 
 - Billing and subscriptions
 - Native mobile apps (web-only for MVP)
+- Audit log (deferred from Phase 2 → Phase 4 master workspace)
 
 ## Target Users
 
@@ -91,6 +91,9 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | Supabase-first backend | Avoid Firebase migration and enforce RLS early | 2026-03-27 | Active |
 | Keep all prototype features | Maintain parity with existing UX expectations | 2026-03-27 | Active |
 | Serverless OAuth | Simplify deployment for integrations | 2026-03-27 | Active |
+| Dual FK on project_members.user_id | auth.users (original) + public.profiles (PostgREST join) | 2026-03-28 | Active |
+| Storage bucket public for documents | Documents accessed via public URL; table RLS gates metadata | 2026-03-28 | Active |
+| Audit log deferred to Phase 4 | MVP value delivered without it; fits master workspace scope better | 2026-03-28 | Active |
 
 ## Success Metrics
 
@@ -121,4 +124,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-28 after Phase 1*
+*Last updated: 2026-03-28 after Phase 2*

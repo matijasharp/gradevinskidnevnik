@@ -42,7 +42,7 @@ import {
   Mail
 } from 'lucide-react';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
-import { signInWithGoogle, signOut, getSession, onAuthStateChange } from './lib/supabaseAuth';
+import { signInWithGoogle, signInWithEmail, signOut, getSession, onAuthStateChange } from './lib/supabaseAuth';
 import {
   subscribeProjects,
   subscribeDiaryEntries,
@@ -71,9 +71,26 @@ import {
   updateDiaryPhoto,
   deleteDiaryPhoto,
   subscribePendingInvitations,
-  cancelInvitation as cancelInvitationRecord
+  cancelInvitation as cancelInvitationRecord,
+  fetchProjectInvitationByEmail,
+  acceptProjectInvitation,
+  fetchProjectMembers,
+  addProjectMember,
+  removeProjectMember,
+  updateProjectMemberRole,
+  fetchProjectInvitations,
+  createProjectInvitation,
+  cancelProjectInvitation,
+  fetchSharedProjects,
+  fetchProjectTasks,
+  createProjectTask,
+  toggleProjectTask,
+  deleteProjectTask,
+  fetchProjectDocuments,
+  uploadProjectDocument,
+  deleteProjectDocument
 } from './lib/data';
-import type { Invitation } from './lib/data';
+import type { Invitation, ProjectMember, ProjectInvitation, ProjectTask, ProjectDocument } from './lib/data';
 import { cn } from './lib/utils';
 import { 
   format, 
@@ -563,6 +580,7 @@ function AppContent() {
   const [editingEntry, setEditingEntry] = useState<DiaryEntry | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [emailLogin, setEmailLogin] = useState({ email: '', password: '', error: '', loading: false });
   const [onboardingStep, setOnboardingStep] = useState(1);
   const [newCompanyName, setNewCompanyName] = useState('');
   const [googleTokens, setGoogleTokens] = useState<GoogleTokens | null>(null);
@@ -572,6 +590,8 @@ function AppContent() {
   const [activeReminder, setActiveReminder] = useState<DiaryEntry | null>(null);
   const [materialHistory, setMaterialHistory] = useState<string[]>([]);
   const [materialUnits, setMaterialUnits] = useState<Record<string, string>>({});
+  const [sharedProjects, setSharedProjects] = useState<Project[]>([]);
+  const [isSharedProject, setIsSharedProject] = useState(false);
 
   // --- Reminder Checker ---
 
@@ -640,6 +660,13 @@ function AppContent() {
           setCompany(org);
           setAppUser(profile);
           setShowOnboarding(false);
+          // Accept any pending cross-org project invitation
+          if (authUser.email) {
+            const projectInvite = await fetchProjectInvitationByEmail(authUser.email).catch(() => null);
+            if (projectInvite) {
+              await acceptProjectInvitation({ invitation: projectInvite, userId: authUser.id }).catch(() => null);
+            }
+          }
         } else if (authUser.email) {
           const invite = await fetchInvitationByEmail(authUser.email);
           if (invite) {
@@ -654,6 +681,11 @@ function AppContent() {
             setCompany(company);
             setShowOnboarding(false);
           } else {
+            // Check for cross-org project invitation even without org membership
+            const projectInvite = await fetchProjectInvitationByEmail(authUser.email).catch(() => null);
+            if (projectInvite) {
+              await acceptProjectInvitation({ invitation: projectInvite, userId: authUser.id }).catch(() => null);
+            }
             setShowOnboarding(true);
           }
         } else {
@@ -700,6 +732,13 @@ function AppContent() {
 
   useEffect(() => {
     if (!appUser) return;
+    fetchSharedProjects(appUser.id, appUser.companyId)
+      .then(setSharedProjects)
+      .catch(() => null);
+  }, [appUser]);
+
+  useEffect(() => {
+    if (!appUser) return;
 
     const unsubscribe = subscribeDiaryEntries(
       appUser.companyId,
@@ -711,7 +750,7 @@ function AppContent() {
   }, [appUser]);
 
   useEffect(() => {
-    if (!appUser || view !== 'users' || appUser.role !== 'admin') return;
+    if (!appUser || appUser.role !== 'admin') return;
 
     const unsubUsers = subscribeCompanyUsers(
       appUser.companyId,
@@ -729,7 +768,7 @@ function AppContent() {
       unsubUsers();
       unsubInvites();
     };
-  }, [appUser, view]);
+  }, [appUser]);
 
   // --- Actions ---
 
@@ -806,6 +845,17 @@ function AppContent() {
       } else {
         console.error('Login error:', error);
       }
+    }
+  };
+
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setEmailLogin(prev => ({ ...prev, loading: true, error: '' }));
+    const { error } = await signInWithEmail(emailLogin.email, emailLogin.password);
+    if (error) {
+      setEmailLogin(prev => ({ ...prev, loading: false, error: 'Pogrešan email ili lozinka.' }));
+    } else {
+      setEmailLogin(prev => ({ ...prev, loading: false }));
     }
   };
 
@@ -1163,6 +1213,38 @@ function AppContent() {
           <Button onClick={handleLogin} className="w-full py-4 text-lg">
             Prijavi se putem Google-a
           </Button>
+
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-px bg-zinc-200" />
+            <span className="text-xs text-zinc-400 font-medium">ili</span>
+            <div className="flex-1 h-px bg-zinc-200" />
+          </div>
+
+          <form onSubmit={handleEmailLogin} className="space-y-3 text-left">
+            <Input
+              label="Email"
+              type="email"
+              placeholder="vas@email.com"
+              value={emailLogin.email}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailLogin(prev => ({ ...prev, email: e.target.value }))}
+              required
+            />
+            <Input
+              label="Lozinka"
+              type="password"
+              placeholder="••••••••"
+              value={emailLogin.password}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailLogin(prev => ({ ...prev, password: e.target.value }))}
+              required
+            />
+            {emailLogin.error && (
+              <p className="text-sm text-red-500">{emailLogin.error}</p>
+            )}
+            <Button type="submit" variant="outline" className="w-full py-3" disabled={emailLogin.loading}>
+              {emailLogin.loading ? <Loader2 className="animate-spin w-4 h-4 mx-auto" /> : 'Prijavi se emailom'}
+            </Button>
+          </form>
+
           <p className="text-xs text-zinc-400">Prijavom se slažete s našim uvjetima pružanja usluge.</p>
         </div>
       </div>
@@ -1263,9 +1345,11 @@ function AppContent() {
           </div>
         )}
         {view === 'projects' && (
-          <ProjectsView 
-            projects={projects} 
-            onProjectClick={(p) => { setSelectedProject(p); setView('project-detail'); }}
+          <ProjectsView
+            projects={projects}
+            sharedProjects={sharedProjects}
+            onProjectClick={(p: Project) => { setSelectedProject(p); setIsSharedProject(false); setView('project-detail'); }}
+            onSharedProjectClick={(p: Project) => { setSelectedProject(p); setIsSharedProject(true); setView('project-detail'); }}
             onCreateProject={() => setView('new-project' as any)}
             onNewEntry={() => setView('new-entry')}
             userRole={appUser?.role}
@@ -1276,9 +1360,9 @@ function AppContent() {
           <NewProjectView onCancel={() => setView('projects')} onSubmit={createProject} company={company} />
         )}
         {view === 'project-detail' && selectedProject && (
-          <ProjectDetailView 
-            project={selectedProject} 
-            entries={entries.filter(e => e.projectId === selectedProject.id).sort((a, b) => b.entryDate.localeCompare(a.entryDate))} 
+          <ProjectDetailView
+            project={selectedProject}
+            entries={entries.filter(e => e.projectId === selectedProject.id).sort((a, b) => b.entryDate.localeCompare(a.entryDate))}
             onBack={() => setView('projects')}
             onNewEntry={() => setView('new-entry')}
             onEntryClick={setSelectedEntry}
@@ -1291,6 +1375,8 @@ function AppContent() {
             userRole={appUser?.role}
             appUser={appUser}
             company={company}
+            readonly={isSharedProject}
+            companyUsers={companyUsers}
           />
         )}
         {view === 'new-entry' && (
@@ -2381,7 +2467,7 @@ function DashboardView({
   );
 }
 
-function ProjectsView({ projects, onProjectClick, onCreateProject, onNewEntry, userRole, company }: any) {
+function ProjectsView({ projects, sharedProjects = [], onProjectClick, onSharedProjectClick, onCreateProject, onNewEntry, userRole, company }: any) {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed' | 'archived'>('all');
   const [phaseFilter, setPhaseFilter] = useState<string>('all');
   const brandColor = company?.brandColor || '#3b82f6';
@@ -2508,6 +2594,44 @@ function ProjectsView({ projects, onProjectClick, onCreateProject, onNewEntry, u
           </div>
         )}
       </div>
+
+      <section className="space-y-4">
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-bold">Dijeljeni projekti</h2>
+          {sharedProjects.length > 0 && (
+            <span className="text-xs bg-zinc-100 text-zinc-500 px-2 py-0.5 rounded-full font-bold">{sharedProjects.length}</span>
+          )}
+        </div>
+        {sharedProjects.length === 0 ? (
+          <div className="text-center py-8 bg-zinc-50 rounded-2xl border border-dashed border-zinc-200">
+            <p className="text-zinc-400 text-sm">Nema dijeljenih projekata.</p>
+          </div>
+        ) : (
+          <div className="grid gap-4">
+            {sharedProjects.map((p: Project) => (
+              <Card key={p.id} onClick={() => onSharedProjectClick(p)} className="cursor-pointer hover:border-zinc-300 transition-all group">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="text-lg font-bold">{p.projectName}</h3>
+                      <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-50 text-blue-500">
+                        Tuđi projekt
+                      </span>
+                    </div>
+                    <p className="text-sm text-zinc-500 flex items-center gap-1">
+                      <UserIcon size={14} /> {p.clientName}
+                    </p>
+                    <p className="text-sm text-zinc-500 flex items-center gap-1">
+                      <MapPin size={14} /> {p.street}, {p.city}
+                    </p>
+                  </div>
+                  <ChevronRight className="text-zinc-300 transition-all group-hover:translate-x-1" size={24} />
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }
@@ -2612,7 +2736,7 @@ function NewProjectView({ onCancel, onSubmit, company }: any) {
   );
 }
 
-function ProjectDetailView({ project, entries, onBack, onNewEntry, onEntryClick, onGeneratePDF, onAddToCalendar, onCompleteProject, onUpdatePhase, onDeleteProject, hasCalendar, userRole, appUser, company }: any) {
+function ProjectDetailView({ project, entries, onBack, onNewEntry, onEntryClick, onGeneratePDF, onAddToCalendar, onCompleteProject, onUpdatePhase, onDeleteProject, hasCalendar, userRole, appUser, company, readonly = false, companyUsers = [] }: any) {
   const [searchQuery, setSearchQuery] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -2622,6 +2746,7 @@ function ProjectDetailView({ project, entries, onBack, onNewEntry, onEntryClick,
   const [projectPhotos, setProjectPhotos] = useState<DiaryPhoto[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState<DiaryPhoto | null>(null);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [activeTab, setActiveTab] = useState<'dnevnik' | 'suradnici' | 'zadaci' | 'dokumenti'>('dnevnik');
 
   const brandColor = company?.brandColor || '#3b82f6';
 
@@ -2732,16 +2857,58 @@ function ProjectDetailView({ project, entries, onBack, onNewEntry, onEntryClick,
             {isGeneratingPDF ? <Loader2 className="animate-spin" size={18} /> : <Download size={18} />}
             <span className="ml-1 md:ml-2 text-sm md:text-base">{isGeneratingPDF ? 'Generiram...' : 'Izvještaj'}</span>
           </Button>
-          <Button 
-            onClick={onNewEntry} 
-            className="flex-1 md:flex-none font-bold shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]" 
-            style={{ backgroundColor: brandColor, boxShadow: `0 10px 20px -5px ${brandColor}4D` }}
-          >
-            <Plus size={18} /> 
-            <span className="ml-1 md:ml-2 text-sm md:text-base">Novi unos</span>
-          </Button>
+          {!readonly && (
+            <Button
+              onClick={onNewEntry}
+              className="flex-1 md:flex-none font-bold shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+              style={{ backgroundColor: brandColor, boxShadow: `0 10px 20px -5px ${brandColor}4D` }}
+            >
+              <Plus size={18} />
+              <span className="ml-1 md:ml-2 text-sm md:text-base">Novi unos</span>
+            </Button>
+          )}
         </div>
       </header>
+
+      {/* Tab bar */}
+      <div className="flex gap-1 p-1 bg-zinc-100 rounded-xl w-fit">
+        <button
+          onClick={() => setActiveTab('dnevnik')}
+          className={cn(
+            "px-4 py-2 rounded-lg text-sm font-bold transition-all",
+            activeTab === 'dnevnik' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+          )}
+        >
+          Dnevnik
+        </button>
+        <button
+          onClick={() => setActiveTab('suradnici')}
+          className={cn(
+            "px-4 py-2 rounded-lg text-sm font-bold transition-all",
+            activeTab === 'suradnici' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+          )}
+        >
+          Suradnici
+        </button>
+        <button
+          onClick={() => setActiveTab('zadaci')}
+          className={cn(
+            "px-4 py-2 rounded-lg text-sm font-bold transition-all",
+            activeTab === 'zadaci' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+          )}
+        >
+          Zadaci
+        </button>
+        <button
+          onClick={() => setActiveTab('dokumenti')}
+          className={cn(
+            "px-4 py-2 rounded-lg text-sm font-bold transition-all",
+            activeTab === 'dokumenti' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+          )}
+        >
+          Dokumenti
+        </button>
+      </div>
 
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
@@ -2774,6 +2941,36 @@ function ProjectDetailView({ project, entries, onBack, onNewEntry, onEntryClick,
         </div>
       )}
 
+      {activeTab === 'suradnici' && (
+        <ProjectMembersTab
+          project={project}
+          currentUser={appUser}
+          orgMembers={companyUsers}
+          company={company}
+        />
+      )}
+
+      {activeTab === 'zadaci' && (
+        <ProjectTasksTab
+          project={project}
+          currentUser={appUser}
+          orgMembers={companyUsers}
+          readonly={readonly}
+          company={company}
+        />
+      )}
+
+      {activeTab === 'dokumenti' && (
+        <ProjectDocumentsTab
+          project={project}
+          currentUser={appUser}
+          readonly={readonly}
+          company={company}
+        />
+      )}
+
+      {activeTab === 'dnevnik' && (
+      <>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Card className="p-4 flex flex-col items-center justify-center gap-1">
           <Clock size={20} style={{ color: brandColor }} />
@@ -2987,6 +3184,556 @@ function ProjectDetailView({ project, entries, onBack, onNewEntry, onEntryClick,
           )}
         </div>
       </section>
+      </>
+      )}
+    </div>
+  );
+}
+
+function ProjectMembersTab({ project, currentUser, orgMembers = [], company }: {
+  project: Project;
+  currentUser: any;
+  orgMembers: any[];
+  company: any;
+}) {
+  const [members, setMembers] = useState<ProjectMember[]>([]);
+  const [invitations, setInvitations] = useState<ProjectInvitation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [addEmail, setAddEmail] = useState('');
+  const [addName, setAddName] = useState('');
+  const [addRole, setAddRole] = useState<'lead' | 'contributor' | 'viewer'>('viewer');
+  const [selectedOrgMemberId, setSelectedOrgMemberId] = useState('');
+  const [selectedOrgMemberRole, setSelectedOrgMemberRole] = useState<'lead' | 'contributor' | 'viewer'>('viewer');
+  const [saving, setSaving] = useState(false);
+  const brandColor = company?.brandColor || '#3b82f6';
+  const isAdmin = currentUser?.role === 'admin';
+
+  const roleLabel = (r: string) => r === 'lead' ? 'Voditelj' : r === 'contributor' ? 'Suradnik' : 'Pregledatelj';
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const [m, i] = await Promise.all([
+        fetchProjectMembers(project.id),
+        fetchProjectInvitations(project.id)
+      ]);
+      setMembers(m);
+      setInvitations(i);
+    } catch { /* silent */ }
+    setLoading(false);
+  };
+
+  useEffect(() => { load(); }, [project.id]);
+
+  const handleAddOrgMember = async () => {
+    if (!selectedOrgMemberId || !currentUser) return;
+    setSaving(true);
+    try {
+      await addProjectMember({ projectId: project.id, userId: selectedOrgMemberId, role: selectedOrgMemberRole, invitedBy: currentUser.id });
+      setSelectedOrgMemberId('');
+      await load();
+    } catch { /* silent */ }
+    setSaving(false);
+  };
+
+  const handleInviteEmail = async () => {
+    if (!addEmail || !currentUser) return;
+    setSaving(true);
+    try {
+      await createProjectInvitation({ projectId: project.id, email: addEmail, name: addName || undefined, role: addRole, createdBy: currentUser.id });
+      await fetch('/api/invite', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: addEmail, name: addName, type: 'project_invite', projectName: project.projectName, inviterName: currentUser.name })
+      }).catch(() => null);
+      setAddEmail('');
+      setAddName('');
+      await load();
+    } catch { /* silent */ }
+    setSaving(false);
+  };
+
+  const handleRemoveMember = async (userId: string) => {
+    try {
+      await removeProjectMember({ projectId: project.id, userId });
+      await load();
+    } catch { /* silent */ }
+  };
+
+  const handleRoleChange = async (userId: string, role: 'lead' | 'contributor' | 'viewer') => {
+    try {
+      await updateProjectMemberRole({ projectId: project.id, userId, role });
+      await load();
+    } catch { /* silent */ }
+  };
+
+  const handleCancelInvitation = async (id: string) => {
+    try {
+      await cancelProjectInvitation(id);
+      await load();
+    } catch { /* silent */ }
+  };
+
+  const existingMemberIds = new Set(members.map(m => m.userId));
+  const availableOrgMembers = orgMembers.filter((u: any) => !existingMemberIds.has(u.id));
+
+  if (loading) return (
+    <div className="flex items-center justify-center py-12">
+      <Loader2 className="animate-spin text-zinc-300" size={24} />
+    </div>
+  );
+
+  return (
+    <div className="space-y-6">
+      {/* Current members */}
+      <section className="space-y-3">
+        <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Članovi projekta</h3>
+        {members.length === 0 ? (
+          <div className="text-center py-8 bg-zinc-50 rounded-2xl border border-dashed border-zinc-200">
+            <p className="text-zinc-400 text-sm">Nema članova.</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {members.map(m => (
+              <Card key={m.id} className="flex items-center justify-between py-3 px-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center">
+                    <UserIcon size={14} className="text-zinc-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold">{m.name || m.email || m.userId}</p>
+                    {m.email && m.name && <p className="text-xs text-zinc-400">{m.email}</p>}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  {isAdmin ? (
+                    <select
+                      value={m.role}
+                      onChange={e => handleRoleChange(m.userId, e.target.value as any)}
+                      className="text-xs font-bold bg-zinc-50 border border-zinc-100 rounded-lg px-2 py-1 focus:outline-none"
+                    >
+                      <option value="lead">Voditelj</option>
+                      <option value="contributor">Suradnik</option>
+                      <option value="viewer">Pregledatelj</option>
+                    </select>
+                  ) : (
+                    <span className="text-xs bg-zinc-100 text-zinc-500 px-2 py-1 rounded-full font-bold">{roleLabel(m.role)}</span>
+                  )}
+                  {isAdmin && (
+                    <button onClick={() => handleRemoveMember(m.userId)} className="p-1.5 text-zinc-300 hover:text-red-400 transition-colors rounded-lg hover:bg-red-50">
+                      <Trash2 size={14} />
+                    </button>
+                  )}
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Pending invitations */}
+      {invitations.length > 0 && (
+        <section className="space-y-3">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Pozivi na čekanju</h3>
+          <div className="space-y-2">
+            {invitations.map(inv => (
+              <Card key={inv.id} className="flex items-center justify-between py-3 px-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center">
+                    <Mail size={14} className="text-zinc-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold">{inv.email}</p>
+                    <p className="text-xs text-zinc-400">{roleLabel(inv.role)}</p>
+                  </div>
+                </div>
+                {isAdmin && (
+                  <button onClick={() => handleCancelInvitation(inv.id)} className="p-1.5 text-zinc-300 hover:text-red-400 transition-colors rounded-lg hover:bg-red-50">
+                    <X size={14} />
+                  </button>
+                )}
+              </Card>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Add member controls (admin only) */}
+      {isAdmin && (
+        <section className="space-y-4">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Dodaj člana</h3>
+
+          {/* Add from org */}
+          {availableOrgMembers.length > 0 && (
+            <Card className="p-4 space-y-3">
+              <p className="text-xs font-bold text-zinc-500">Dodaj iz tima</p>
+              <div className="flex gap-2 flex-wrap">
+                <select
+                  value={selectedOrgMemberId}
+                  onChange={e => setSelectedOrgMemberId(e.target.value)}
+                  className="flex-1 min-w-0 text-sm bg-zinc-50 border border-zinc-100 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/5"
+                >
+                  <option value="">Odaberi člana tima...</option>
+                  {availableOrgMembers.map((u: any) => (
+                    <option key={u.id} value={u.id}>{u.name || u.email}</option>
+                  ))}
+                </select>
+                <select
+                  value={selectedOrgMemberRole}
+                  onChange={e => setSelectedOrgMemberRole(e.target.value as any)}
+                  className="text-sm bg-zinc-50 border border-zinc-100 rounded-xl px-3 py-2 focus:outline-none"
+                >
+                  <option value="lead">Voditelj</option>
+                  <option value="contributor">Suradnik</option>
+                  <option value="viewer">Pregledatelj</option>
+                </select>
+                <Button
+                  size="sm"
+                  disabled={!selectedOrgMemberId || saving}
+                  onClick={handleAddOrgMember}
+                  style={{ backgroundColor: brandColor }}
+                  className="text-white border-none"
+                >
+                  {saving ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
+                  Dodaj
+                </Button>
+              </div>
+            </Card>
+          )}
+
+          {/* Invite by email */}
+          <Card className="p-4 space-y-3">
+            <p className="text-xs font-bold text-zinc-500">Pozovi emailom</p>
+            <input
+              type="text"
+              placeholder="Ime (opcionalno)"
+              value={addName}
+              onChange={e => setAddName(e.target.value)}
+              className="w-full text-sm bg-zinc-50 border border-zinc-100 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/5"
+            />
+            <div className="flex gap-2 flex-wrap">
+              <input
+                type="email"
+                placeholder="Email adresa"
+                value={addEmail}
+                onChange={e => setAddEmail(e.target.value)}
+                className="flex-1 min-w-0 text-sm bg-zinc-50 border border-zinc-100 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/5"
+              />
+              <select
+                value={addRole}
+                onChange={e => setAddRole(e.target.value as any)}
+                className="text-sm bg-zinc-50 border border-zinc-100 rounded-xl px-3 py-2 focus:outline-none"
+              >
+                <option value="lead">Voditelj</option>
+                <option value="contributor">Suradnik</option>
+                <option value="viewer">Pregledatelj</option>
+              </select>
+            </div>
+            <Button
+              size="sm"
+              disabled={!addEmail || saving}
+              onClick={handleInviteEmail}
+              style={{ backgroundColor: brandColor }}
+              className="w-full text-white border-none"
+            >
+              {saving ? <Loader2 size={14} className="animate-spin mr-2" /> : <UserPlus size={14} className="mr-2" />}
+              Pošalji poziv
+            </Button>
+          </Card>
+        </section>
+      )}
+    </div>
+  );
+}
+
+function ProjectTasksTab({ project, currentUser, orgMembers = [], readonly = false, company }: {
+  project: Project;
+  currentUser: any;
+  orgMembers: any[];
+  readonly?: boolean;
+  company: any;
+}) {
+  const [tasks, setTasks] = useState<ProjectTask[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [newTitle, setNewTitle] = useState('');
+  const [newAssignedTo, setNewAssignedTo] = useState('');
+  const [saving, setSaving] = useState(false);
+  const brandColor = company?.brandColor || '#3b82f6';
+  const isAdmin = currentUser?.role === 'admin';
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const t = await fetchProjectTasks(project.id);
+      setTasks(t);
+    } catch { /* silent */ }
+    setLoading(false);
+  };
+
+  useEffect(() => { load(); }, [project.id]);
+
+  const handleToggle = async (task: ProjectTask) => {
+    try {
+      await toggleProjectTask({ taskId: task.id, done: !task.done });
+      setTasks(prev => prev.map(t => t.id === task.id ? { ...t, done: !t.done } : t));
+    } catch { /* silent */ }
+  };
+
+  const handleDelete = async (taskId: string) => {
+    try {
+      await deleteProjectTask(taskId);
+      setTasks(prev => prev.filter(t => t.id !== taskId));
+    } catch { /* silent */ }
+  };
+
+  const handleCreate = async () => {
+    if (!newTitle.trim() || !currentUser) return;
+    setSaving(true);
+    try {
+      const task = await createProjectTask({
+        projectId: project.id,
+        title: newTitle.trim(),
+        assignedTo: newAssignedTo || undefined,
+        createdBy: currentUser.id
+      });
+      setTasks(prev => [...prev, task]);
+      setNewTitle('');
+      setNewAssignedTo('');
+    } catch { /* silent */ }
+    setSaving(false);
+  };
+
+  if (loading) return (
+    <div className="flex items-center justify-center py-12">
+      <Loader2 className="animate-spin text-zinc-300" size={24} />
+    </div>
+  );
+
+  return (
+    <div className="space-y-6">
+      {/* Task list */}
+      <section className="space-y-3">
+        <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Zadaci</h3>
+        {tasks.length === 0 ? (
+          <div className="text-center py-8 bg-zinc-50 rounded-2xl border border-dashed border-zinc-200">
+            <p className="text-zinc-400 text-sm">Nema zadataka.</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {tasks.map(task => (
+              <Card key={task.id} className="flex items-center justify-between py-3 px-4">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <input
+                    type="checkbox"
+                    checked={task.done}
+                    onChange={() => handleToggle(task)}
+                    className="w-4 h-4 rounded border-zinc-300 cursor-pointer flex-shrink-0"
+                    style={{ accentColor: brandColor }}
+                  />
+                  <div className="min-w-0">
+                    <p className={cn("text-sm font-medium truncate", task.done && "line-through text-zinc-400")}>
+                      {task.title}
+                    </p>
+                    {task.assignedToName && (
+                      <p className="text-xs text-zinc-400">{task.assignedToName}</p>
+                    )}
+                  </div>
+                </div>
+                {!readonly && isAdmin && (
+                  <button
+                    onClick={() => handleDelete(task.id)}
+                    className="p-1.5 text-zinc-300 hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 flex-shrink-0 ml-2"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                )}
+              </Card>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Add task form — admin only, not readonly */}
+      {!readonly && isAdmin && (
+        <section className="space-y-3">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Dodaj zadatak</h3>
+          <Card className="space-y-3 p-4">
+            <input
+              type="text"
+              value={newTitle}
+              onChange={e => setNewTitle(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleCreate()}
+              placeholder="Novi zadatak..."
+              className="w-full text-sm bg-zinc-50 border border-zinc-100 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-zinc-200"
+            />
+            <select
+              value={newAssignedTo}
+              onChange={e => setNewAssignedTo(e.target.value)}
+              className="w-full text-sm bg-zinc-50 border border-zinc-100 rounded-xl px-3 py-2 focus:outline-none"
+            >
+              <option value="">Bez dodjele</option>
+              {orgMembers.map((m: any) => (
+                <option key={m.id} value={m.id}>{m.name}</option>
+              ))}
+            </select>
+            <Button
+              onClick={handleCreate}
+              disabled={!newTitle.trim() || saving}
+              style={{ backgroundColor: brandColor }}
+              className="w-full text-white border-none"
+            >
+              {saving ? <Loader2 size={14} className="animate-spin mr-2" /> : <Plus size={14} className="mr-2" />}
+              Dodaj zadatak
+            </Button>
+          </Card>
+        </section>
+      )}
+    </div>
+  );
+}
+
+function ProjectDocumentsTab({ project, currentUser, readonly = false, company }: {
+  project: Project;
+  currentUser: any;
+  readonly?: boolean;
+  company: any;
+}) {
+  const [docs, setDocs] = useState<ProjectDocument[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [search, setSearch] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const brandColor = company?.brandColor || '#3b82f6';
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const d = await fetchProjectDocuments(project.id);
+      setDocs(d);
+    } catch { /* silent */ }
+    setLoading(false);
+  };
+
+  useEffect(() => { load(); }, [project.id]);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !currentUser) return;
+    setUploading(true);
+    try {
+      const doc = await uploadProjectDocument({
+        projectId: project.id,
+        orgId: currentUser.companyId,
+        file,
+        uploadedBy: currentUser.id
+      });
+      setDocs(prev => [doc, ...prev]);
+    } catch { /* silent */ }
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleDelete = async (doc: ProjectDocument) => {
+    try {
+      await deleteProjectDocument(doc.id, doc.filePath);
+      setDocs(prev => prev.filter(d => d.id !== doc.id));
+    } catch { /* silent */ }
+  };
+
+  const filteredDocs = docs.filter(d => d.name.toLowerCase().includes(search.toLowerCase()));
+
+  const fileTypeLabel = (mimeType?: string) => {
+    if (!mimeType) return '';
+    const part = mimeType.split('/')[1]?.toUpperCase() ?? '';
+    return part.length > 6 ? part.slice(0, 6) : part;
+  };
+
+  if (loading) return (
+    <div className="flex items-center justify-center py-12">
+      <Loader2 className="animate-spin text-zinc-300" size={24} />
+    </div>
+  );
+
+  return (
+    <div className="space-y-6">
+      <section className="space-y-3">
+        <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Dokumenti</h3>
+        {docs.length > 0 && (
+          <div className="relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Pretraži dokumente..."
+              className="w-full text-sm bg-zinc-50 border border-zinc-100 rounded-xl pl-8 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-zinc-200"
+            />
+          </div>
+        )}
+        {filteredDocs.length === 0 ? (
+          <div className="text-center py-8 bg-zinc-50 rounded-2xl border border-dashed border-zinc-200">
+            <p className="text-zinc-400 text-sm">{search ? 'Nema rezultata.' : 'Nema dokumenata.'}</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {filteredDocs.map(doc => (
+              <Card key={doc.id} className="flex items-center justify-between py-3 px-4">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <FileText size={16} className="text-zinc-400 flex-shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium truncate">{doc.name}</p>
+                    {doc.fileType && (
+                      <span className="text-xs text-zinc-400">{fileTypeLabel(doc.fileType)}</span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 flex-shrink-0 ml-2">
+                  <a
+                    href={doc.fileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1.5 text-zinc-400 hover:text-zinc-700 transition-colors rounded-lg hover:bg-zinc-100"
+                  >
+                    <Download size={14} />
+                  </a>
+                  {!readonly && (
+                    <button
+                      onClick={() => handleDelete(doc)}
+                      className="p-1.5 text-zinc-300 hover:text-red-400 transition-colors rounded-lg hover:bg-red-50"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  )}
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {!readonly && (
+        <section className="space-y-3">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Dodaj dokument</h3>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="*/*"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          <Button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            style={{ backgroundColor: brandColor }}
+            className="w-full text-white border-none"
+          >
+            {uploading
+              ? <><Loader2 size={14} className="animate-spin mr-2" />Učitavanje...</>
+              : <><Plus size={14} className="mr-2" />Dodaj dokument</>
+            }
+          </Button>
+        </section>
+      )}
     </div>
   );
 }
