@@ -92,6 +92,7 @@ import {
 } from './lib/data';
 import type { Invitation, ProjectMember, ProjectInvitation, ProjectTask, ProjectDocument } from './lib/data';
 import { cn } from './lib/utils';
+import { getPhases, getWorkTypes, DISCIPLINE_LABELS, DISCIPLINE_SUBTITLES, detectDisciplineFromSubdomain, type Discipline } from './lib/disciplineConfig';
 import { 
   format, 
   startOfMonth, 
@@ -224,6 +225,7 @@ interface Company {
   email?: string;
   phone?: string;
   website?: string;
+  discipline?: 'electro' | 'water' | 'klima';
 }
 
 interface AppUser {
@@ -244,7 +246,7 @@ interface Project {
   city: string;
   objectType: string;
   status: 'active' | 'completed' | 'archived';
-  phase: 'Priprema' | 'Razvod' | 'Kabliranje' | 'Montaža' | 'Testiranje' | 'Sanacija' | 'Završeno';
+  phase: string;
   startDate: string;
   notes?: string;
 }
@@ -257,7 +259,7 @@ interface DiaryEntry {
   createdByName: string;
   entryDate: string;
   title: string;
-  phase: 'Priprema' | 'Razvod' | 'Kabliranje' | 'Montaža' | 'Testiranje' | 'Sanacija' | 'Završeno';
+  phase: string;
   workType: string;
   zone?: string;
   description: string;
@@ -583,6 +585,8 @@ function AppContent() {
   const [emailLogin, setEmailLogin] = useState({ email: '', password: '', error: '', loading: false });
   const [onboardingStep, setOnboardingStep] = useState(1);
   const [newCompanyName, setNewCompanyName] = useState('');
+  const [contextDiscipline] = useState<Discipline>(() => detectDisciplineFromSubdomain());
+  const [onboardingDiscipline, setOnboardingDiscipline] = useState<Discipline>(() => detectDisciplineFromSubdomain());
   const [googleTokens, setGoogleTokens] = useState<GoogleTokens | null>(null);
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
   const [calendarLoading, setCalendarLoading] = useState(false);
@@ -951,7 +955,8 @@ function AppContent() {
         organizationName: newCompanyName,
         ownerUserId: user.id,
         ownerEmail: user.email,
-        ownerName: displayName
+        ownerName: displayName,
+        discipline: onboardingDiscipline
       });
 
       setAppUser(profile);
@@ -1208,7 +1213,7 @@ function AppContent() {
               <FileText className="text-white w-8 h-8" />
             </div>
             <h1 className="text-4xl font-bold tracking-tight text-zinc-900">Site Diary Mini</h1>
-            <p className="text-zinc-500">Profesionalni dnevni izvještaji za električare u manje od 2 minute.</p>
+            <p className="text-zinc-500">{DISCIPLINE_SUBTITLES[contextDiscipline]}</p>
           </div>
           <Button onClick={handleLogin} className="w-full py-4 text-lg">
             Prijavi se putem Google-a
@@ -1259,12 +1264,24 @@ function AppContent() {
             <h2 className="text-2xl font-bold">Dobrodošli!</h2>
             <p className="text-zinc-500">Postavimo profil vaše tvrtke.</p>
           </div>
-          <Input 
-            label="Naziv tvrtke" 
-            placeholder="npr. Elektro-Instalacije d.o.o." 
+          <Input
+            label="Naziv tvrtke"
+            placeholder="npr. Elektro-Instalacije d.o.o."
             value={newCompanyName}
             onChange={(e: any) => setNewCompanyName(e.target.value)}
           />
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-zinc-700">Struka</label>
+            <select
+              className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-accent"
+              value={onboardingDiscipline}
+              onChange={(e) => setOnboardingDiscipline(e.target.value as Discipline)}
+            >
+              {(Object.entries(DISCIPLINE_LABELS) as [Discipline, string][]).map(([value, label]) => (
+                <option key={value} value={value}>{label}</option>
+              ))}
+            </select>
+          </div>
           <Button onClick={handleOnboarding} className="w-full py-3" disabled={!newCompanyName}>
             Kreiraj tvrtku
           </Button>
@@ -1380,25 +1397,27 @@ function AppContent() {
           />
         )}
         {view === 'new-entry' && (
-          <NewEntryView 
-            appUser={appUser!} 
-            projects={projects} 
+          <NewEntryView
+            appUser={appUser!}
+            projects={projects}
             initialProject={selectedProject}
             materialHistory={materialHistory}
             materialUnits={materialUnits}
-            onCancel={() => setView(selectedProject ? 'project-detail' : 'dashboard')} 
+            company={company}
+            onCancel={() => setView(selectedProject ? 'project-detail' : 'dashboard')}
             onSuccess={() => setView(selectedProject ? 'project-detail' : 'dashboard')}
           />
         )}
         {view === 'edit-entry' && editingEntry && (
-          <NewEntryView 
-            appUser={appUser!} 
-            projects={projects} 
+          <NewEntryView
+            appUser={appUser!}
+            projects={projects}
             initialProject={projects.find(p => p.id === editingEntry.projectId)}
             initialEntry={editingEntry}
             materialHistory={materialHistory}
             materialUnits={materialUnits}
-            onCancel={() => { setEditingEntry(null); setView(selectedProject ? 'project-detail' : 'dashboard'); }} 
+            company={company}
+            onCancel={() => { setEditingEntry(null); setView(selectedProject ? 'project-detail' : 'dashboard'); }}
             onSuccess={() => { setEditingEntry(null); setView(selectedProject ? 'project-detail' : 'dashboard'); }}
           />
         )}
@@ -1970,6 +1989,7 @@ function CompanySettingsView({ company, onUpdate }: { company: Company, onUpdate
     return found ? company.phone.slice(found.value.length).trim() : (company.phone || '');
   });
   const [website, setWebsite] = useState(company.website || '');
+  const [discipline, setDiscipline] = useState<Discipline>(company.discipline ?? 'electro');
   const [uploading, setUploading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -2010,16 +2030,17 @@ function CompanySettingsView({ company, onUpdate }: { company: Company, onUpdate
     }
 
     setErrors({});
-    onUpdate({ 
-      name, 
-      logoUrl, 
-      brandColor, 
+    onUpdate({
+      name,
+      logoUrl,
+      brandColor,
       street,
       city,
       address: `${street}, ${city}`,
-      email, 
-      phone: `${phonePrefix} ${phone.trim()}`, 
-      website 
+      email,
+      phone: `${phonePrefix} ${phone.trim()}`,
+      website,
+      discipline,
     });
     setSuccessMessage('Postavke su uspješno spremljene!');
     setTimeout(() => setSuccessMessage(null), 3000);
@@ -2071,13 +2092,22 @@ function CompanySettingsView({ company, onUpdate }: { company: Company, onUpdate
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Input 
-                  label="Naziv tvrtke" 
+                <Input
+                  label="Naziv tvrtke"
                   value={name}
                   onChange={(e: any) => setName(e.target.value)}
                   placeholder="Unesite naziv tvrtke"
                   error={errors.name}
                 />
+                <Select
+                  label="Struka"
+                  value={discipline}
+                  onChange={(e: any) => setDiscipline(e.target.value as Discipline)}
+                  options={Object.entries(DISCIPLINE_LABELS).map(([v, l]) => ({ value: v, label: l }))}
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div />
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Boja branda</label>
                   <div className="flex flex-col sm:flex-row gap-3">
@@ -2487,13 +2517,7 @@ function ProjectsView({ projects, sharedProjects = [], onProjectClick, onSharedP
 
   const phaseOptions = [
     { value: 'all', label: 'Sve faze' },
-    { value: 'Priprema', label: 'Priprema' },
-    { value: 'Razvod', label: 'Razvod' },
-    { value: 'Kabliranje', label: 'Kabliranje' },
-    { value: 'Montaža', label: 'Montaža' },
-    { value: 'Sanacija', label: 'Sanacija' },
-    { value: 'Testiranje', label: 'Testiranje' },
-    { value: 'Završeno', label: 'Završeno' },
+    ...getPhases(company?.discipline).map((p: string) => ({ value: p, label: p })),
   ];
 
   return (
@@ -2701,19 +2725,11 @@ function NewProjectView({ onCancel, onSubmit, company }: any) {
               { value: 'Održavanje', label: 'Održavanje' },
             ]}
           />
-          <Select 
-            label="Faza radova" 
+          <Select
+            label="Faza radova"
             value={data.phase}
             onChange={(e: any) => setData({...data, phase: e.target.value})}
-            options={[
-              { value: 'Priprema', label: 'Priprema' },
-              { value: 'Razvod', label: 'Razvod' },
-              { value: 'Kabliranje', label: 'Kabliranje' },
-              { value: 'Montaža', label: 'Montaža' },
-              { value: 'Sanacija', label: 'Sanacija' },
-              { value: 'Testiranje', label: 'Testiranje' },
-              { value: 'Završeno', label: 'Završeno' },
-            ]}
+            options={getPhases(company?.discipline).map((p: string) => ({ value: p, label: p }))}
           />
           <Input 
             label="Datum početka" 
@@ -2811,18 +2827,14 @@ function ProjectDetailView({ project, entries, onBack, onNewEntry, onEntryClick,
               )}
               <span className="bg-zinc-100 text-zinc-500 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase whitespace-nowrap">{project.phase}</span>
               {userRole === 'admin' && project.status !== 'completed' && (
-                <select 
+                <select
                   className="text-[10px] font-bold uppercase bg-zinc-50 border-none rounded-full px-2 py-0.5 focus:ring-0 cursor-pointer text-zinc-500"
                   value={project.phase}
-                  onChange={(e) => onUpdatePhase(e.target.value as any)}
+                  onChange={(e) => onUpdatePhase(e.target.value)}
                 >
-                  <option value="Priprema">Priprema</option>
-                  <option value="Razvod">Razvod</option>
-                  <option value="Kabliranje">Kabliranje</option>
-                  <option value="Montaža">Montaža</option>
-                  <option value="Sanacija">Sanacija</option>
-                  <option value="Testiranje">Testiranje</option>
-                  <option value="Završeno">Završeno</option>
+                  {getPhases(company?.discipline).map((p: string) => (
+                    <option key={p} value={p}>{p}</option>
+                  ))}
                 </select>
               )}
             </div>
@@ -4545,7 +4557,7 @@ const SUGGESTED_MATERIALS = [
   'Prekidač (izmjenični)',
 ];
 
-function NewEntryView({ appUser, projects, initialProject, initialEntry, materialHistory, materialUnits, onCancel, onSuccess }: any) {
+function NewEntryView({ appUser, projects, initialProject, initialEntry, materialHistory, materialUnits, company, onCancel, onSuccess }: any) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -4919,33 +4931,17 @@ function NewEntryView({ appUser, projects, initialProject, initialEntry, materia
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Select 
-                label="Faza radova" 
+              <Select
+                label="Faza radova"
                 value={data.phase}
                 onChange={(e: any) => setData({...data, phase: e.target.value})}
-                options={[
-                  { value: 'Priprema', label: 'Priprema' },
-                  { value: 'Razvod', label: 'Razvod' },
-                  { value: 'Kabliranje', label: 'Kabliranje' },
-                  { value: 'Montaža', label: 'Montaža' },
-                  { value: 'Sanacija', label: 'Sanacija' },
-                  { value: 'Testiranje', label: 'Testiranje' },
-                  { value: 'Završeno', label: 'Završeno' },
-                ]}
+                options={getPhases(company?.discipline).map((p: string) => ({ value: p, label: p }))}
               />
-              <Select 
-                label="Vrsta posla" 
+              <Select
+                label="Vrsta posla"
                 value={data.workType}
                 onChange={(e: any) => setData({...data, workType: e.target.value})}
-                options={[
-                  { value: 'razvod', label: 'Razvod' },
-                  { value: 'kabliranje', label: 'Kabliranje' },
-                  { value: 'montaža', label: 'Montaža' },
-                  { value: 'rasvjeta', label: 'Rasvjeta' },
-                  { value: 'ormar', label: 'Razvodni ormar' },
-                  { value: 'testiranje', label: 'Testiranje' },
-                  { value: 'servis', label: 'Servis/Intervencija' },
-                ]}
+                options={getWorkTypes(company?.discipline)}
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

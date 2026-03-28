@@ -9,7 +9,7 @@ interface Project {
   city: string;
   objectType: string;
   status: 'active' | 'completed' | 'archived';
-  phase: 'Priprema' | 'Razvod' | 'Kabliranje' | 'Montaža' | 'Testiranje' | 'Sanacija' | 'Završeno';
+  phase: string;
   startDate: string;
   notes?: string;
 }
@@ -22,7 +22,7 @@ interface DiaryEntry {
   createdByName: string;
   entryDate: string;
   title: string;
-  phase: 'Priprema' | 'Razvod' | 'Kabliranje' | 'Montaža' | 'Testiranje' | 'Sanacija' | 'Završeno';
+  phase: string;
   workType: string;
   zone?: string;
   description: string;
@@ -64,6 +64,7 @@ interface Company {
   email?: string;
   phone?: string;
   website?: string;
+  discipline?: 'electro' | 'water' | 'klima';
 }
 
 export interface Invitation {
@@ -155,7 +156,8 @@ const mapOrganization = (row: any): Company => ({
   address: row.address ?? undefined,
   email: row.email ?? undefined,
   phone: row.phone ?? undefined,
-  website: row.website ?? undefined
+  website: row.website ?? undefined,
+  discipline: (row.discipline ?? 'electro') as 'electro' | 'water' | 'klima',
 });
 
 const mapInvitation = (row: any): Invitation => ({
@@ -400,6 +402,7 @@ export const createOrganizationWithOwner = async (params: {
   ownerUserId: string;
   ownerEmail: string | null;
   ownerName: string;
+  discipline?: 'electro' | 'water' | 'klima';
 }): Promise<{ company: Company; profile: AppUser }> => {
   ensureSupabase();
   const { data: org, error: orgError } = await supabase
@@ -407,7 +410,8 @@ export const createOrganizationWithOwner = async (params: {
     .insert({
       name: params.organizationName,
       owner_email: params.ownerEmail ?? undefined,
-      owner_user_id: params.ownerUserId
+      owner_user_id: params.ownerUserId,
+      discipline: params.discipline ?? 'electro'
     })
     .select('*')
     .single();
@@ -564,6 +568,7 @@ export const updateOrganization = async (organizationId: string, data: Partial<C
   if (data.email !== undefined) payload.email = data.email;
   if (data.phone !== undefined) payload.phone = data.phone;
   if (data.website !== undefined) payload.website = data.website;
+  if (data.discipline !== undefined) payload.discipline = data.discipline;
 
   const { error } = await supabase
     .from('organizations')

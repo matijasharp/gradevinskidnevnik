@@ -8,7 +8,7 @@ Start from the electrician prototype, deliver a Supabase-backed MVP with full UI
 
 **v1.0 MVP** (v1.0)
 Status: In progress
-Phases: 2 of 4 complete
+Phases: 3 of 4 complete
 
 ## Phases
 
@@ -20,7 +20,7 @@ Phases: 2 of 4 complete
 |-------|------|-------|--------|-----------|
 | 1 | Contractor MVP (Electro) | 3 | ✅ Complete | 2026-03-28 |
 | 2 | Multi-tenant + Sharing | 3 | ✅ Complete | 2026-03-28 |
-| 3 | Vertical Expansion + Subdomains | 2 | Not started | - |
+| 3 | Vertical Expansion + Subdomains | 2 | ✅ Complete | 2026-03-28 |
 | 4 | Master Project Workspace | 2 | Not started | - |
 
 ## Phase Details
@@ -69,8 +69,8 @@ Phases: 2 of 4 complete
 - Subdomain entry points and branding
 
 **Plans:**
-- [ ] 03-01: Vertical config and templates
-- [ ] 03-02: Subdomain routing and UX polish
+- [x] 03-01: Vertical config and templates
+- [x] 03-02: Subdomain routing and UX polish
 
 ### Phase 4: Master Project Workspace
 

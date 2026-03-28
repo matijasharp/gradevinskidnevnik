@@ -14,7 +14,7 @@ Contractors log site progress fast while project leads see shared, audited statu
 |-----------|-------|
 | Type | Application |
 | Version | 1.0-alpha |
-| Status | MVP (Phase 1 complete) |
+| Status | MVP (Phase 3 complete) |
 | Last Updated | 2026-03-28 |
 
 **Production URLs:**
@@ -34,10 +34,11 @@ Contractors log site progress fast while project leads see shared, audited statu
 
 - ✓ Phase 1: Prototype parity in main app with Supabase backend — Phase 1
 - ✓ Phase 2: Multi-tenant sharing — invitations, project membership, task checklist, file documents — Phase 2
+- ✓ Phase 3: Vertical subdomains and discipline-specific templates — Phase 3
 
 ### Active (In Progress)
 
-- [ ] Phase 3: Vertical subdomains and discipline-specific templates
+- [ ] Phase 4: Master project workspace
 
 ### Planned (Next)
 
@@ -94,6 +95,8 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | Dual FK on project_members.user_id | auth.users (original) + public.profiles (PostgREST join) | 2026-03-28 | Active |
 | Storage bucket public for documents | Documents accessed via public URL; table RLS gates metadata | 2026-03-28 | Active |
 | Audit log deferred to Phase 4 | MVP value delivered without it; fits master workspace scope better | 2026-03-28 | Active |
+| detectDisciplineFromSubdomain reads hostname then ?discipline= param | Enables prod subdomain routing and local dev testing without DNS setup | 2026-03-28 | Active |
+| discipline typed inline in createOrganizationWithOwner | Avoids circular import between data.ts and disciplineConfig.ts | 2026-03-28 | Active |
 
 ## Success Metrics
 
@@ -124,4 +127,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-28 after Phase 2*
+*Last updated: 2026-03-28 after Phase 3*
