@@ -1,91 +1,33 @@
 import { supabase, isSupabaseConfigured } from './supabase';
+import type {
+  Project,
+  DiaryEntry,
+  AppUser,
+  Company,
+  DiaryPhoto,
+  Unsubscribe,
+  Invitation,
+  ProjectMember,
+  ProjectInvitation,
+  MasterProject,
+  MasterProjectOrganization,
+  MasterProjectStats,
+  MasterActivityItem,
+  MasterProjectIssue,
+  ProjectTask,
+  ProjectDocument,
+} from '../shared/types';
 
-interface Project {
-  id: string;
-  companyId: string;
-  clientName: string;
-  projectName: string;
-  street: string;
-  city: string;
-  objectType: string;
-  status: 'active' | 'completed' | 'archived';
-  phase: string;
-  startDate: string;
-  notes?: string;
-}
-
-interface DiaryEntry {
-  id: string;
-  companyId: string;
-  projectId: string;
-  createdBy: string;
-  createdByName: string;
-  entryDate: string;
-  title: string;
-  phase: string;
-  workType: string;
-  zone?: string;
-  description: string;
-  status: 'završeno' | 'djelomično završeno' | 'čeka materijal' | 'blokirano' | 'potrebno dodatno';
-  hours: number;
-  workersCount: number;
-  lineItems?: { name: string; quantity: number; unit: string }[];
-  materialsUsed?: string;
-  missingItems?: string;
-  returnVisitNeeded: boolean;
-  issueNote?: string;
-  aiSummary?: string;
-  weatherCondition?: string;
-  temperature?: number;
-  reminderAt?: string;
-  reminderNotified?: boolean;
-  signatureUrl?: string;
-  createdAt: any;
-}
-
-interface AppUser {
-  id: string;
-  companyId: string;
-  name: string;
-  email: string;
-  role: 'admin' | 'worker';
-  googleTokens?: any;
-}
-
-interface Company {
-  id: string;
-  name: string;
-  ownerEmail?: string;
-  brandColor?: string;
-  logoUrl?: string;
-  street?: string;
-  city?: string;
-  address?: string;
-  email?: string;
-  phone?: string;
-  website?: string;
-  discipline?: 'electro' | 'water' | 'klima' | 'general';
-}
-
-export interface Invitation {
-  id: string;
-  organizationId: string;
-  email: string;
-  name?: string;
-  role: 'admin' | 'worker';
-}
-
-interface DiaryPhoto {
-  id: string;
-  entryId: string;
-  projectId: string;
-  companyId: string;
-  url: string;
-  description?: string;
-  createdAt?: any;
-}
-
-type Unsubscribe = () => void;
+export type { Invitation } from '../shared/types';
+export type { ProjectMember } from '../shared/types';
+export type { ProjectInvitation } from '../shared/types';
+export type { MasterProject } from '../shared/types';
+export type { MasterProjectOrganization } from '../shared/types';
+export type { MasterProjectStats } from '../shared/types';
+export type { MasterActivityItem } from '../shared/types';
+export type { MasterProjectIssue } from '../shared/types';
+export type { ProjectTask } from '../shared/types';
+export type { ProjectDocument } from '../shared/types';
 
 const ensureSupabase = () => {
   if (!isSupabaseConfigured) {
@@ -866,27 +808,6 @@ export const cancelInvitation = async (invitationId: string): Promise<void> => {
 
 // ─── Project Membership & Cross-org Invitations ──────────────────────────────
 
-export interface ProjectMember {
-  id: string;
-  projectId: string;
-  userId: string;
-  role: 'lead' | 'contributor' | 'viewer';
-  invitedBy?: string;
-  createdAt: string;
-  name?: string;
-  email?: string;
-}
-
-export interface ProjectInvitation {
-  id: string;
-  projectId: string;
-  email: string;
-  name?: string;
-  role: 'lead' | 'contributor' | 'viewer';
-  createdBy?: string;
-  createdAt: string;
-}
-
 const mapProjectMember = (row: any): ProjectMember => ({
   id: row.id,
   projectId: row.project_id,
@@ -1072,45 +993,6 @@ export const fetchSharedProjects = async (
 
 // ─── Master Project Workspace ────────────────────────────────────────────────
 
-export interface MasterProject {
-  id: string;
-  name: string;
-  description?: string;
-  location?: string;
-  status: 'active' | 'completed' | 'archived';
-  ownerOrganizationId: string;
-  createdBy?: string;
-  createdAt: string;
-}
-
-export interface MasterProjectOrganization {
-  id: string;
-  masterProjectId: string;
-  organizationId: string;
-  organizationName?: string;
-  discipline: 'electro' | 'water' | 'klima';
-  role: 'lead' | 'contributor' | 'viewer';
-  linkedProjectId?: string;
-  linkedProjectName?: string;
-  createdAt: string;
-}
-
-export interface MasterProjectStats {
-  projectId: string;
-  entryCount: number;
-  totalHours: number;
-  lastEntryDate?: string;
-}
-
-export interface MasterActivityItem {
-  entryId: string;
-  projectId: string;
-  entryDate: string;
-  title: string;
-  status: string;
-  createdByName: string;
-}
-
 const mapMasterProject = (row: any): MasterProject => ({
   id: row.id,
   name: row.name ?? '',
@@ -1186,7 +1068,7 @@ export const fetchMasterProjects = async (organizationId: string): Promise<Maste
     .from('master_project_organizations')
     .select('master_project_id')
     .eq('organization_id', organizationId)
-    .neq('master_project_id', null);
+    .not('master_project_id', 'is', null);
   if (participantError) throw participantError;
 
   const participantIds = (participantRows ?? []).map((r: any) => r.master_project_id);
@@ -1302,18 +1184,6 @@ export const fetchMasterRecentActivity = async (projectIds: string[], limit = 10
 
 // ─── Master Project Issues ───────────────────────────────────────────────────
 
-export interface MasterProjectIssue {
-  id: string;
-  masterProjectId: string;
-  title: string;
-  description?: string;
-  status: 'open' | 'in_progress' | 'resolved' | 'closed';
-  priority: 'low' | 'medium' | 'high';
-  discipline?: string;
-  reportedBy?: string;
-  createdAt: string;
-}
-
 const mapMasterProjectIssue = (row: any): MasterProjectIssue => ({
   id: row.id,
   masterProjectId: row.master_project_id ?? '',
@@ -1372,17 +1242,6 @@ export const updateMasterProjectIssueStatus = async (id: string, status: MasterP
 };
 
 // ─── Project Tasks ───────────────────────────────────────────────────────────
-
-export interface ProjectTask {
-  id: string;
-  projectId: string;
-  title: string;
-  done: boolean;
-  assignedTo?: string;
-  assignedToName?: string;
-  createdBy?: string;
-  createdAt: string;
-}
 
 const mapProjectTask = (row: any): ProjectTask => ({
   id: row.id,
@@ -1455,19 +1314,6 @@ export const updateProjectTaskTitle = async (params: { taskId: string; title: st
 };
 
 // ─── Project Documents ───────────────────────────────────────────────────────
-
-export interface ProjectDocument {
-  id: string;
-  projectId: string;
-  organizationId: string;
-  name: string;
-  filePath: string;
-  fileUrl: string;
-  fileSize?: number;
-  fileType?: string;
-  uploadedBy?: string;
-  createdAt: string;
-}
 
 const mapProjectDocument = (row: any): ProjectDocument => ({
   id: row.id,

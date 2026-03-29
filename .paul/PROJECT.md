@@ -13,9 +13,9 @@ Contractors log site progress fast while project leads see shared, audited statu
 | Attribute | Value |
 |-----------|-------|
 | Type | Application |
-| Version | 1.0 |
-| Status | MVP complete (all 4 phases shipped) |
-| Last Updated | 2026-03-28 |
+| Version | 1.1 (in progress) |
+| Status | v1.0 complete; v1.1 frontend refactor in progress (Phase 5 of 14 done) |
+| Last Updated | 2026-03-29 |
 
 **Production URLs:**
 - None
@@ -36,10 +36,11 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 2: Multi-tenant sharing — invitations, project membership, task checklist, file documents — Phase 2
 - ✓ Phase 3: Vertical subdomains and discipline-specific templates — Phase 3
 - ✓ Phase 4: Master project workspace — cross-discipline overview, org linking, issue tracking — Phase 4
+- ✓ Phase 5: Shared type/utility foundation — types/index.ts, shared/utils, Firebase removed — Phase 5
 
 ### Active (In Progress)
 
-- None — v1.0 MVP complete
+- v1.1 Frontend Architecture Refactor — Phases 5–14: extract shared types, utils, UI primitives, components, router, auth context, data layer
 
 ### Planned (Next)
 
@@ -103,6 +104,8 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | 'general' discipline for PM/general contractor orgs | Master project owners are coordinators, not specialty trades; separate discipline value prevents misclassification | 2026-03-28 | Active |
 | master_project_issues INSERT allows all participants | Any linked org can report issues, not just the owner; enables cross-discipline collaboration | 2026-03-28 | Active |
 | Issue status cycle on badge click | Minimal mobile-friendly UX; no dropdown needed for MVP | 2026-03-28 | Active |
+| Extract-and-import pattern for v1.1 refactor | Create new file → import → npm run build → remove inline; never delete before proven working | 2026-03-29 | Active |
+| data.ts re-exports from shared/types | Preserves App.tsx line 106 import compat across all phases without churn | 2026-03-29 | Active |
 
 ## Success Metrics
 
@@ -133,4 +136,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-28 after Phase 4 — v1.0 MVP complete*
+*Last updated: 2026-03-29 after Phase 5 — v1.1 refactor underway*

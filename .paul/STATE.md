@@ -2,39 +2,43 @@
 
 ## Project Reference
 
-See: .paul/PROJECT.md (updated 2026-03-28)
+See: .paul/PROJECT.md (updated 2026-03-29)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.0 MVP — COMPLETE. All 4 phases shipped.
+**Current focus:** v1.1 — Frontend Architecture Refactor. Phase 5 complete, ready to plan Phase 6.
 
 ## Current Position
 
-Milestone: v1.0 MVP (v1.0) — ✅ COMPLETE
-Phase: 4 of 4 (Master Project Workspace) — ✅ Complete
-Plan: 04-04 complete
-Status: Milestone complete — all phases shipped
-Last activity: 2026-03-28 — Unified 04-04, Phase 4 complete, v1.0 MVP shipped
+Milestone: v1.1 — Frontend Architecture Refactor
+Phase: 6 of 14 (Shared UI Primitives) — Not started
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-03-29 — Phase 5 complete, transitioned to Phase 6
 
 Progress:
-- Milestone: [██████████] 100%
-- Phase 4: [██████████] 100%
+- v1.1 Milestone: [█░░░░░░░░░] 10% (1/10 phases)
+- Phase 6: [░░░░░░░░░░] 0%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Loop complete — milestone complete]
+  ✓        ✓        ✓     [Loop complete — ready for next PLAN]
 ```
 
 ## Performance Metrics
 
-**Velocity:**
+**Velocity (v1.0):**
 - Total plans completed: 14
 - Average duration: ~46 min
 - Total execution time: ~10.8 hours
 
-**By Phase:**
+**Velocity (v1.1 so far):**
+- Plans completed: 1
+- Duration: ~35 min
+
+**By Phase (v1.0):**
 
 | Phase | Plans | Total Time | Avg/Plan |
 |-------|-------|------------|----------|
@@ -43,9 +47,11 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | 03-vertical-expansion-subdomains | 2/2 ✅ | ~55 min | 28 min |
 | 04-master-project-workspace | 4/4 ✅ | ~195 min | 49 min |
 
-**Recent Trend:**
-- Last 5 plans: 35m, 20m, 25m, 25m, 25m
-- Trend: Consistently fast — well-scoped plans
+**By Phase (v1.1):**
+
+| Phase | Plans | Total Time | Avg/Plan |
+|-------|-------|------------|----------|
+| 05-types-utilities | 1/1 ✅ | ~35 min | 35 min |
 
 ## Accumulated Context
 
@@ -74,14 +80,20 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | 'general' discipline for PM/coordinator orgs | Phase 4 | Master project owners are not specialty trades; prevents misclassification |
 | master_project_issues INSERT allows all participants | Phase 4 | Any linked org can report issues; cross-discipline collaboration |
 | Issue status cycle on badge click | Phase 4 | Mobile-friendly; no dropdown needed for MVP |
+| Extract-and-import pattern for refactor | v1.1 | Create new file → import → verify → remove inline. Never delete before proven working |
+| npm run build must pass after every phase | v1.1 | Governing constraint — nothing gets broken |
+| data.ts re-exports from shared/types | Phase 5 | Preserves App.tsx line 106 import compat without churn across all phases |
 
 ### Deferred Issues
 
 | Issue | Origin | Effort | Revisit |
 |-------|--------|--------|---------|
-| Audit log (activity feed) | Phase 2 | Medium | Post-MVP |
+| Audit log (activity feed) | Phase 2 | Medium | v1.2 Backend Infrastructure |
 | DNS/subdomain production setup | Phase 3 | Low | Deployment (post-MVP) |
-| Issue edit/delete/comments | Phase 4 | Low | Post-MVP |
+| Issue edit/delete/comments | Phase 4 | Low | Post v1.1 |
+| Sub-projects (parent_project_id) | Architecture audit | Medium | Post v1.1 |
+| Contractor→master project linking UI | Architecture audit | Low | Post v1.1 |
+| Investor/client access portal | Architecture audit | High | Future milestone |
 
 ### Blockers/Concerns
 
@@ -91,21 +103,24 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: 773cac1 — feat(03-vertical-expansion-subdomains): Phase 3 complete
+Last commit: 9566858 — feat(04-master-project-workspace): Phase 4 complete — master workspace + issue tracking
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
+*Note: Phase 5 changes staged, commit pending*
 
 ## Boundaries (Active)
 
 - Preserve prototype UI and mobile design (no redesign)
-- Firebase files can now be removed (Supabase parity confirmed in Phase 1)
+- Preserve all existing behavior — no feature changes during refactor
+- Firebase files can now be removed (Supabase parity confirmed in Phase 1) ✓ Done
+- All existing migrations are untouchable (already applied to production)
 
 ## Session Continuity
 
-Last session: 2026-03-28
-Stopped at: v1.0 MVP complete — Phase 4 unified, milestone closed
-Next action: /paul:milestone to define next milestone, or deploy v1.0
+Last session: 2026-03-29
+Stopped at: Phase 5 complete, loop closed
+Next action: /paul:plan for Phase 6 (Shared UI Primitives)
 Resume file: .paul/ROADMAP.md
 
 ---

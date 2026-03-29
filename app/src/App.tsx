@@ -40,7 +40,9 @@ import {
   Users,
   UserPlus,
   Mail,
-  Layers
+  Layers,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import { signInWithGoogle, signInWithEmail, signOut, getSession, onAuthStateChange } from './lib/supabaseAuth';
@@ -102,6 +104,10 @@ import {
   updateMasterProjectIssueStatus
 } from './lib/data';
 import type { Invitation, ProjectMember, ProjectInvitation, ProjectTask, ProjectDocument, MasterProject, MasterProjectOrganization, MasterProjectStats, MasterActivityItem, MasterProjectIssue } from './lib/data';
+import type { Company, AppUser, Project, DiaryEntry, DiaryPhoto, GoogleTokens, CalendarEvent } from './shared/types';
+import { safeFormatDate, stripMarkdown } from './shared/utils/format';
+import { trimCanvas, compressImage } from './shared/utils/image';
+import { OperationType, setAuthContext, handleFirestoreError } from './shared/utils/error';
 import { cn } from './lib/utils';
 import { getPhases, getWorkTypes, DISCIPLINE_LABELS, DISCIPLINE_SUBTITLES, detectDisciplineFromSubdomain, type Discipline } from './lib/disciplineConfig';
 import { 
@@ -144,249 +150,6 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import Markdown from 'react-markdown';
 import SignatureCanvas from 'react-signature-canvas';
-
-// Helper to trim canvas (replaces broken trim-canvas library)
-const trimCanvas = (canvas: HTMLCanvasElement) => {
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
-  if (!ctx) return canvas;
-  
-  const width = canvas.width;
-  const height = canvas.height;
-  const imageData = ctx.getImageData(0, 0, width, height);
-  const data = imageData.data;
-  
-  const getAlpha = (x: number, y: number) => data[4 * (y * width + x) + 3];
-  
-  let top = null, bottom = null, left = null, right = null;
-  
-  // Find top
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      if (getAlpha(x, y) > 0) {
-        top = y;
-        break;
-      }
-    }
-    if (top !== null) break;
-  }
-  
-  if (top === null) return canvas; // Empty canvas
-  
-  // Find bottom
-  for (let y = height - 1; y >= 0; y--) {
-    for (let x = 0; x < width; x++) {
-      if (getAlpha(x, y) > 0) {
-        bottom = y;
-        break;
-      }
-    }
-    if (bottom !== null) break;
-  }
-  
-  // Find left
-  for (let x = 0; x < width; x++) {
-    for (let y = 0; y < height; y++) {
-      if (getAlpha(x, y) > 0) {
-        left = x;
-        break;
-      }
-    }
-    if (left !== null) break;
-  }
-  
-  // Find right
-  for (let x = width - 1; x >= 0; x--) {
-    for (let y = 0; y < height; y++) {
-      if (getAlpha(x, y) > 0) {
-        right = x;
-        break;
-      }
-    }
-    if (right !== null) break;
-  }
-  
-  if (bottom === null || left === null || right === null) return canvas;
-  
-  const trimmedWidth = right - left + 1;
-  const trimmedHeight = bottom - top + 1;
-  const trimmedData = ctx.getImageData(left, top, trimmedWidth, trimmedHeight);
-  
-  const trimmedCanvas = document.createElement('canvas');
-  trimmedCanvas.width = trimmedWidth;
-  trimmedCanvas.height = trimmedHeight;
-  const trimmedCtx = trimmedCanvas.getContext('2d');
-  if (trimmedCtx) {
-    trimmedCtx.putImageData(trimmedData, 0, 0);
-  }
-  
-  return trimmedCanvas;
-};
-
-// --- Types ---
-
-interface Company {
-  id: string;
-  name: string;
-  logoUrl?: string;
-  ownerEmail?: string;
-  brandColor?: string;
-  street?: string;
-  city?: string;
-  address?: string;
-  email?: string;
-  phone?: string;
-  website?: string;
-  discipline?: 'electro' | 'water' | 'klima' | 'general';
-}
-
-interface AppUser {
-  id: string;
-  companyId: string;
-  name: string;
-  email: string;
-  role: 'admin' | 'worker';
-  googleTokens?: GoogleTokens;
-}
-
-interface Project {
-  id: string;
-  companyId: string;
-  clientName: string;
-  projectName: string;
-  street: string;
-  city: string;
-  objectType: string;
-  status: 'active' | 'completed' | 'archived';
-  phase: string;
-  startDate: string;
-  notes?: string;
-}
-
-interface DiaryEntry {
-  id: string;
-  companyId: string;
-  projectId: string;
-  createdBy: string;
-  createdByName: string;
-  entryDate: string;
-  title: string;
-  phase: string;
-  workType: string;
-  zone?: string;
-  description: string;
-  status: 'završeno' | 'djelomično završeno' | 'čeka materijal' | 'blokirano' | 'potrebno dodatno';
-  hours: number;
-  workersCount: number;
-  lineItems?: { name: string; quantity: number; unit: string }[];
-  materialsUsed?: string;
-  missingItems?: string;
-  returnVisitNeeded: boolean;
-  issueNote?: string;
-  aiSummary?: string;
-  weatherCondition?: string;
-  temperature?: number;
-  reminderAt?: string;
-  reminderNotified?: boolean;
-  signatureUrl?: string;
-  createdAt: any;
-}
-
-interface DiaryPhoto {
-  id: string;
-  entryId: string;
-  projectId: string;
-  companyId: string;
-  url: string;
-  description?: string;
-  createdAt?: any;
-}
-
-interface GoogleTokens {
-  access_token: string;
-  refresh_token?: string;
-  scope: string;
-  token_type: string;
-  expiry_date: number;
-}
-
-interface CalendarEvent {
-  id: string;
-  summary: string;
-  description?: string;
-  start: { dateTime?: string; date?: string };
-  end: { dateTime?: string; date?: string };
-  htmlLink?: string;
-}
-
-// --- Firestore Error Handling ---
-
-enum OperationType {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-  LIST = 'list',
-  GET = 'get',
-  WRITE = 'write',
-}
-
-interface FirestoreErrorInfo {
-  error: string;
-  operationType: OperationType;
-  path: string | null;
-  authInfo: {
-    userId: string | undefined;
-    email: string | null | undefined;
-    emailVerified: boolean | undefined;
-    isAnonymous: boolean | undefined;
-    tenantId: string | null | undefined;
-    providerInfo: {
-      providerId: string;
-      displayName: string | null;
-      email: string | null;
-      photoUrl: string | null;
-    }[];
-  }
-}
-
-let authContext: { userId?: string; email?: string | null } = {};
-
-function setAuthContext(user: SupabaseUser | null) {
-  authContext = {
-    userId: user?.id,
-    email: user?.email ?? null
-  };
-}
-
-function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
-  const errorMessage = error instanceof Error ? error.message : String(error);
-  
-  const errInfo: FirestoreErrorInfo = {
-    error: errorMessage,
-    authInfo: {
-      userId: authContext.userId,
-      email: authContext.email,
-      emailVerified: undefined,
-      isAnonymous: undefined,
-      tenantId: undefined,
-      providerInfo: []
-    },
-    operationType,
-    path
-  }
-  
-  console.error('Data Error: ', JSON.stringify(errInfo));
-  
-  // If it's a quota error, we might want to show a more user-friendly message
-  if (errorMessage.includes('Quota limit exceeded') || errorMessage.includes('quota exceeded')) {
-    const quotaError = new Error(JSON.stringify({
-      ...errInfo,
-      userMessage: 'Dosegnuto je ograničenje besplatne kvote baze podataka. Molimo pokušajte ponovno sutra ili kontaktirajte podršku.'
-    }));
-    throw quotaError;
-  }
-  
-  throw new Error(JSON.stringify(errInfo));
-}
 
 class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean, error: any }> {
   constructor(props: { children: React.ReactNode }) {
@@ -451,40 +214,6 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
   }
 }
 
-// --- Image Compression ---
-
-async function compressImage(base64Str: string, maxWidth = 1200, maxHeight = 1200, quality = 0.7): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.src = base64Str;
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let width = img.width;
-      let height = img.height;
-
-      if (width > height) {
-        if (width > maxWidth) {
-          height *= maxWidth / width;
-          width = maxWidth;
-        }
-      } else {
-        if (height > maxHeight) {
-          width *= maxHeight / height;
-          height = maxHeight;
-        }
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return reject(new Error('Failed to get canvas context'));
-      ctx.drawImage(img, 0, 0, width, height);
-      resolve(canvas.toDataURL('image/jpeg', quality));
-    };
-    img.onerror = (e) => reject(e);
-  });
-}
-
 // --- Components ---
 
 const Button = ({ className, variant = 'primary', ...props }: any) => {
@@ -542,32 +271,6 @@ const Select = ({ label, options, ...props }: any) => (
   </div>
 );
 
-function safeFormatDate(dateStr: string | undefined | null, formatStr: string, fallback: string = 'Nema datuma') {
-  if (!dateStr) return fallback;
-  try {
-    const date = new Date(dateStr);
-    if (isNaN(date.getTime())) return fallback;
-    return format(date, formatStr);
-  } catch (e) {
-    return fallback;
-  }
-}
-
-function stripMarkdown(text: string): string {
-  if (!text) return '';
-  return text
-    .replace(/\*\*(.*?)\*\*/g, '$1') // bold
-    .replace(/\*(.*?)\*/g, '$1')     // italic
-    .replace(/__(.*?)__/g, '$1')     // bold
-    .replace(/_(.*?)_/g, '$1')       // italic
-    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // links
-    .replace(/#{1,6}\s+(.*)/g, '$1') // headers
-    .replace(/`{1,3}(.*?)`{1,3}/g, '$1') // code
-    .replace(/^\s*[-*+]\s+/gm, '• ') // bullets
-    .replace(/^\s*\d+\.\s+/gm, '')   // numbers
-    .trim();
-}
-
 // --- Main App ---
 
 export default function App() {
@@ -594,6 +297,7 @@ function AppContent() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [emailLogin, setEmailLogin] = useState({ email: '', password: '', error: '', loading: false });
+  const [showPassword, setShowPassword] = useState(false);
   const [onboardingStep, setOnboardingStep] = useState(1);
   const [newCompanyName, setNewCompanyName] = useState('');
   const [contextDiscipline] = useState<Discipline>(() => detectDisciplineFromSubdomain());
@@ -1265,14 +969,27 @@ function AppContent() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailLogin(prev => ({ ...prev, email: e.target.value }))}
               required
             />
-            <Input
-              label="Lozinka"
-              type="password"
-              placeholder="••••••••"
-              value={emailLogin.password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailLogin(prev => ({ ...prev, password: e.target.value }))}
-              required
-            />
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Lozinka</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  value={emailLogin.password}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailLogin(prev => ({ ...prev, password: e.target.value }))}
+                  required
+                  className="w-full px-4 py-3 pr-11 bg-zinc-50 border border-zinc-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent/5 focus:border-accent transition-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(p => !p)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 transition-colors"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
             {emailLogin.error && (
               <p className="text-sm text-red-500">{emailLogin.error}</p>
             )}
