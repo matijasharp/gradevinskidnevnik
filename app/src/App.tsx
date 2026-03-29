@@ -109,6 +109,7 @@ import { safeFormatDate, stripMarkdown } from './shared/utils/format';
 import { trimCanvas, compressImage } from './shared/utils/image';
 import { OperationType, setAuthContext, handleFirestoreError } from './shared/utils/error';
 import { cn } from './lib/utils';
+import { Button, Card, Input, Select, StatusBadge } from './shared/ui';
 import { getPhases, getWorkTypes, DISCIPLINE_LABELS, DISCIPLINE_SUBTITLES, detectDisciplineFromSubdomain, type Discipline } from './lib/disciplineConfig';
 import { 
   format, 
@@ -213,63 +214,6 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
     return this.props.children;
   }
 }
-
-// --- Components ---
-
-const Button = ({ className, variant = 'primary', ...props }: any) => {
-  const variants: any = {
-    primary: 'bg-accent text-white hover:opacity-90 shadow-lg shadow-accent/20',
-    secondary: 'bg-zinc-100 text-black hover:bg-zinc-200',
-    outline: 'border border-zinc-200 text-black hover:bg-zinc-50',
-    ghost: 'text-zinc-600 hover:bg-zinc-100',
-    danger: 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-100',
-  };
-  return (
-    <button 
-      className={cn(
-        'px-4 py-2 rounded-xl font-medium transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2',
-        variants[variant],
-        className
-      )} 
-      {...props} 
-    />
-  );
-};
-
-const Card = ({ children, className, onClick, style }: any) => (
-  <div 
-    onClick={onClick}
-    className={cn('bg-white border border-slate-100 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-accent/20 transition-all', className)}
-    style={style}
-  >
-    {children}
-  </div>
-);
-
-const Input = ({ label, error, ...props }: any) => (
-  <div className="space-y-1.5">
-    {label && <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">{label}</label>}
-    <input 
-      className="w-full px-4 py-3 bg-zinc-50 border border-zinc-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent/5 focus:border-accent transition-all"
-      {...props} 
-    />
-    {error && <p className="text-xs text-red-500">{error}</p>}
-  </div>
-);
-
-const Select = ({ label, options, ...props }: any) => (
-  <div className="space-y-1.5">
-    {label && <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">{label}</label>}
-    <select 
-      className="w-full px-4 py-3 bg-zinc-50 border border-zinc-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent/5 focus:border-accent transition-all appearance-none"
-      {...props}
-    >
-      {options.map((opt: any) => (
-        <option key={opt.value} value={opt.value}>{opt.label}</option>
-      ))}
-    </select>
-  </div>
-);
 
 // --- Main App ---
 
@@ -4526,21 +4470,6 @@ function ReportsView({ projects, entries, company }: { projects: Project[], entr
         </Card>
       </div>
     </div>
-  );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const styles: any = {
-    'završeno': 'bg-green-100 text-green-600',
-    'djelomično završeno': 'bg-sky-100 text-sky-600',
-    'čeka materijal': 'bg-orange-100 text-orange-600',
-    'blokirano': 'bg-red-100 text-red-600',
-    'potrebno dodatno': 'bg-purple-100 text-purple-600',
-  };
-  return (
-    <span className={cn("text-[10px] font-bold uppercase px-2 py-0.5 rounded-full", styles[status])}>
-      {status}
-    </span>
   );
 }
 

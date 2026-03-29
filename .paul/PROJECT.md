@@ -37,6 +37,7 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 3: Vertical subdomains and discipline-specific templates — Phase 3
 - ✓ Phase 4: Master project workspace — cross-discipline overview, org linking, issue tracking — Phase 4
 - ✓ Phase 5: Shared type/utility foundation — types/index.ts, shared/utils, Firebase removed — Phase 5
+- ✓ Phase 6: Shared UI primitives — Button, Card, Input, Select, StatusBadge extracted to shared/ui/ — Phase 6
 
 ### Active (In Progress)
 
@@ -136,4 +137,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-29 after Phase 5 — v1.1 refactor underway*
+*Last updated: 2026-03-29 after Phase 6 — shared UI primitives extracted*
