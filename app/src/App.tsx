@@ -45,7 +45,7 @@ import {
   EyeOff
 } from 'lucide-react';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
-import { signInWithGoogle, signInWithEmail, signOut, getSession, onAuthStateChange } from './lib/supabaseAuth';
+import { signInWithGoogle, signInWithEmail, getSession, onAuthStateChange } from './lib/supabaseAuth';
 import {
   subscribeProjects,
   subscribeDiaryEntries,
@@ -110,6 +110,9 @@ import { trimCanvas, compressImage } from './shared/utils/image';
 import { OperationType, setAuthContext, handleFirestoreError } from './shared/utils/error';
 import { cn } from './lib/utils';
 import { Button, Card, Input, Select, StatusBadge } from './shared/ui';
+import ErrorBoundary from './shared/components/ErrorBoundary';
+import SecretsModal from './shared/components/SecretsModal';
+import AppShell from './app/layouts/AppShell';
 import { getPhases, getWorkTypes, DISCIPLINE_LABELS, DISCIPLINE_SUBTITLES, detectDisciplineFromSubdomain, type Discipline } from './lib/disciplineConfig';
 import { 
   format, 
@@ -151,69 +154,6 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import Markdown from 'react-markdown';
 import SignatureCanvas from 'react-signature-canvas';
-
-class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean, error: any }> {
-  constructor(props: { children: React.ReactNode }) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
-
-  static getDerivedStateFromError(error: any) {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error: any, errorInfo: any) {
-    console.error("ErrorBoundary caught an error", error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      let displayMessage = "Došlo je do neočekivane pogreške.";
-      let isQuotaError = false;
-
-      try {
-        const parsedError = JSON.parse(this.state.error.message);
-        if (parsedError.userMessage) {
-          displayMessage = parsedError.userMessage;
-          isQuotaError = true;
-        }
-      } catch (e) {
-        // Not a JSON error
-      }
-
-      return (
-        <div className="min-h-screen bg-zinc-50 flex items-center justify-center p-6">
-          <Card className="max-w-md w-full p-8 text-center space-y-6 shadow-2xl border-none">
-            <div className="w-20 h-20 bg-red-50 rounded-3xl flex items-center justify-center text-red-600 mx-auto">
-              <AlertTriangle size={40} />
-            </div>
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tight">Ups! Nešto je pošlo po krivu</h2>
-              <p className="text-zinc-500 text-sm leading-relaxed">
-                {displayMessage}
-              </p>
-            </div>
-            <div className="pt-4 flex flex-col gap-3">
-              <Button 
-                onClick={() => window.location.reload()} 
-                className="w-full py-4 h-auto text-base font-bold"
-              >
-                Osvježi stranicu
-              </Button>
-              {!isQuotaError && (
-                <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-bold">
-                  Ako se problem nastavi, kontaktirajte podršku.
-                </p>
-              )}
-            </div>
-          </Card>
-        </div>
-      );
-    }
-
-    return this.props.children;
-  }
-}
 
 // --- Main App ---
 
@@ -1004,55 +944,8 @@ function AppContent() {
   };
 
   return (
-    <div
-      className="min-h-screen bg-zinc-50 pb-24 md:pb-0 md:pl-64"
-      style={{ '--color-accent': company?.brandColor || '#3B82F6' } as any}
-    >
-      {/* Sidebar - Desktop */}
-      <aside className="hidden md:flex flex-col w-64 bg-primary text-white border-r border-slate-800 h-screen fixed left-0 top-0 p-6">
-        <div className="flex items-center gap-3 mb-10">
-          <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center shadow-lg shadow-accent/20 overflow-hidden">
-            {company?.logoUrl ? (
-              <img src={company.logoUrl} alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
-            ) : (
-              <Zap className="text-white w-5 h-5 fill-white" />
-            )}
-          </div>
-          <span className="font-bold text-xl tracking-tight">Site Diary</span>
-        </div>
-
-        <nav className="space-y-2 flex-1">
-          <NavItem active={view === 'dashboard'} onClick={() => setView('dashboard')} icon={<LayoutDashboard size={20} />} label="Nadzorna ploča" brandColor={company?.brandColor} />
-          <NavItem active={view === 'projects'} onClick={() => setView('projects')} icon={<Folder size={20} />} label="Projekti" brandColor={company?.brandColor} />
-          <NavItem active={view === 'calendar'} onClick={() => setView('calendar')} icon={<CalendarDays size={20} />} label="Kalendar" brandColor={company?.brandColor} />
-          <NavItem active={view === 'reports'} onClick={() => setView('reports')} icon={<FileText size={20} />} label="Izvještaji" brandColor={company?.brandColor} />
-          <NavItem active={view === 'master-workspace'} onClick={() => setView('master-workspace')} icon={<Layers size={20} />} label="Master projekti" brandColor={company?.brandColor} />
-          {appUser?.role === 'admin' && (
-            <NavItem active={view === 'users'} onClick={() => setView('users')} icon={<Users size={20} />} label="Korisnici" brandColor={company?.brandColor} />
-          )}
-          {appUser?.role === 'admin' && (
-            <NavItem active={view === 'company-settings'} onClick={() => setView('company-settings')} icon={<Building2 size={20} />} label="Postavke tvrtke" brandColor={company?.brandColor} />
-          )}
-        </nav>
-
-        <div className="pt-6 border-t border-slate-800">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
-              <UserIcon size={16} className="text-slate-400" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold truncate text-white">{appUser?.name}</p>
-              <p className="text-xs text-slate-400 truncate">{company?.name}</p>
-            </div>
-          </div>
-          <Button variant="ghost" className="w-full justify-start text-slate-400 hover:text-red-400 hover:bg-red-400/10" onClick={signOut}>
-            <LogOut size={18} /> Odjava
-          </Button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="max-w-4xl mx-auto p-4 md:p-8">
+    <>
+      <AppShell view={view} setView={setView} company={company} appUser={appUser}>
         {view === 'dashboard' && appUser && (
             <DashboardView 
               appUser={appUser} 
@@ -1421,22 +1314,7 @@ function AppContent() {
             company={company}
           />
         )}
-      </main>
-
-      {/* Bottom Nav - Mobile */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-100 px-6 py-3 flex justify-between items-center z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-        <MobileNavItem active={view === 'dashboard'} onClick={() => setView('dashboard')} icon={<LayoutDashboard size={24} />} brandColor={company?.brandColor} />
-        <MobileNavItem active={view === 'projects'} onClick={() => setView('projects')} icon={<Folder size={24} />} brandColor={company?.brandColor} />
-        <button 
-          onClick={() => setView('new-entry')}
-          className="w-14 h-14 rounded-full flex items-center justify-center -mt-10 shadow-lg text-white active:scale-90 transition-transform border-4 border-white"
-          style={{ backgroundColor: company?.brandColor || '#3b82f6', boxShadow: `0 10px 15px -3px ${(company?.brandColor || '#3b82f6')}33` }}
-        >
-          <Plus size={28} />
-        </button>
-        <MobileNavItem active={view === 'calendar'} onClick={() => setView('calendar')} icon={<CalendarDays size={24} />} brandColor={company?.brandColor} />
-        <MobileNavItem active={view === 'reports'} onClick={() => setView('reports')} icon={<FileText size={24} />} brandColor={company?.brandColor} />
-      </nav>
+      </AppShell>
 
       {/* Secrets Modal */}
       {showSecretsModal && (
@@ -1503,128 +1381,11 @@ function AppContent() {
           </motion.div>
         </div>
       )}
-    </div>
-  );
-}
-
-function SecretsModal({ onClose }: { onClose: () => void }) {
-  const [hasKey, setHasKey] = useState(false);
-
-  useEffect(() => {
-    const checkKey = async () => {
-      if ((window as any).aistudio?.hasSelectedApiKey) {
-        const result = await (window as any).aistudio.hasSelectedApiKey();
-        setHasKey(result);
-      }
-    };
-    checkKey();
-  }, []);
-
-  const handleOpenSelectKey = async () => {
-    if ((window as any).aistudio?.openSelectKey) {
-      await (window as any).aistudio.openSelectKey();
-      onClose();
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl space-y-6"
-      >
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight">Postavke Tajni</h2>
-          <button onClick={onClose} className="p-2 hover:bg-zinc-100 rounded-full transition-colors">
-            <X size={24} />
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100 space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
-                <Zap size={20} />
-              </div>
-              <div>
-                <p className="font-bold text-sm">Gemini API Ključ</p>
-                <p className="text-[10px] text-zinc-500">Potreban za AI značajke (sažetke, analizu).</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center justify-between pt-2">
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${hasKey ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>
-                {hasKey ? 'KLJUČ ODABRAN' : 'KLJUČ NIJE ODABRAN'}
-              </span>
-              <Button variant="outline" size="sm" onClick={handleOpenSelectKey} className="text-xs py-1 h-auto">
-                {hasKey ? 'Promijeni' : 'Odaberi Ključ'}
-              </Button>
-            </div>
-          </div>
-
-          <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100 space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
-                <Calendar size={20} />
-              </div>
-              <div>
-                <p className="font-bold text-sm">Google Calendar API</p>
-                <p className="text-[10px] text-zinc-500">Konfigurirajte Client ID i Secret u postavkama projekta.</p>
-              </div>
-            </div>
-            <p className="text-[10px] text-zinc-400 bg-white p-2 rounded-lg border border-zinc-100">
-              Ove tajne se postavljaju u AI Studio sučelju pod "Secrets" sekcijom koristeći varijable:
-              <br/>
-              <code className="text-accent font-mono">GOOGLE_CLIENT_ID</code>
-              <br/>
-              <code className="text-accent font-mono">GOOGLE_CLIENT_SECRET</code>
-            </p>
-          </div>
-        </div>
-
-        <div className="pt-4">
-          <Button onClick={onClose} className="w-full py-3">Zatvori</Button>
-        </div>
-      </motion.div>
-    </div>
+    </>
   );
 }
 
 // --- Sub-views ---
-
-function NavItem({ active, onClick, icon, label, brandColor }: any) {
-  return (
-    <button 
-      onClick={onClick}
-      className={cn(
-        'w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all',
-        active 
-          ? 'text-white shadow-lg' 
-          : 'text-slate-400 hover:text-white hover:bg-slate-800'
-      )}
-      style={active ? { backgroundColor: brandColor || '#3b82f6', boxShadow: `0 10px 15px -3px ${(brandColor || '#3b82f6')}33` } : {}}
-    >
-      {icon}
-      <span className="font-medium">{label}</span>
-    </button>
-  );
-}
-
-function MobileNavItem({ active, onClick, icon, brandColor }: any) {
-  return (
-    <button 
-      onClick={onClick}
-      className={cn(
-        'p-2 rounded-xl transition-all',
-        active ? 'shadow-sm' : 'text-zinc-400'
-      )}
-      style={active ? { color: brandColor || '#3b82f6', backgroundColor: `${brandColor || '#3b82f6'}10` } : {}}
-    >
-      {icon}
-    </button>
-  );
-}
 
 function DiaryEntryDetailModal({ entry, project, onClose, onEdit, onAddToCalendar, hasCalendar, company }: { entry: DiaryEntry, project: Project, onClose: () => void, onEdit: (e: DiaryEntry) => void, onAddToCalendar: (e: DiaryEntry) => Promise<void>, hasCalendar: boolean, company: Company | null }) {
   const [loading, setLoading] = useState(false);
