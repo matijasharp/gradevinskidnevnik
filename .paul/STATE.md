@@ -5,26 +5,26 @@
 See: .paul/PROJECT.md (updated 2026-03-29)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.1 — Frontend Architecture Refactor. Phase 9 complete, ready to plan Phase 10.
+**Current focus:** v1.1 — Frontend Architecture Refactor. Phase 11 complete, ready to plan Phase 12.
 
 ## Current Position
 
 Milestone: v1.1 — Frontend Architecture Refactor
-Phase: 9 of 14 (Extract Complex View Components) — Complete ✅
-Plan: 09-04 complete
-Status: Phase 9 done — ready to plan Phase 10
-Last activity: 2026-03-30 — Phase 9 complete: all 4 plans done, all complex views extracted
+Phase: 12 of 14 (navigate() Migration) — Not started
+Plan: Not started
+Status: Ready to plan Phase 12
+Last activity: 2026-03-30 — Phase 11 complete. Transitioned to Phase 12.
 
 Progress:
-- v1.1 Milestone: [█████░░░░░] 50% (5/10 phases)
-- Phase 9: [██████████] 100% (4/4 plans complete)
+- v1.1 Milestone: [███████░░░] 70% (7/10 phases)
+- Phase 12: [░░░░░░░░░░] 0%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Loop complete — Phase 9 done, ready for Phase 10 PLAN]
+  ○        ○        ○     [Phase 12 not started — ready to plan]
 ```
 
 ## Performance Metrics
@@ -35,8 +35,8 @@ PLAN ──▶ APPLY ──▶ UNIFY
 - Total execution time: ~10.8 hours
 
 **Velocity (v1.1 so far):**
-- Plans completed: 7
-- Duration: ~135 min total
+- Plans completed: 8
+- Duration: ~145 min total
 
 **By Phase (v1.0):**
 
@@ -54,6 +54,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | 05-types-utilities | 1/1 ✅ | ~35 min | 35 min |
 | 06-shared-ui-primitives | 1/1 ✅ | ~10 min | 10 min |
 | 09-extract-complex-views | 4/4 ✅ | ~75 min | ~19 min |
+| 10-router-scaffolding | 1/1 ✅ | ~10 min | ~10 min |
 
 ## Accumulated Context
 
@@ -85,6 +86,10 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | Extract-and-import pattern for refactor | v1.1 | Create new file → import → verify → remove inline. Never delete before proven working |
 | npm run build must pass after every phase | v1.1 | Governing constraint — nothing gets broken |
 | data.ts re-exports from shared/types | Phase 5 | Preserves App.tsx line 106 import compat without churn across all phases |
+| AppRouter not mounted until Phase 12 | Phase 10 | Router scaffold + AuthProvider (Phase 11) must both exist before activation |
+| setAppUser/setCompany/setShowOnboarding exposed as context setters | Phase 11 | handleOnboarding can mutate auth-adjacent state; Phase 12 calls these via useAuth() |
+| BrowserRouter in main.tsx (temporary) | Phase 11 | Phase 12 must remove it when RouterProvider/createBrowserRouter activates AppRouter |
+| ROUTES const as single source of truth | Phase 10 | All navigate() calls in Phase 12 import from routeConfig.ts |
 
 ### Deferred Issues
 
@@ -120,9 +125,9 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-03-30
-Stopped at: Phase 9 complete — all 4 plans done, loop closed
-Next action: /paul:plan (Phase 10 — Router Scaffolding)
-Resume file: .paul/phases/09-extract-complex-views/09-04-SUMMARY.md
+Stopped at: Phase 11 complete, transitioned to Phase 12
+Next action: /paul:plan for Phase 12 (navigate() Migration)
+Resume file: .paul/ROADMAP.md
 
 ---
 *STATE.md — Updated after every significant action*

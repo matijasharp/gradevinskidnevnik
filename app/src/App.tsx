@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useAuth } from './app/providers';
 import { motion } from 'motion/react';
 import { 
   Plus, 
@@ -44,8 +45,7 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react';
-import type { User as SupabaseUser } from '@supabase/supabase-js';
-import { signInWithGoogle, signInWithEmail, getSession, onAuthStateChange } from './lib/supabaseAuth';
+import { signInWithGoogle, signInWithEmail } from './lib/supabaseAuth';
 import {
   subscribeProjects,
   subscribeDiaryEntries,
@@ -53,10 +53,6 @@ import {
   subscribeDiaryPhotos,
   fetchDiaryPhotos,
   fetchProjectPhotos,
-  fetchProfileByUserId,
-  fetchOrganizationById,
-  fetchInvitationByEmail,
-  acceptInvitation,
   createOrganizationWithOwner,
   createInvitation,
   updateProfileRole,
@@ -75,8 +71,6 @@ import {
   deleteDiaryPhoto,
   subscribePendingInvitations,
   cancelInvitation as cancelInvitationRecord,
-  fetchProjectInvitationByEmail,
-  acceptProjectInvitation,
   fetchProjectMembers,
   addProjectMember,
   removeProjectMember,
@@ -107,7 +101,7 @@ import type { Invitation, ProjectMember, ProjectInvitation, ProjectTask, Project
 import type { Company, AppUser, Project, DiaryEntry, DiaryPhoto, GoogleTokens, CalendarEvent } from './shared/types';
 import { safeFormatDate, stripMarkdown } from './shared/utils/format';
 import { trimCanvas, compressImage } from './shared/utils/image';
-import { OperationType, setAuthContext, handleFirestoreError } from './shared/utils/error';
+import { OperationType, handleFirestoreError } from './shared/utils/error';
 import { cn } from './lib/utils';
 import { Button, Card, Input, Select, StatusBadge } from './shared/ui';
 import ErrorBoundary from './shared/components/ErrorBoundary';
@@ -185,10 +179,12 @@ export default function App() {
 }
 
 function AppContent() {
-  const [user, setUser] = useState<SupabaseUser | null>(null);
-  const [appUser, setAppUser] = useState<AppUser | null>(null);
-  const [company, setCompany] = useState<Company | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user, appUser, company, loading, showOnboarding, setShowOnboarding, setAppUser, setCompany } = useAuth();
+
+  useEffect(() => {
+    if (!user) setGoogleTokens(null);
+  }, [user]);
+
   const [view, setView] = useState<'dashboard' | 'projects' | 'new-entry' | 'edit-entry' | 'project-detail' | 'reports' | 'users' | 'company-settings' | 'calendar' | 'master-workspace'>('dashboard');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -197,7 +193,6 @@ function AppContent() {
   const [pendingInvitations, setPendingInvitations] = useState<Invitation[]>([]);
   const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
   const [editingEntry, setEditingEntry] = useState<DiaryEntry | null>(null);
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [emailLogin, setEmailLogin] = useState({ email: '', password: '', error: '', loading: false });
   const [showPassword, setShowPassword] = useState(false);
@@ -271,89 +266,6 @@ function AppContent() {
     setMaterialHistory(Array.from(historyMap.keys()));
     setMaterialUnits(Object.fromEntries(historyMap));
   }, [entries]);
-
-  // --- Auth & Initial Data ---
-
-  useEffect(() => {
-    let active = true;
-
-    const resolveUser = async (authUser: SupabaseUser | null) => {
-      if (!active) return;
-      setLoading(true);
-      setUser(authUser);
-      setAuthContext(authUser);
-
-      if (!authUser) {
-        setAppUser(null);
-        setCompany(null);
-        setGoogleTokens(null);
-        setShowOnboarding(false);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const profile = await fetchProfileByUserId(authUser.id);
-        if (profile && profile.companyId) {
-          const org = await fetchOrganizationById(profile.companyId);
-          setCompany(org);
-          setAppUser(profile);
-          setShowOnboarding(false);
-          // Accept any pending cross-org project invitation
-          if (authUser.email) {
-            const projectInvite = await fetchProjectInvitationByEmail(authUser.email).catch(() => null);
-            if (projectInvite) {
-              await acceptProjectInvitation({ invitation: projectInvite, userId: authUser.id }).catch(() => null);
-            }
-          }
-        } else if (authUser.email) {
-          const invite = await fetchInvitationByEmail(authUser.email);
-          if (invite) {
-            const displayName = authUser.user_metadata?.full_name || authUser.user_metadata?.name || authUser.email;
-            const { profile: invitedProfile, company } = await acceptInvitation({
-              userId: authUser.id,
-              email: authUser.email,
-              name: displayName,
-              invitation: invite
-            });
-            setAppUser(invitedProfile);
-            setCompany(company);
-            setShowOnboarding(false);
-          } else {
-            // Check for cross-org project invitation even without org membership
-            const projectInvite = await fetchProjectInvitationByEmail(authUser.email).catch(() => null);
-            if (projectInvite) {
-              await acceptProjectInvitation({ invitation: projectInvite, userId: authUser.id }).catch(() => null);
-            }
-            setShowOnboarding(true);
-          }
-        } else {
-          setShowOnboarding(true);
-        }
-      } catch (error: any) {
-        console.error('resolveUser error:', error);
-        setShowOnboarding(true);
-      }
-
-      setLoading(false);
-    };
-
-    getSession()
-      .then(({ data }) => resolveUser(data.session?.user ?? null))
-      .catch((error) => {
-        console.error('session error:', error);
-        setLoading(false);
-      });
-
-    const { data } = onAuthStateChange((_event, _session, authUser) => {
-      resolveUser(authUser);
-    });
-
-    return () => {
-      active = false;
-      data.subscription.unsubscribe();
-    };
-  }, []);
 
   // --- Real-time Listeners ---
 

@@ -14,7 +14,7 @@ Contractors log site progress fast while project leads see shared, audited statu
 |-----------|-------|
 | Type | Application |
 | Version | 1.1 (in progress) |
-| Status | v1.0 complete; v1.1 frontend refactor in progress (Phase 8 of 14 done) |
+| Status | v1.0 complete; v1.1 frontend refactor in progress (Phase 11 of 14 done) |
 | Last Updated | 2026-03-30 |
 
 **Production URLs:**
@@ -40,6 +40,9 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 6: Shared UI primitives — Button, Card, Input, Select, StatusBadge extracted to shared/ui/ — Phase 6
 - ✓ Phase 7: Navigation + layout shell — ErrorBoundary, SecretsModal, AppShell extracted; AppContent return restructured to use AppShell — Phase 7
 - ✓ Phase 8: Extract simple view components — all 12 prop-driven views extracted into feature folders; App.tsx reduced 4207 → 3119 lines (−1088) — Phase 8
+- ✓ Phase 9: Extract complex view components — 7 data-fetching views extracted into feature folders — Phase 9
+- ✓ Phase 10: Router scaffolding — react-router-dom installed, Vite SPA fallback configured, router skeleton created (not activated) — Phase 10
+- ✓ Phase 11: AuthProvider extraction — auth state (user, appUser, company, loading, showOnboarding) moved to context; main.tsx wrapped with BrowserRouter + AuthProvider; AppContent migrated to useAuth() — Phase 11
 
 ### Active (In Progress)
 
@@ -109,6 +112,9 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | Issue status cycle on badge click | Minimal mobile-friendly UX; no dropdown needed for MVP | 2026-03-28 | Active |
 | Extract-and-import pattern for v1.1 refactor | Create new file → import → npm run build → remove inline; never delete before proven working | 2026-03-29 | Active |
 | data.ts re-exports from shared/types | Preserves App.tsx line 106 import compat across all phases without churn | 2026-03-29 | Active |
+| AppRouter not mounted until Phase 12 | Router scaffold and auth context (Phase 11) must both exist before activation; prevents partial wiring | 2026-03-30 | Active |
+| setAppUser/setCompany/setShowOnboarding exposed as context setters | handleOnboarding mutates auth-adjacent state after org creation; must be mutable from AppContent | 2026-03-30 | Active |
+| BrowserRouter in main.tsx (temporary) | Phase 12's useNavigate() requires a router context; will be replaced by RouterProvider when AppRouter activates | 2026-03-30 | Active |
 
 ## Success Metrics
 
@@ -139,4 +145,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-30 after Phase 8 — all 12 simple view components extracted*
+*Last updated: 2026-03-30 after Phase 11 — AuthProvider extracted, AppContent migrated to useAuth()*
