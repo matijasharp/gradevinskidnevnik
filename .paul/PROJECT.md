@@ -14,8 +14,8 @@ Contractors log site progress fast while project leads see shared, audited statu
 |-----------|-------|
 | Type | Application |
 | Version | 1.1 (in progress) |
-| Status | v1.0 complete; v1.1 frontend refactor in progress (Phase 7 of 14 done) |
-| Last Updated | 2026-03-29 |
+| Status | v1.0 complete; v1.1 frontend refactor in progress (Phase 8 of 14 done) |
+| Last Updated | 2026-03-30 |
 
 **Production URLs:**
 - None
@@ -39,6 +39,7 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 5: Shared type/utility foundation — types/index.ts, shared/utils, Firebase removed — Phase 5
 - ✓ Phase 6: Shared UI primitives — Button, Card, Input, Select, StatusBadge extracted to shared/ui/ — Phase 6
 - ✓ Phase 7: Navigation + layout shell — ErrorBoundary, SecretsModal, AppShell extracted; AppContent return restructured to use AppShell — Phase 7
+- ✓ Phase 8: Extract simple view components — all 12 prop-driven views extracted into feature folders; App.tsx reduced 4207 → 3119 lines (−1088) — Phase 8
 
 ### Active (In Progress)
 
@@ -138,4 +139,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-29 after Phase 7 — navigation + layout shell extracted*
+*Last updated: 2026-03-30 after Phase 8 — all 12 simple view components extracted*

@@ -5,26 +5,26 @@
 See: .paul/PROJECT.md (updated 2026-03-29)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.1 — Frontend Architecture Refactor. Phase 7 complete, ready to plan Phase 8.
+**Current focus:** v1.1 — Frontend Architecture Refactor. Phase 8 complete, ready to plan Phase 9.
 
 ## Current Position
 
 Milestone: v1.1 — Frontend Architecture Refactor
-Phase: 7 of 14 (Navigation + Layout Shell) — Complete
-Plan: 07-01 complete
-Status: Phase 7 done — ready to plan Phase 8
-Last activity: 2026-03-29 — Phase 7 complete: ErrorBoundary, SecretsModal, AppShell extracted; AppContent restructured
+Phase: 9 of 14 (Extract Complex View Components) — Not Started
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-03-30 — Phase 8 complete: all 12 simple view components extracted, App.tsx 4207→3119 (−1088 lines)
 
 Progress:
-- v1.1 Milestone: [███░░░░░░░] 30% (3/10 phases)
-- Phase 7: [██████████] 100% ✅
+- v1.1 Milestone: [████░░░░░░] 40% (4/10 phases)
+- Phase 9: [░░░░░░░░░░] 0% (0 plans, not started)
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Loop complete — Phase 7 done]
+  ✓        ✓        ✓     [Loop complete — ready for next PLAN]
 ```
 
 ## Performance Metrics
@@ -104,7 +104,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: 16b49b7 — feat(06-shared-ui-primitives): Phase 6 complete — shared UI primitives
+Last commit: (pending — Phase 8 commit not yet created)
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -118,10 +118,10 @@ Feature branches merged: none
 
 ## Session Continuity
 
-Last session: 2026-03-29
-Stopped at: Phase 7 complete — loop closed
-Next action: /paul:plan (Phase 8 — Extract Simple View Components)
-Resume file: .paul/phases/07-navigation-layout/07-01-SUMMARY.md
+Last session: 2026-03-30
+Stopped at: Phase 8 complete — UNIFY done, transition complete, ready to plan Phase 9
+Next action: /paul:plan for Phase 9 (Extract Complex View Components)
+Resume file: .paul/ROADMAP.md
 
 ---
 *STATE.md — Updated after every significant action*

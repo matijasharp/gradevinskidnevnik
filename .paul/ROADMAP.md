@@ -8,7 +8,7 @@ Start from the electrician prototype, deliver a Supabase-backed MVP with full UI
 
 **v1.1 — Frontend Architecture Refactor** (v1.1)
 Status: 🚧 In Progress
-Phases: 3 of 10 complete
+Phases: 4 of 10 complete
 
 ## Previous Milestone
 
@@ -40,7 +40,7 @@ Phases: 4 of 4 complete
 | 5 | Types + Pure Utilities | 1/1 | ✅ Complete | 2026-03-29 |
 | 6 | Shared UI Primitives | 1/1 | ✅ Complete | 2026-03-29 |
 | 7 | Navigation + Layout Shell | 1/1 | ✅ Complete | 2026-03-29 |
-| 8 | Extract Simple View Components | TBD | Not started | - |
+| 8 | Extract Simple View Components | 3/3 | ✅ Complete | 2026-03-30 |
 | 9 | Extract Complex View Components | TBD | Not started | - |
 | 10 | Router Scaffolding | TBD | Not started | - |
 | 11 | AuthProvider Extraction | TBD | Not started | - |
@@ -226,4 +226,4 @@ Phases: 4 of 4 complete
 
 ---
 *Roadmap created: 2026-03-27*
-*Last updated: 2026-03-29 — Phase 7 complete*
+*Last updated: 2026-03-30 — Phase 8 complete*
