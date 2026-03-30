@@ -104,7 +104,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: (pending — Phase 8 commit not yet created)
+Last commit: c60f748 — feat(08-extract-simple-views): Phase 8 complete — all 12 simple view components extracted
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
