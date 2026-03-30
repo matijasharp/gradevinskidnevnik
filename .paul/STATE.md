@@ -5,26 +5,26 @@
 See: .paul/PROJECT.md (updated 2026-03-29)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.1 — Frontend Architecture Refactor. Phase 8 complete, ready to plan Phase 9.
+**Current focus:** v1.1 — Frontend Architecture Refactor. Phase 9 complete, ready to plan Phase 10.
 
 ## Current Position
 
 Milestone: v1.1 — Frontend Architecture Refactor
-Phase: 9 of 14 (Extract Complex View Components) — Not Started
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-03-30 — Phase 8 complete: all 12 simple view components extracted, App.tsx 4207→3119 (−1088 lines)
+Phase: 9 of 14 (Extract Complex View Components) — Complete ✅
+Plan: 09-04 complete
+Status: Phase 9 done — ready to plan Phase 10
+Last activity: 2026-03-30 — Phase 9 complete: all 4 plans done, all complex views extracted
 
 Progress:
-- v1.1 Milestone: [████░░░░░░] 40% (4/10 phases)
-- Phase 9: [░░░░░░░░░░] 0% (0 plans, not started)
+- v1.1 Milestone: [█████░░░░░] 50% (5/10 phases)
+- Phase 9: [██████████] 100% (4/4 plans complete)
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Loop complete — ready for next PLAN]
+  ✓        ✓        ✓     [Loop complete — Phase 9 done, ready for Phase 10 PLAN]
 ```
 
 ## Performance Metrics
@@ -35,8 +35,8 @@ PLAN ──▶ APPLY ──▶ UNIFY
 - Total execution time: ~10.8 hours
 
 **Velocity (v1.1 so far):**
-- Plans completed: 1
-- Duration: ~35 min
+- Plans completed: 7
+- Duration: ~135 min total
 
 **By Phase (v1.0):**
 
@@ -53,6 +53,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 |-------|-------|------------|----------|
 | 05-types-utilities | 1/1 ✅ | ~35 min | 35 min |
 | 06-shared-ui-primitives | 1/1 ✅ | ~10 min | 10 min |
+| 09-extract-complex-views | 4/4 ✅ | ~75 min | ~19 min |
 
 ## Accumulated Context
 
@@ -119,9 +120,9 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-03-30
-Stopped at: Phase 8 complete — UNIFY done, transition complete, ready to plan Phase 9
-Next action: /paul:plan for Phase 9 (Extract Complex View Components)
-Resume file: .paul/ROADMAP.md
+Stopped at: Phase 9 complete — all 4 plans done, loop closed
+Next action: /paul:plan (Phase 10 — Router Scaffolding)
+Resume file: .paul/phases/09-extract-complex-views/09-04-SUMMARY.md
 
 ---
 *STATE.md — Updated after every significant action*
