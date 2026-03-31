@@ -14,8 +14,8 @@ Contractors log site progress fast while project leads see shared, audited statu
 |-----------|-------|
 | Type | Application |
 | Version | 1.1 (in progress) |
-| Status | v1.0 complete; v1.1 frontend refactor in progress (Phase 11 of 14 done) |
-| Last Updated | 2026-03-30 |
+| Status | v1.0 complete; v1.1 frontend refactor in progress (Phase 12 of 14 done) |
+| Last Updated | 2026-03-31 |
 
 **Production URLs:**
 - None
@@ -43,6 +43,8 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 9: Extract complex view components — 7 data-fetching views extracted into feature folders — Phase 9
 - ✓ Phase 10: Router scaffolding — react-router-dom installed, Vite SPA fallback configured, router skeleton created (not activated) — Phase 10
 - ✓ Phase 11: AuthProvider extraction — auth state (user, appUser, company, loading, showOnboarding) moved to context; main.tsx wrapped with BrowserRouter + AuthProvider; AppContent migrated to useAuth() — Phase 11
+- ✓ Phase 12: navigate() migration — view useState removed; Routes/Route replace view-conditionals; all setView() → navigate(); AppRouter activated as RouterProvider; BrowserRouter removed — Phase 12
+- ✓ Phase 13: Data layer decomposition — data.ts (1427 lines) split into 10 domain query modules under integrations/supabase/queries/; data.ts → single-line barrel re-export; zero consumer changes — Phase 13
 
 ### Active (In Progress)
 
@@ -114,7 +116,9 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | data.ts re-exports from shared/types | Preserves App.tsx line 106 import compat across all phases without churn | 2026-03-29 | Active |
 | AppRouter not mounted until Phase 12 | Router scaffold and auth context (Phase 11) must both exist before activation; prevents partial wiring | 2026-03-30 | Active |
 | setAppUser/setCompany/setShowOnboarding exposed as context setters | handleOnboarding mutates auth-adjacent state after org creation; must be mutable from AppContent | 2026-03-30 | Active |
-| BrowserRouter in main.tsx (temporary) | Phase 12's useNavigate() requires a router context; will be replaced by RouterProvider when AppRouter activates | 2026-03-30 | Active |
+| BrowserRouter in main.tsx (temporary) | Phase 12's useNavigate() requires a router context; will be replaced by RouterProvider when AppRouter activates | 2026-03-30 | Resolved — Phase 12 |
+| AppRouter catchall path='*' → App: thin pages deferred to Phase 14 | Phase 12 activates routing; thin page components (DashboardPage etc.) split in Phase 14 | 2026-03-31 | Active |
+| ProtectedRoute redirects to ROUTES.DASHBOARD, not /login | No separate /login route until Phase 14; AppContent shows LoginView at '/' when user is null | 2026-03-31 | Active |
 
 ## Success Metrics
 
@@ -145,4 +149,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-30 after Phase 11 — AuthProvider extracted, AppContent migrated to useAuth()*
+*Last updated: 2026-03-31 after Phase 13 — data layer decomposed into 10 domain query modules, data.ts → thin re-export*

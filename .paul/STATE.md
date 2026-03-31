@@ -2,29 +2,29 @@
 
 ## Project Reference
 
-See: .paul/PROJECT.md (updated 2026-03-29)
+See: .paul/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.1 — Frontend Architecture Refactor. Phase 11 complete, ready to plan Phase 12.
+**Current focus:** v1.1 — Frontend Architecture Refactor. Phase 13 complete, ready to plan Phase 14.
 
 ## Current Position
 
 Milestone: v1.1 — Frontend Architecture Refactor
-Phase: 12 of 14 (navigate() Migration) — Not started
+Phase: 14 of 14 (OrganizationProvider + Thin Pages) — Not started
 Plan: Not started
-Status: Ready to plan Phase 12
-Last activity: 2026-03-30 — Phase 11 complete. Transitioned to Phase 12.
+Status: Ready to plan
+Last activity: 2026-03-31 — Phase 13 complete, transitioned to Phase 14
 
 Progress:
-- v1.1 Milestone: [███████░░░] 70% (7/10 phases)
-- Phase 12: [░░░░░░░░░░] 0%
+- v1.1 Milestone: [█████████░] 90% (9/10 phases)
+- Phase 14: [░░░░░░░░░░] 0%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ○        ○        ○     [Phase 12 not started — ready to plan]
+  ✓        ✓        ✓     [Loop complete — ready for next PLAN]
 ```
 
 ## Performance Metrics
@@ -88,8 +88,13 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | data.ts re-exports from shared/types | Phase 5 | Preserves App.tsx line 106 import compat without churn across all phases |
 | AppRouter not mounted until Phase 12 | Phase 10 | Router scaffold + AuthProvider (Phase 11) must both exist before activation |
 | setAppUser/setCompany/setShowOnboarding exposed as context setters | Phase 11 | handleOnboarding can mutate auth-adjacent state; Phase 12 calls these via useAuth() |
-| BrowserRouter in main.tsx (temporary) | Phase 11 | Phase 12 must remove it when RouterProvider/createBrowserRouter activates AppRouter |
-| ROUTES const as single source of truth | Phase 10 | All navigate() calls in Phase 12 import from routeConfig.ts |
+| BrowserRouter in main.tsx (temporary) | Phase 11 | Resolved in Phase 12 — RouterProvider/createBrowserRouter activates AppRouter |
+| ROUTES const as single source of truth | Phase 10 | All navigate() calls import from routeConfig.ts |
+| AppRouter catchall path='*' → App | Phase 12 | Thin page components deferred to Phase 14; Phase 12 activates routing only |
+| ProtectedRoute redirects to ROUTES.DASHBOARD | Phase 12 | No /login route until Phase 14; AppContent shows LoginView at '/' when !user |
+| selectedProject state stays in AppContent | Phase 12 | URL param → state sync deferred to Phase 13; direct /projects/:id navigation renders null until then |
+| _utils.ts shared helper for query modules | Phase 13 | ensureSupabase + subscribeWithFetch shared across all 10 domain files; plan allowed both copy-in or shared |
+| invitations.ts imports from organizations.ts | Phase 13 | acceptInvitation cross-module dep; establishes intra-queries/ import pattern |
 
 ### Deferred Issues
 
@@ -124,9 +129,9 @@ Feature branches merged: none
 
 ## Session Continuity
 
-Last session: 2026-03-30
-Stopped at: Phase 11 complete, transitioned to Phase 12
-Next action: /paul:plan for Phase 12 (navigate() Migration)
+Last session: 2026-03-31
+Stopped at: Phase 13 complete — query module decomposition done, transitioned to Phase 14
+Next action: /paul:plan for Phase 14 (OrganizationProvider + Thin Pages)
 Resume file: .paul/ROADMAP.md
 
 ---
