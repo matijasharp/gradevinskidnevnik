@@ -32,6 +32,8 @@ export interface AppUser {
   email: string;
   role: 'admin' | 'worker';
   googleTokens?: GoogleTokens;
+  status: 'pending' | 'approved' | 'rejected';
+  isSuperAdmin: boolean;
 }
 
 export interface Project {

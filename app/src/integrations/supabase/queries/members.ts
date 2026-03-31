@@ -7,7 +7,9 @@ const mapUser = (row: any): AppUser => ({
   name: row.name ?? '',
   email: row.email ?? '',
   role: row.role ?? 'worker',
-  googleTokens: row.google_tokens ?? undefined
+  googleTokens: row.google_tokens ?? undefined,
+  status: (row.status ?? 'approved') as 'pending' | 'approved' | 'rejected',
+  isSuperAdmin: row.is_super_admin ?? false,
 });
 
 export const subscribeCompanyUsers = (
@@ -116,5 +118,28 @@ export const updateProfileTokens = async (userId: string, tokens: any): Promise<
     .from('profiles')
     .update({ google_tokens: tokens })
     .eq('id', userId);
+  if (error) throw error;
+};
+
+export const fetchPendingProfiles = async (): Promise<AppUser[]> => {
+  ensureSupabase();
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('status', 'pending')
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map(mapUser);
+};
+
+export const approveProfile = async (userId: string): Promise<void> => {
+  ensureSupabase();
+  const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
+  if (error) throw error;
+};
+
+export const rejectProfile = async (userId: string): Promise<void> => {
+  ensureSupabase();
+  const { error } = await supabase.from('profiles').update({ status: 'rejected' }).eq('id', userId);
   if (error) throw error;
 };

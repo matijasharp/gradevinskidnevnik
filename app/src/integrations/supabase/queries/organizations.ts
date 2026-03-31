@@ -22,7 +22,9 @@ const mapUser = (row: any): AppUser => ({
   name: row.name ?? '',
   email: row.email ?? '',
   role: row.role ?? 'worker',
-  googleTokens: row.google_tokens ?? undefined
+  googleTokens: row.google_tokens ?? undefined,
+  status: (row.status ?? 'approved') as 'pending' | 'approved' | 'rejected',
+  isSuperAdmin: row.is_super_admin ?? false,
 });
 
 export const fetchOrganizationById = async (organizationId: string): Promise<Company | null> => {
@@ -86,7 +88,8 @@ export const createOrganizationWithOwner = async (params: {
       name: params.ownerName,
       email: params.ownerEmail ?? undefined,
       role: 'admin',
-      invited: false
+      invited: false,
+      status: 'pending'
     })
     .select('*')
     .single();

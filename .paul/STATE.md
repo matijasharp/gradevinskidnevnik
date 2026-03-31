@@ -5,26 +5,26 @@
 See: .paul/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.2 — Backend Infrastructure (next milestone; awaiting planning).
+**Current focus:** v1.2 — Electro MVP Launch (Phase 16 complete; ready for Phase 17 Landing Page).
 
 ## Current Position
 
 Milestone: v1.2 — Electro MVP Launch
-Phase: 16 of 22 (Signup Approval Gate + Minimal Super Admin) — Planning
-Plan: none yet
-Status: Phase 15 complete — ready to plan Phase 16
-Last activity: 2026-03-31 — Phase 15 UNIFY complete (15-01 closed)
+Phase: 16 of 22 (Signup Approval Gate + Minimal Super Admin) — Complete ✅
+Plan: 16-01 complete
+Status: Ready for Phase 17 PLAN
+Last activity: 2026-03-31 — UNIFY complete for 16-01 (3/3 tasks PASS, all 6 AC met)
 
 Progress:
-- v1.2 Milestone: [█░░░░░░░░░] 13%
-- Phase 16: [░░░░░░░░░░] 0%
+- v1.2 Milestone: [██░░░░░░░░] 25%
+- Phase 16: [██████████] 100% ✅
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ○        ○        ○     [Loop closed — ready for next PLAN]
+  ✓        ✓        ✓     [Loop complete — ready for Phase 17 PLAN]
 ```
 
 ## Performance Metrics
@@ -97,6 +97,8 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | invitations.ts imports from organizations.ts | Phase 13 | acceptInvitation cross-module dep; establishes intra-queries/ import pattern |
 | OrganizationProvider mounted in AppRouter route element, not main.tsx | Phase 14 | useNavigate() requires Router context; RouterProvider lives inside AppRouter; any provider needing useNavigate() must be inside the route element |
 | refreshMasterProjects() on OrgContextValue | Phase 14 | masterProjects is one-time fetch; JSX inline handler needed to trigger re-fetch after creation; setMasterProjects is private to provider |
+| DEFAULT 'approved' on profiles.status migration | Phase 16 | Existing profiles remain unblocked; new signups explicitly set to pending in createOrganizationWithOwner |
+| isSuperAdmin guard inside component, not ProtectedRoute | Phase 16 | Route is intentionally hidden — no nav link; non-admins redirect silently from inside useEffect |
 
 ### Deferred Issues
 
@@ -132,9 +134,9 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-03-31
-Stopped at: Phase 15 complete — loop closed
-Next action: Run /paul:plan for Phase 16 (Signup Approval Gate + Minimal Super Admin)
-Resume file: .paul/phases/15-app-polish-role-enforcement/15-01-SUMMARY.md
+Stopped at: Phase 16 complete — UNIFY done
+Next action: Run /paul:plan for Phase 17 (Landing Page)
+Resume file: .paul/phases/16-signup-approval-gate/16-01-SUMMARY.md
 
 ---
 *STATE.md — Updated after every significant action*

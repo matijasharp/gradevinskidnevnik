@@ -14,6 +14,7 @@ import ErrorBoundary from './shared/components/ErrorBoundary';
 import SecretsModal from './shared/components/SecretsModal';
 import AppShell from './app/layouts/AppShell';
 import LoginView from './features/auth/components/LoginView';
+import PendingApprovalView from './features/auth/components/PendingApprovalView';
 import DashboardPage from './features/dashboard/components/DashboardPage';
 import CalendarPage from './features/calendar/components/CalendarPage';
 import ProjectsPage from './features/projects/components/ProjectsPage';
@@ -23,6 +24,7 @@ import ReportsPage from './features/reports/components/ReportsPage';
 import UsersPage from './features/users/components/UsersPage';
 import CompanySettingsPage from './features/organizations/components/CompanySettingsPage';
 import MasterWorkspacePage from './features/masterProjects/components/MasterWorkspacePage';
+import SuperAdminPage from './features/admin/components/SuperAdminPage';
 import NewEntryPage from './features/diary/components/NewEntryPage';
 import EditEntryPage from './features/diary/components/EditEntryPage';
 import ReminderOverlay from './features/diary/components/ReminderOverlay';
@@ -112,6 +114,10 @@ function AppContent() {
     );
   }
 
+  if (appUser?.status === 'pending') {
+    return <PendingApprovalView />;
+  }
+
   return (
     <>
       <AppShell company={company} appUser={appUser}>
@@ -127,6 +133,7 @@ function AppContent() {
           <Route path={ROUTES.USERS} element={<UsersPage />} />
           <Route path={ROUTES.COMPANY_SETTINGS} element={<CompanySettingsPage />} />
           <Route path={ROUTES.MASTER_WORKSPACE} element={<MasterWorkspacePage />} />
+          <Route path={ROUTES.SUPER_ADMIN} element={<SuperAdminPage />} />
         </Routes>
       </AppShell>
 
