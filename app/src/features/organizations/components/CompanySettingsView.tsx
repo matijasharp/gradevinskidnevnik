@@ -18,7 +18,7 @@ const countryCodes = [
 export default function CompanySettingsView({ company, onUpdate }: { company: Company, onUpdate: (data: any) => void }) {
   const [name, setName] = useState(company.name);
   const [logoUrl, setLogoUrl] = useState(company.logoUrl || '');
-  const [brandColor, setBrandColor] = useState(company.brandColor || '#3b82f6');
+  const [brandColor, setBrandColor] = useState(company.brandColor || '#6366f1');
   const [street, setStreet] = useState(company.street || (company.address?.split(',')[0] || ''));
   const [city, setCity] = useState(company.city || (company.address?.split(',')[1]?.trim() || ''));
   const [email, setEmail] = useState(company.email || '');
@@ -169,6 +169,13 @@ export default function CompanySettingsView({ company, onUpdate }: { company: Co
                       placeholder="#000000"
                     />
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => setBrandColor('#6366f1')}
+                    className="text-xs text-slate-500 hover:text-slate-700 underline mt-1"
+                  >
+                    Resetiraj na zadano
+                  </button>
                 </div>
               </div>
             </div>

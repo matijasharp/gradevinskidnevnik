@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ROUTES } from '../../app/router/routeConfig';
 
 export default function LandingPage() {
   return (
@@ -8,18 +9,21 @@ export default function LandingPage() {
       {/* ─── NAVBAR ─────────────────────────────────────────────────── */}
       <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="text-white font-bold text-lg tracking-tight">
-            ⚡ Gradevinski Dnevnik
-          </span>
+          <div className="flex items-center gap-2">
+            <img src="/brand/logo.svg" alt="GDO" className="h-8 w-8" />
+            <span className="text-white font-bold text-lg tracking-tight">
+              Građevinski Dnevnik Online
+            </span>
+          </div>
           <div className="flex items-center gap-3">
             <Link
-              to="/"
+              to={ROUTES.REPORTS}
               className="hidden sm:inline text-slate-400 hover:text-white text-sm transition-colors px-3 py-2"
             >
               Zatraži demo
             </Link>
             <Link
-              to="/"
+              to={ROUTES.REPORTS}
               className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
             >
               Isprobaj besplatno
@@ -62,13 +66,13 @@ export default function LandingPage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/"
+              to={ROUTES.REPORTS}
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-colors inline-block"
             >
               Isprobaj besplatno →
             </Link>
             <Link
-              to="/"
+              to={ROUTES.REPORTS}
               className="border border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white px-8 py-4 rounded-xl text-lg transition-colors inline-block"
             >
               Zatraži demo
@@ -297,7 +301,7 @@ export default function LandingPage() {
           </div>
 
           <Link
-            to="/"
+            to={ROUTES.REPORTS}
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-10 py-4 rounded-xl text-lg inline-block transition-colors"
           >
             Postani jedan od prvih 10 →
@@ -336,7 +340,7 @@ export default function LandingPage() {
             Pridruži se prvim korisnicima i dobij founder cijenu zauvijek.
           </p>
           <Link
-            to="/"
+            to={ROUTES.REPORTS}
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-10 py-4 rounded-xl text-lg inline-block transition-colors"
           >
             Isprobaj besplatno →

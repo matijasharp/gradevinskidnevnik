@@ -5,26 +5,26 @@
 See: .paul/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.2 — Electro MVP Launch (Phase 17 complete; ready for Phase 18 Deployment).
+**Current focus:** v1.2 — Electro MVP Launch (Phase 18.1 complete; ready for Phase 19 Supabase Local Config).
 
 ## Current Position
 
 Milestone: v1.2 — Electro MVP Launch
-Phase: 18 of 22 (Deployment) — Not started
+Phase: 19 of 22 (Supabase Local Config) — Not started
 Plan: Not started
-Status: Ready to plan Phase 18
-Last activity: 2026-03-31 — Phase 17 complete, transitioned to Phase 18
+Status: Ready to plan Phase 19
+Last activity: 2026-03-31 — Phase 18.1 complete; transitioned to Phase 19
 
 Progress:
-- v1.2 Milestone: [████░░░░░░] 40%
-- Phase 18: [░░░░░░░░░░] 0%
+- v1.2 Milestone: [██████░░░░] 60%
+- Phase 19: [░░░░░░░░░░] 0%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ○        ○        ○     [Ready for next PLAN — Phase 18]
+  ○        ○        ○     [Phase 19 — ready to plan]
 ```
 
 ## Performance Metrics
@@ -99,6 +99,9 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | refreshMasterProjects() on OrgContextValue | Phase 14 | masterProjects is one-time fetch; JSX inline handler needed to trigger re-fetch after creation; setMasterProjects is private to provider |
 | DEFAULT 'approved' on profiles.status migration | Phase 16 | Existing profiles remain unblocked; new signups explicitly set to pending in createOrganizationWithOwner |
 | isSuperAdmin guard inside component, not ProtectedRoute | Phase 16 | Route is intentionally hidden — no nav link; non-admins redirect silently from inside useEffect |
+| Landing CTAs → ROUTES.REPORTS (not '/' or '/login') | Phase 18.1 | No dedicated /login route; `*` catchall → App → LoginView is the auth entry |
+| SplashScreen only in LoginView loading gate, not per-page | Phase 18.1 | Scope limit: initial auth load only; per-page transitions deferred |
+| #3b82f6 fallback left in 10+ other components | Phase 18.1 | Out of scope; AppShell + CompanySettings were sufficient for visible surfaces |
 
 ### Deferred Issues
 
@@ -119,7 +122,8 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: d6e9628 — feat(17-landing-page): Phase 17 complete — Croatian marketing landing page
+Last commit: ddb4e3e — feat(18.1-brand-identity): apply Jost font, GDO branding, custom SVG icons, landing page routing
+Pending commit: feat(18.1-brand-identity): Phase 18.1 complete — GSAP splash, landing CTA fix, #6366f1 default, letter spacing, dashboard route fix
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -134,8 +138,8 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-03-31
-Stopped at: Phase 17 complete — transition done
-Next action: /paul:plan for Phase 18 Deployment
+Stopped at: Phase 18.1 transition complete — Phase 19 ready to plan
+Next action: /paul:plan for Phase 19 (Supabase Local Config)
 Resume file: .paul/ROADMAP.md
 
 ---

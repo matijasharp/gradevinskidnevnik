@@ -7,7 +7,7 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
   --color-primary: #0F172A; /* Slate 900 */
-  --color-accent: #3B82F6;  /* Blue 500 */
+  --color-accent: #6366f1;  /* Indigo 500 — GDO brand */
   --color-surface: #F8FAFC; /* Slate 50 */
   --color-border: #E2E8F0;  /* Slate 200 */
 }
@@ -16,5 +16,6 @@
   body {
     @apply font-sans text-slate-900 antialiased bg-surface;
     font-family: 'Jost', sans-serif;
+    letter-spacing: 0.015em;
   }
 }

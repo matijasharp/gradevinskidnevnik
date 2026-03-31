@@ -49,10 +49,12 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 15: App Polish + Role Enforcement — Master projekti nav/create gated by discipline; contractors see only invited projects; shared/icons/ barrel created — Phase 15
 - ✓ Phase 16: Signup Approval Gate + Minimal Super Admin — profiles.status pending/approved; PendingApprovalView; hidden /admin/approvals super admin page — Phase 16
 - ✓ Phase 17: Landing Page — 9-section Croatian marketing page at /landing; favicon.svg; OG/Twitter metadata; GuestRoute auth guard — Phase 17
+- ✓ Phase 18: Deployment — Railway hosting, PORT env var, live at elektro.gradevinskidnevnik.online — Phase 18
+- ✓ Phase 18.1: Brand Identity — Jost font, GDO SVG icons/logo, GSAP splash screen, landing CTA fix, #6366f1 default color, letter spacing — Phase 18.1
 
 ### Active (In Progress)
 
-- v1.2 Electro MVP Launch — Phase 18: Deployment (next)
+- v1.2 Electro MVP Launch — Phase 19: Supabase Local Config (next)
 
 ### Planned (Next)
 
@@ -125,6 +127,8 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | ProtectedRoute redirects to ROUTES.DASHBOARD, not /login | No separate /login route until Phase 14; AppContent shows LoginView at '/' when user is null | 2026-03-31 | Active |
 | OrganizationProvider mounted in AppRouter route element, not main.tsx | useNavigate() requires Router context; any provider needing navigation must be inside RouterProvider | 2026-03-31 | Active |
 | ReminderOverlay "Vidi detalje" navigates to /projects/:id without setSelectedEntry | selectedEntry is internal to ProjectDetailPage; cross-boundary prop drilling not warranted for overlay UX | 2026-03-31 | Active |
+| Landing CTAs → ROUTES.REPORTS (catchall → App → LoginView) | No dedicated /login route; `*` catchall is the auth entry point | 2026-03-31 | Active |
+| SplashScreen only in LoginView loading gate | Per-page splash out of scope; initial auth load only | 2026-03-31 | Active |
 
 ## Success Metrics
 
@@ -155,4 +159,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-31 after Phase 17 — v1.2 Electro MVP Launch in progress; landing page shipped; Phase 18 Deployment next*
+*Last updated: 2026-03-31 after Phase 18.1 — v1.2 Electro MVP Launch in progress; brand identity complete; Phase 19 Supabase Local Config next*

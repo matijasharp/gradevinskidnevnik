@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { Button, Card, Input } from '../../../shared/ui';
 import { DISCIPLINE_LABELS, DISCIPLINE_SUBTITLES, type Discipline } from '../../../lib/disciplineConfig';
+import { SplashScreen } from './SplashScreen';
 
 export default function LoginView({
   loading,
@@ -19,13 +20,10 @@ export default function LoginView({
   setOnboardingDiscipline,
   handleOnboarding,
 }: any) {
-  if (loading) {
-    return (
-      <div className="h-screen w-full flex flex-col items-center justify-center bg-zinc-50 gap-4">
-        <Loader2 className="w-8 h-8 animate-spin text-zinc-400" />
-        <p className="text-sm font-medium text-zinc-500">Učitavanje dnevnika...</p>
-      </div>
-    );
+  const [splashDone, setSplashDone] = useState(false);
+
+  if (loading || !splashDone) {
+    return <SplashScreen onComplete={() => setSplashDone(true)} />;
   }
 
   if (!showOnboarding) {
