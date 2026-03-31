@@ -31,7 +31,7 @@ export const generateDiaryPdf = async (project: Project, entries: DiaryEntry[], 
       doc.setFont('helvetica');
     }
 
-    const companyName = company?.name || 'Site Diary Mini';
+    const companyName = company?.name || 'Građevinski Dnevnik Online';
 
     // Helper to convert hex to RGB
     const hexToRgb = (hex: string) => {
@@ -174,7 +174,7 @@ export const generateDiaryPdf = async (project: Project, entries: DiaryEntry[], 
       doc.setFontSize(8);
       doc.setTextColor(150, 150, 150);
       doc.text(`Stranica ${i} od ${pageCount}`, 105, 290, { align: 'center' });
-      doc.text(`Generirano putem Site Diary Mini`, 14, 290);
+      doc.text(`Generirano putem Građevinski Dnevnik Online`, 14, 290);
     }
 
     doc.save(`${project.projectName}_Izvjestaj.pdf`);

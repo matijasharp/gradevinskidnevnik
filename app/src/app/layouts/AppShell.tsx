@@ -4,10 +4,7 @@ import { cn } from '../../lib/utils';
 import { Button } from '../../shared/ui';
 import { signOut } from '../../lib/supabaseAuth';
 import { useOrg } from '../providers';
-import {
-  LayoutDashboard, Folder, CalendarDays, FileText, Layers,
-  Users, Building2, Zap, LogOut, Plus, User as UserIcon
-} from 'lucide-react';
+import { LogOut, Plus, User as UserIcon } from 'lucide-react';
 
 function NavItem({ active, onClick, icon, label, brandColor }: any) {
   return (
@@ -60,24 +57,24 @@ export default function AppShell({ company, appUser, children }: any) {
             {company?.logoUrl ? (
               <img src={company.logoUrl} alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
             ) : (
-              <Zap className="text-white w-5 h-5 fill-white" />
+              <img src="/brand/logo.svg" alt="GDO" className="w-6 h-6" />
             )}
           </div>
-          <span className="font-bold text-xl tracking-tight">Site Diary</span>
+          <span className="font-bold text-xl tracking-tight">Građevinski Dnevnik</span>
         </div>
         <nav className="space-y-2 flex-1">
-          <NavItem active={location.pathname === ROUTES.DASHBOARD} onClick={() => navigate(ROUTES.DASHBOARD)} icon={<LayoutDashboard size={20} />} label="Nadzorna ploča" brandColor={brandColor} />
-          <NavItem active={location.pathname === ROUTES.PROJECTS} onClick={() => navigate(ROUTES.PROJECTS)} icon={<Folder size={20} />} label="Projekti" brandColor={brandColor} />
-          <NavItem active={location.pathname === ROUTES.CALENDAR} onClick={() => navigate(ROUTES.CALENDAR)} icon={<CalendarDays size={20} />} label="Kalendar" brandColor={brandColor} />
-          <NavItem active={location.pathname === ROUTES.REPORTS} onClick={() => navigate(ROUTES.REPORTS)} icon={<FileText size={20} />} label="Izvještaji" brandColor={brandColor} />
+          <NavItem active={location.pathname === ROUTES.DASHBOARD} onClick={() => navigate(ROUTES.DASHBOARD)} icon={<img src="/icons/nadzorna-ploca.svg" className="w-10 h-10" alt="" />} label="Nadzorna ploča" brandColor={brandColor} />
+          <NavItem active={location.pathname === ROUTES.PROJECTS} onClick={() => navigate(ROUTES.PROJECTS)} icon={<img src="/icons/projekt.svg" className="w-10 h-10" alt="" />} label="Projekti" brandColor={brandColor} />
+          <NavItem active={location.pathname === ROUTES.CALENDAR} onClick={() => navigate(ROUTES.CALENDAR)} icon={<img src="/icons/kalendar.svg" className="w-10 h-10" alt="" />} label="Kalendar" brandColor={brandColor} />
+          <NavItem active={location.pathname === ROUTES.REPORTS} onClick={() => navigate(ROUTES.REPORTS)} icon={<img src="/icons/izvjestaji.svg" className="w-10 h-10" alt="" />} label="Izvještaji" brandColor={brandColor} />
           {showMasterNav && (
-            <NavItem active={location.pathname === ROUTES.MASTER_WORKSPACE} onClick={() => navigate(ROUTES.MASTER_WORKSPACE)} icon={<Layers size={20} />} label="Master projekti" brandColor={brandColor} />
+            <NavItem active={location.pathname === ROUTES.MASTER_WORKSPACE} onClick={() => navigate(ROUTES.MASTER_WORKSPACE)} icon={<img src="/icons/projekt.svg" className="w-10 h-10" alt="" />} label="Master projekti" brandColor={brandColor} />
           )}
           {appUser?.role === 'admin' && (
-            <NavItem active={location.pathname === ROUTES.USERS} onClick={() => navigate(ROUTES.USERS)} icon={<Users size={20} />} label="Korisnici" brandColor={brandColor} />
+            <NavItem active={location.pathname === ROUTES.USERS} onClick={() => navigate(ROUTES.USERS)} icon={<img src="/icons/tim.svg" className="w-10 h-10" alt="" />} label="Korisnici" brandColor={brandColor} />
           )}
           {appUser?.role === 'admin' && (
-            <NavItem active={location.pathname === ROUTES.COMPANY_SETTINGS} onClick={() => navigate(ROUTES.COMPANY_SETTINGS)} icon={<Building2 size={20} />} label="Postavke tvrtke" brandColor={brandColor} />
+            <NavItem active={location.pathname === ROUTES.COMPANY_SETTINGS} onClick={() => navigate(ROUTES.COMPANY_SETTINGS)} icon={<img src="/icons/tvrtka.svg" className="w-10 h-10" alt="" />} label="Postavke tvrtke" brandColor={brandColor} />
           )}
         </nav>
         <div className="pt-6 border-t border-slate-800">
@@ -103,8 +100,8 @@ export default function AppShell({ company, appUser, children }: any) {
 
       {/* Bottom Nav - Mobile */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-100 px-6 py-3 flex justify-between items-center z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-        <MobileNavItem active={location.pathname === ROUTES.DASHBOARD} onClick={() => navigate(ROUTES.DASHBOARD)} icon={<LayoutDashboard size={24} />} brandColor={brandColor} />
-        <MobileNavItem active={location.pathname === ROUTES.PROJECTS} onClick={() => navigate(ROUTES.PROJECTS)} icon={<Folder size={24} />} brandColor={brandColor} />
+        <MobileNavItem active={location.pathname === ROUTES.DASHBOARD} onClick={() => navigate(ROUTES.DASHBOARD)} icon={<img src="/icons/nadzorna-ploca.svg" className="w-12 h-12" alt="" />} brandColor={brandColor} />
+        <MobileNavItem active={location.pathname === ROUTES.PROJECTS} onClick={() => navigate(ROUTES.PROJECTS)} icon={<img src="/icons/projekt.svg" className="w-12 h-12" alt="" />} brandColor={brandColor} />
         <button
           onClick={() => navigate(ROUTES.NEW_ENTRY)}
           className="w-14 h-14 rounded-full flex items-center justify-center -mt-10 shadow-lg text-white active:scale-90 transition-transform border-4 border-white"
@@ -112,8 +109,8 @@ export default function AppShell({ company, appUser, children }: any) {
         >
           <Plus size={28} />
         </button>
-        <MobileNavItem active={location.pathname === ROUTES.CALENDAR} onClick={() => navigate(ROUTES.CALENDAR)} icon={<CalendarDays size={24} />} brandColor={brandColor} />
-        <MobileNavItem active={location.pathname === ROUTES.REPORTS} onClick={() => navigate(ROUTES.REPORTS)} icon={<FileText size={24} />} brandColor={brandColor} />
+        <MobileNavItem active={location.pathname === ROUTES.CALENDAR} onClick={() => navigate(ROUTES.CALENDAR)} icon={<img src="/icons/kalendar.svg" className="w-12 h-12" alt="" />} brandColor={brandColor} />
+        <MobileNavItem active={location.pathname === ROUTES.REPORTS} onClick={() => navigate(ROUTES.REPORTS)} icon={<img src="/icons/izvjestaji.svg" className="w-12 h-12" alt="" />} brandColor={brandColor} />
       </nav>
     </div>
   );

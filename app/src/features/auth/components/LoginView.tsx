@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loader2, FileText, Eye, EyeOff } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { Button, Card, Input } from '../../../shared/ui';
 import { DISCIPLINE_LABELS, DISCIPLINE_SUBTITLES, type Discipline } from '../../../lib/disciplineConfig';
 
@@ -33,10 +33,8 @@ export default function LoginView({
       <div className="h-screen w-full flex flex-col items-center justify-center bg-zinc-50 p-6">
         <div className="max-w-md w-full space-y-8 text-center">
           <div className="space-y-2">
-            <div className="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-accent/10">
-              <FileText className="text-white w-8 h-8" />
-            </div>
-            <h1 className="text-4xl font-bold tracking-tight text-zinc-900">Site Diary Mini</h1>
+            <img src="/brand/logo.svg" alt="Građevinski Dnevnik Online" className="h-14 w-14 mb-3 mx-auto" />
+            <h1 className="text-2xl font-bold text-gray-900">Građevinski Dnevnik Online</h1>
             <p className="text-zinc-500">{DISCIPLINE_SUBTITLES[contextDiscipline]}</p>
           </div>
           <Button onClick={handleLogin} className="w-full py-4 text-lg">

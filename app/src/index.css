@@ -15,5 +15,6 @@
 @layer base {
   body {
     @apply font-sans text-slate-900 antialiased bg-surface;
+    font-family: 'Jost', sans-serif;
   }
 }
