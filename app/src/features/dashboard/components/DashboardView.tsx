@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'motion/react';
 import {
   Plus,
-  Settings,
   Calendar,
   CalendarDays,
   Loader2,
@@ -11,7 +10,9 @@ import {
   Building2,
   Briefcase,
   ChevronRight,
+  LogOut,
 } from 'lucide-react';
+import { signOut } from '../../../lib/supabaseAuth';
 import {
   BarChart,
   Bar,
@@ -42,7 +43,7 @@ function DashboardView({
   company
 }: any) {
   const activeProjects = projects.filter((p: any) => p.status === 'active');
-  const brandColor = company?.brandColor || '#3b82f6';
+  const brandColor = company?.brandColor || '#6366f1';
 
   // Prepare chart data
   const chartData = projects.map((p: Project) => {
@@ -72,8 +73,8 @@ function DashboardView({
             <Plus size={18} />
             Novi unos
           </Button>
-          <Button variant="ghost" onClick={onOpenSecrets} className="text-zinc-400">
-            <Settings size={18} /> Tajne
+          <Button variant="ghost" onClick={signOut} className="md:hidden text-zinc-400 hover:text-red-500 hover:bg-red-50">
+            <LogOut size={18} />
           </Button>
         </div>
       </header>
@@ -151,8 +152,8 @@ function DashboardView({
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {googleTokens ? (
+      {googleTokens && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card className="p-6 space-y-4">
             <div className="flex items-center justify-between">
               <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">Google Kalendar</p>
@@ -183,17 +184,8 @@ function DashboardView({
               )}
             </div>
           </Card>
-        ) : (
-          <Card className="p-6 flex flex-col items-center justify-center text-center space-y-3 bg-slate-50 border-dashed">
-            <Calendar size={24} className="text-zinc-300" />
-            <div className="space-y-1">
-              <p className="text-sm font-bold">Povežite Google Kalendar</p>
-              <p className="text-[10px] text-zinc-500">Pratite rokove i zakazane radove direktno ovdje.</p>
-            </div>
-            <Button variant="outline" size="sm" onClick={onConnectCalendar} className="text-xs py-1.5 h-auto">Poveži</Button>
-          </Card>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Analytics Section */}
       {chartData.length > 0 && (
