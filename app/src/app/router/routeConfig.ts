@@ -1,4 +1,5 @@
 export const ROUTES = {
+  LANDING: '/landing',
   DASHBOARD: '/',
   PROJECTS: '/projects',
   PROJECT_DETAIL: '/projects/:projectId',

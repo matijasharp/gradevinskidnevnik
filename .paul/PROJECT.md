@@ -14,7 +14,7 @@ Contractors log site progress fast while project leads see shared, audited statu
 |-----------|-------|
 | Type | Application |
 | Version | 1.2 (in progress) |
-| Status | v1.2 Electro MVP Launch — Phase 15 complete (role enforcement shipped) |
+| Status | v1.2 Electro MVP Launch — Phase 17 complete (landing page shipped; deployment next) |
 | Last Updated | 2026-03-31 |
 
 **Production URLs:**
@@ -47,10 +47,12 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 13: Data layer decomposition — data.ts (1427 lines) split into 10 domain query modules under integrations/supabase/queries/; data.ts → single-line barrel re-export; zero consumer changes — Phase 13
 - ✓ Phase 14: OrganizationProvider + Thin Pages — OrganizationProvider extracted; 12 thin page components created; App.tsx reduced from ~696 to 140 lines; AppContent god-component eliminated — Phase 14
 - ✓ Phase 15: App Polish + Role Enforcement — Master projekti nav/create gated by discipline; contractors see only invited projects; shared/icons/ barrel created — Phase 15
+- ✓ Phase 16: Signup Approval Gate + Minimal Super Admin — profiles.status pending/approved; PendingApprovalView; hidden /admin/approvals super admin page — Phase 16
+- ✓ Phase 17: Landing Page — 9-section Croatian marketing page at /landing; favicon.svg; OG/Twitter metadata; GuestRoute auth guard — Phase 17
 
 ### Active (In Progress)
 
-- v1.2 Electro MVP Launch — Phase 16: Signup Approval Gate + Minimal Super Admin (next)
+- v1.2 Electro MVP Launch — Phase 18: Deployment (next)
 
 ### Planned (Next)
 
@@ -153,4 +155,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-31 after Phase 15 — v1.2 Electro MVP Launch in progress; role enforcement shipped; Phase 16 next*
+*Last updated: 2026-03-31 after Phase 17 — v1.2 Electro MVP Launch in progress; landing page shipped; Phase 18 Deployment next*
