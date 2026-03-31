@@ -114,10 +114,6 @@ function AppContent() {
     );
   }
 
-  if (appUser?.status === 'pending') {
-    return <PendingApprovalView />;
-  }
-
   return (
     <>
       <AppShell company={company} appUser={appUser}>

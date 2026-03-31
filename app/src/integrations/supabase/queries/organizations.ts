@@ -89,7 +89,7 @@ export const createOrganizationWithOwner = async (params: {
       email: params.ownerEmail ?? undefined,
       role: 'admin',
       invited: false,
-      status: 'pending'
+      status: 'approved'
     })
     .select('*')
     .single();
