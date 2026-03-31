@@ -13,8 +13,8 @@ Contractors log site progress fast while project leads see shared, audited statu
 | Attribute | Value |
 |-----------|-------|
 | Type | Application |
-| Version | 1.1 (in progress) |
-| Status | v1.0 complete; v1.1 frontend refactor in progress (Phase 12 of 14 done) |
+| Version | 1.1 (complete) |
+| Status | v1.1 Frontend Architecture Refactor complete — all 14 phases done |
 | Last Updated | 2026-03-31 |
 
 **Production URLs:**
@@ -45,10 +45,11 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 11: AuthProvider extraction — auth state (user, appUser, company, loading, showOnboarding) moved to context; main.tsx wrapped with BrowserRouter + AuthProvider; AppContent migrated to useAuth() — Phase 11
 - ✓ Phase 12: navigate() migration — view useState removed; Routes/Route replace view-conditionals; all setView() → navigate(); AppRouter activated as RouterProvider; BrowserRouter removed — Phase 12
 - ✓ Phase 13: Data layer decomposition — data.ts (1427 lines) split into 10 domain query modules under integrations/supabase/queries/; data.ts → single-line barrel re-export; zero consumer changes — Phase 13
+- ✓ Phase 14: OrganizationProvider + Thin Pages — OrganizationProvider extracted; 12 thin page components created; App.tsx reduced from ~696 to 140 lines; AppContent god-component eliminated — Phase 14
 
 ### Active (In Progress)
 
-- v1.1 Frontend Architecture Refactor — Phases 5–14: extract shared types, utils, UI primitives, components, router, auth context, data layer
+- None — v1.1 complete; awaiting v1.2 milestone definition
 
 ### Planned (Next)
 
@@ -117,8 +118,10 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | AppRouter not mounted until Phase 12 | Router scaffold and auth context (Phase 11) must both exist before activation; prevents partial wiring | 2026-03-30 | Active |
 | setAppUser/setCompany/setShowOnboarding exposed as context setters | handleOnboarding mutates auth-adjacent state after org creation; must be mutable from AppContent | 2026-03-30 | Active |
 | BrowserRouter in main.tsx (temporary) | Phase 12's useNavigate() requires a router context; will be replaced by RouterProvider when AppRouter activates | 2026-03-30 | Resolved — Phase 12 |
-| AppRouter catchall path='*' → App: thin pages deferred to Phase 14 | Phase 12 activates routing; thin page components (DashboardPage etc.) split in Phase 14 | 2026-03-31 | Active |
+| AppRouter catchall path='*' → App: thin pages deferred to Phase 14 | Phase 12 activates routing; thin page components (DashboardPage etc.) split in Phase 14 | 2026-03-31 | Resolved — Phase 14 |
 | ProtectedRoute redirects to ROUTES.DASHBOARD, not /login | No separate /login route until Phase 14; AppContent shows LoginView at '/' when user is null | 2026-03-31 | Active |
+| OrganizationProvider mounted in AppRouter route element, not main.tsx | useNavigate() requires Router context; any provider needing navigation must be inside RouterProvider | 2026-03-31 | Active |
+| ReminderOverlay "Vidi detalje" navigates to /projects/:id without setSelectedEntry | selectedEntry is internal to ProjectDetailPage; cross-boundary prop drilling not warranted for overlay UX | 2026-03-31 | Active |
 
 ## Success Metrics
 
@@ -149,4 +152,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-31 after Phase 13 — data layer decomposed into 10 domain query modules, data.ts → thin re-export*
+*Last updated: 2026-03-31 after Phase 14 — v1.1 Frontend Architecture Refactor complete; App.tsx 696 → 140 lines; AppContent god-component eliminated*

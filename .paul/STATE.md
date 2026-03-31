@@ -5,26 +5,26 @@
 See: .paul/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.1 — Frontend Architecture Refactor. Phase 13 complete, ready to plan Phase 14.
+**Current focus:** v1.2 — Backend Infrastructure (next milestone; awaiting planning).
 
 ## Current Position
 
-Milestone: v1.1 — Frontend Architecture Refactor
-Phase: 14 of 14 (OrganizationProvider + Thin Pages) — Not started
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-03-31 — Phase 13 complete, transitioned to Phase 14
+Milestone: v1.1 — Frontend Architecture Refactor — ✅ COMPLETE
+Phase: 14 of 14 — ✅ COMPLETE (all plans unified)
+Plan: —
+Status: Milestone complete. Ready to plan v1.2.
+Last activity: 2026-03-31 — Phase 14 unified — v1.1 milestone closed
 
 Progress:
-- v1.1 Milestone: [█████████░] 90% (9/10 phases)
-- Phase 14: [░░░░░░░░░░] 0%
+- v1.1 Milestone: [██████████] 100% ✅ (all 14 phases complete)
+- Phase 14: [██████████] 100% ✅ (3/3 plans complete)
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Loop complete — ready for next PLAN]
+  ✓        ✓        ✓     [Loop complete — v1.1 milestone closed]
 ```
 
 ## Performance Metrics
@@ -35,8 +35,8 @@ PLAN ──▶ APPLY ──▶ UNIFY
 - Total execution time: ~10.8 hours
 
 **Velocity (v1.1 so far):**
-- Plans completed: 8
-- Duration: ~145 min total
+- Plans completed: 9
+- Duration: ~175 min total
 
 **By Phase (v1.0):**
 
@@ -95,6 +95,8 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | selectedProject state stays in AppContent | Phase 12 | URL param → state sync deferred to Phase 13; direct /projects/:id navigation renders null until then |
 | _utils.ts shared helper for query modules | Phase 13 | ensureSupabase + subscribeWithFetch shared across all 10 domain files; plan allowed both copy-in or shared |
 | invitations.ts imports from organizations.ts | Phase 13 | acceptInvitation cross-module dep; establishes intra-queries/ import pattern |
+| OrganizationProvider mounted in AppRouter route element, not main.tsx | Phase 14 | useNavigate() requires Router context; RouterProvider lives inside AppRouter; any provider needing useNavigate() must be inside the route element |
+| refreshMasterProjects() on OrgContextValue | Phase 14 | masterProjects is one-time fetch; JSX inline handler needed to trigger re-fetch after creation; setMasterProjects is private to provider |
 
 ### Deferred Issues
 
@@ -115,7 +117,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: 5a60f04 — feat(11-auth-provider): Phase 11 complete — AuthProvider extracted
+Last commit: (pending phase 14 commit)
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -130,8 +132,8 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-03-31
-Stopped at: Phase 13 complete — query module decomposition done, transitioned to Phase 14
-Next action: /paul:plan for Phase 14 (OrganizationProvider + Thin Pages)
+Stopped at: v1.1 milestone complete — all 14 phases unified
+Next action: /paul:milestone to define v1.2 — Backend Infrastructure
 Resume file: .paul/ROADMAP.md
 
 ---
