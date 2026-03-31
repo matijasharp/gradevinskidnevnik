@@ -2,11 +2,12 @@ import React from 'react';
 import { Plus, Layers, ChevronRight, MapPin } from 'lucide-react';
 import type { MasterProject } from '../../../lib/data';
 
-export default function MasterProjectsListView({ masterProjects, brandColor, onSelect, onCreateNew }: {
+export default function MasterProjectsListView({ masterProjects, brandColor, onSelect, onCreateNew, isCoordinator = false }: {
   masterProjects: MasterProject[];
   brandColor?: string;
   onSelect: (mp: MasterProject) => void;
-  onCreateNew: () => void;
+  onCreateNew?: () => void;
+  isCoordinator?: boolean;
 }) {
   const color = brandColor || '#3b82f6';
   const statusLabel: Record<string, string> = { active: 'Aktivan', completed: 'Završen', archived: 'Arhiviran' };
@@ -19,14 +20,16 @@ export default function MasterProjectsListView({ masterProjects, brandColor, onS
           <h1 className="text-2xl font-bold text-zinc-900">Master projekti</h1>
           <p className="text-sm text-zinc-500 mt-0.5">Agregirani pregled svih disciplina na jednom projektu</p>
         </div>
-        <button
-          className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90"
-          style={{ backgroundColor: color }}
-          onClick={onCreateNew}
-        >
-          <Plus size={16} />
-          Novi master projekt
-        </button>
+        {isCoordinator && (
+          <button
+            className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90"
+            style={{ backgroundColor: color }}
+            onClick={onCreateNew}
+          >
+            <Plus size={16} />
+            Novi master projekt
+          </button>
+        )}
       </div>
 
       {masterProjects.length === 0 ? (
@@ -34,15 +37,24 @@ export default function MasterProjectsListView({ masterProjects, brandColor, onS
           <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: `${color}20` }}>
             <Layers size={28} style={{ color }} />
           </div>
-          <h3 className="text-lg font-semibold text-zinc-900 mb-2">Nema master projekata</h3>
-          <p className="text-sm text-zinc-500 max-w-xs">Kreirajte novi master projekt za agregaciju projekata više disciplina na jednoj lokaciji.</p>
-          <button
-            className="mt-6 rounded-xl px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90"
-            style={{ backgroundColor: color }}
-            onClick={onCreateNew}
-          >
-            Kreiraj master projekt
-          </button>
+          {isCoordinator ? (
+            <>
+              <h3 className="text-lg font-semibold text-zinc-900 mb-2">Nema master projekata</h3>
+              <p className="text-sm text-zinc-500 max-w-xs">Kreirajte novi master projekt za agregaciju projekata više disciplina na jednoj lokaciji.</p>
+              <button
+                className="mt-6 rounded-xl px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90"
+                style={{ backgroundColor: color }}
+                onClick={onCreateNew}
+              >
+                Kreiraj master projekt
+              </button>
+            </>
+          ) : (
+            <>
+              <h3 className="text-lg font-semibold text-zinc-900 mb-2">Niste pozvani ni na jedan master projekt</h3>
+              <p className="text-sm text-zinc-500 max-w-xs">Koordinator vas mora pozvati da sudjelujete u master projektu.</p>
+            </>
+          )}
         </div>
       ) : (
         <div className="space-y-3">

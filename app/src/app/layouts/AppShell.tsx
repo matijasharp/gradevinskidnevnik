@@ -3,6 +3,7 @@ import { ROUTES } from '../router/routeConfig';
 import { cn } from '../../lib/utils';
 import { Button } from '../../shared/ui';
 import { signOut } from '../../lib/supabaseAuth';
+import { useOrg } from '../providers';
 import {
   LayoutDashboard, Folder, CalendarDays, FileText, Layers,
   Users, Building2, Zap, LogOut, Plus, User as UserIcon
@@ -44,7 +45,9 @@ function MobileNavItem({ active, onClick, icon, brandColor }: any) {
 export default function AppShell({ company, appUser, children }: any) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { masterProjects } = useOrg();
   const brandColor = company?.brandColor || '#3b82f6';
+  const showMasterNav = company?.discipline === 'general' || masterProjects.length > 0;
   return (
     <div
       className="min-h-screen bg-zinc-50 pb-24 md:pb-0 md:pl-64"
@@ -67,7 +70,9 @@ export default function AppShell({ company, appUser, children }: any) {
           <NavItem active={location.pathname === ROUTES.PROJECTS} onClick={() => navigate(ROUTES.PROJECTS)} icon={<Folder size={20} />} label="Projekti" brandColor={brandColor} />
           <NavItem active={location.pathname === ROUTES.CALENDAR} onClick={() => navigate(ROUTES.CALENDAR)} icon={<CalendarDays size={20} />} label="Kalendar" brandColor={brandColor} />
           <NavItem active={location.pathname === ROUTES.REPORTS} onClick={() => navigate(ROUTES.REPORTS)} icon={<FileText size={20} />} label="Izvještaji" brandColor={brandColor} />
-          <NavItem active={location.pathname === ROUTES.MASTER_WORKSPACE} onClick={() => navigate(ROUTES.MASTER_WORKSPACE)} icon={<Layers size={20} />} label="Master projekti" brandColor={brandColor} />
+          {showMasterNav && (
+            <NavItem active={location.pathname === ROUTES.MASTER_WORKSPACE} onClick={() => navigate(ROUTES.MASTER_WORKSPACE)} icon={<Layers size={20} />} label="Master projekti" brandColor={brandColor} />
+          )}
           {appUser?.role === 'admin' && (
             <NavItem active={location.pathname === ROUTES.USERS} onClick={() => navigate(ROUTES.USERS)} icon={<Users size={20} />} label="Korisnici" brandColor={brandColor} />
           )}

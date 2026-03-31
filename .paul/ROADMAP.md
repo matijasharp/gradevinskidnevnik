@@ -6,15 +6,107 @@ Start from the electrician prototype, deliver a Supabase-backed MVP with full UI
 
 ## Current Milestone
 
+**v1.2 — Electro MVP Launch** (v1.2)
+Status: 🚧 In Progress
+Phases: 1 of 8 complete
+
+## Previous Milestones
+
 **v1.1 — Frontend Architecture Refactor** (v1.1)
 Status: ✅ Complete
 Phases: 10 of 10 complete
 
-## Previous Milestone
-
 **v1.0 MVP** (v1.0)
 Status: ✅ Complete
 Phases: 4 of 4 complete
+
+---
+
+### v1.2 — Electro MVP Launch
+
+**Goal:** Launch the app for electricians on elektro.gradevinskidnevnik.online with role enforcement, approval gate, landing page, and deployment.
+
+| Phase | Name | Plans | Status | Completed |
+|-------|------|-------|--------|-----------|
+| 15 | App Polish + Role Enforcement | 1/1 | ✅ Complete | 2026-03-31 |
+| 16 | Signup Approval Gate + Minimal Super Admin | TBD | Not started | - |
+| 17 | Landing Page | TBD | Not started | - |
+| 18 | Deployment | TBD | Not started | - |
+| 19 | Supabase Local Config | TBD | Not started | - |
+| 20 | Edge Functions | TBD | Not started | - |
+| 21 | Activity Log | TBD | Not started | - |
+| 22 | Full Super Admin Panel | TBD | Not started | - |
+
+#### Phase Details
+
+##### Phase 15: App Polish + Role Enforcement
+**Goal:** Gate master project nav/creation by org discipline (`general` = coordinator only). Create `src/shared/icons/` folder. Any other UI polish before launch.
+**Scope:**
+- Hide "Master projekti" nav from contractor orgs (non-`general` discipline)
+- Disable "create master project" for contractor orgs
+- Show only invited master projects for contractors
+- Add route guard on `/master-workspace` for contractor orgs
+- Create `src/shared/icons/` directory with placeholder barrel export
+**Plans:** TBD
+
+##### Phase 16: Signup Approval Gate + Minimal Super Admin
+**Goal:** New signups see a "pending approval" screen. A minimal super admin screen lets the platform owner approve/reject users.
+**Scope:**
+- Signup flow → pending state in DB (e.g. `profiles.status = 'pending'`)
+- App shows "We'll contact you when approved" screen for pending users
+- Minimal super admin route (hidden, protected) listing pending users with approve/reject
+- Super admin role flag on `profiles` table
+**Plans:** TBD
+
+##### Phase 17: Landing Page
+**Goal:** Full Croatian landing page on elektro.gradevinskidnevnik.online targeting electricians.
+**Scope:**
+- Hero, Problem, How It Works, Features, Social Proof, Pilot Offer, Referral sections
+- All copy in Croatian as provided
+- CTA buttons linking to app signup
+- Mobile-first design consistent with app aesthetic
+**Plans:** TBD
+
+##### Phase 18: Deployment
+**Goal:** App live on elektro.gradevinskidnevnik.online via Namecheap DNS.
+**Scope:**
+- Hosting setup (platform TBD during planning)
+- Namecheap DNS subdomain configuration
+- Environment variables (.env production)
+- Landing page deployed alongside app
+- Smoke test post-deploy
+**Plans:** TBD
+
+##### Phase 19: Supabase Local Config
+**Goal:** Reproducible local dev environment.
+**Scope:**
+- `supabase/config.toml`
+- `.env.example` with all required keys
+- `database.types.ts` auto-generated types
+- `supabase/seed/` with dev data
+**Plans:** TBD
+
+##### Phase 20: Edge Functions
+**Goal:** Move heavy operations off-client.
+**Scope:**
+- Real email invitations via Edge Function
+- PDF generation off-client
+**Plans:** TBD
+
+##### Phase 21: Activity Log
+**Goal:** Audit trail for all project activity.
+**Scope:**
+- `activity_log` migration + RLS policies
+- UI activity feed component
+**Plans:** TBD
+
+##### Phase 22: Full Super Admin Panel
+**Goal:** Complete platform oversight for platform owner.
+**Scope:**
+- User management (list, suspend, delete)
+- Analytics dashboard (orgs, entries, usage)
+- Full access control management
+**Plans:** TBD
 
 ---
 
@@ -217,13 +309,8 @@ Phases: 4 of 4 complete
 
 ## Planned (Future Milestones)
 
-### v1.2 — Backend Infrastructure *(after v1.1 fully stable)*
-- supabase/config.toml, .env.example
-- supabase/seed/ directory with dev data
-- database.types.ts auto-generated types
-- Edge functions: real email invitations, PDF off-client
-- activity_log migration + policies
+*(none — v1.2 is now active)*
 
 ---
 *Roadmap created: 2026-03-27*
-*Last updated: 2026-03-31 — Phase 14 complete — v1.1 milestone complete*
+*Last updated: 2026-03-31 — v1.2 Electro MVP Launch milestone created; 8 phases defined*

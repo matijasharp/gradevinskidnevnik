@@ -43,6 +43,8 @@ export default function MasterWorkspacePage() {
 
   if (!appUser || !company) return null;
 
+  const isCoordinator = company.discipline === 'general';
+
   const handleAddOrgSearch = async (q: string) => {
     setAddOrgQuery(q);
     setAddOrgSelected(null);
@@ -203,6 +205,7 @@ export default function MasterWorkspacePage() {
       <MasterProjectsListView
         masterProjects={masterProjects}
         brandColor={company.brandColor}
+        isCoordinator={isCoordinator}
         onSelect={(mp: MasterProject) => {
           setSelectedMasterProject(mp);
           fetchMasterProjectOrganizations(mp.id)
@@ -217,9 +220,9 @@ export default function MasterWorkspacePage() {
             .catch(() => null);
           fetchMasterProjectIssues(mp.id).then(setMasterProjectIssues).catch(() => null);
         }}
-        onCreateNew={() => setShowNewMasterProjectModal(true)}
+        onCreateNew={isCoordinator ? () => setShowNewMasterProjectModal(true) : undefined}
       />
-      {showNewMasterProjectModal && (
+      {isCoordinator && showNewMasterProjectModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
             <h2 className="text-xl font-bold text-zinc-900 mb-4">Novi master projekt</h2>

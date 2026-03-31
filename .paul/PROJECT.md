@@ -13,8 +13,8 @@ Contractors log site progress fast while project leads see shared, audited statu
 | Attribute | Value |
 |-----------|-------|
 | Type | Application |
-| Version | 1.1 (complete) |
-| Status | v1.1 Frontend Architecture Refactor complete — all 14 phases done |
+| Version | 1.2 (in progress) |
+| Status | v1.2 Electro MVP Launch — Phase 15 complete (role enforcement shipped) |
 | Last Updated | 2026-03-31 |
 
 **Production URLs:**
@@ -46,10 +46,11 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 12: navigate() migration — view useState removed; Routes/Route replace view-conditionals; all setView() → navigate(); AppRouter activated as RouterProvider; BrowserRouter removed — Phase 12
 - ✓ Phase 13: Data layer decomposition — data.ts (1427 lines) split into 10 domain query modules under integrations/supabase/queries/; data.ts → single-line barrel re-export; zero consumer changes — Phase 13
 - ✓ Phase 14: OrganizationProvider + Thin Pages — OrganizationProvider extracted; 12 thin page components created; App.tsx reduced from ~696 to 140 lines; AppContent god-component eliminated — Phase 14
+- ✓ Phase 15: App Polish + Role Enforcement — Master projekti nav/create gated by discipline; contractors see only invited projects; shared/icons/ barrel created — Phase 15
 
 ### Active (In Progress)
 
-- None — v1.1 complete; awaiting v1.2 milestone definition
+- v1.2 Electro MVP Launch — Phase 16: Signup Approval Gate + Minimal Super Admin (next)
 
 ### Planned (Next)
 
@@ -152,4 +153,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-31 after Phase 14 — v1.1 Frontend Architecture Refactor complete; App.tsx 696 → 140 lines; AppContent god-component eliminated*
+*Last updated: 2026-03-31 after Phase 15 — v1.2 Electro MVP Launch in progress; role enforcement shipped; Phase 16 next*
