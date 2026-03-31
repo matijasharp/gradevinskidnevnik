@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+.next/
+
+# Local Claude Code config (machine-specific)
+.claude/
+
+# Local MCP config (contains project URLs)
+.mcp.json
+
+# Framework source repos (not project code)
+repos/
+
+# Development/internal files
+TEST_USERS.md
+db
+context-seed.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*

@@ -1,8 +1,0 @@
-{
-  "name": "Site Diary Mini",
-  "description": "Mobile-first site diary for electricians to capture daily work, photos, and voice notes for professional reports.",
-  "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ]
-}
