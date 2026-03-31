@@ -119,7 +119,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: cd1e4a3 — feat(16-signup-approval-gate): Phase 16 complete — signup approval gate + minimal super admin
+Last commit: d6e9628 — feat(17-landing-page): Phase 17 complete — Croatian marketing landing page
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
