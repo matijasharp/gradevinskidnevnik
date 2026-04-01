@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthProvider';
+import { supabase } from '../../lib/supabase';
 import { ROUTES } from '../router/routeConfig';
 import {
   subscribeProjects,
@@ -137,17 +138,15 @@ export function OrganizationProvider({ children }: { children: React.ReactNode }
         role,
         createdBy: appUser.id
       });
-      await fetch('/api/invite', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      await supabase.functions.invoke('send-invitation', {
+        body: {
           email,
           name,
           role,
           organizationName: company?.name ?? '',
           inviterName: appUser.name,
           appUrl: window.location.origin
-        })
+        }
       });
       alert(`Pozivnica je uspješno poslana na ${email}. Korisnik će biti dodan u tim nakon što se prijavi.`);
     } catch (error) {

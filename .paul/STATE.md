@@ -10,21 +10,21 @@ See: .paul/PROJECT.md (updated 2026-03-31)
 ## Current Position
 
 Milestone: v1.2 — Electro MVP Launch
-Phase: 20 of 23 (Edge Functions) — Not started
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-04-01 — Phase 19 complete, transitioned to Phase 20
+Phase: 20 of 23 (Edge Functions) — In Progress (plans 20-01, 20-02 complete)
+Plan: 20-02 applied
+Status: Ready for UNIFY (20-02)
+Last activity: 2026-04-01 — Plan 20-02 applied (generate-pdf Edge Function + client rewrite)
 
 Progress:
 - v1.2 Milestone: [████████░░] 78%
-- Phase 20: [░░░░░░░░░░] 0%
+- Phase 20: [█████░░░░░] 50%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Loop complete — ready for next PLAN]
+  ✓        ✓        ○     [APPLY complete — ready for UNIFY]
 ```
 
 ## Performance Metrics
@@ -110,6 +110,8 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | Supabase client stays untyped (no createClient<Database>) | Phase 19 | Typed wiring deferred — database.types.ts is reference only; Phase 20+ can wire it |
 | seed.sql profiles.org_id set via UPDATE after org insert | Phase 19 | FK ordering: orgs must exist before profiles can reference them |
 | database.types.ts generated via MCP from live schema | Phase 19 | Always regenerate after new migrations; regen command in file header |
+| Resend via fetch REST API in Edge Functions (no SDK) | Phase 20 | Resend SDK has no Deno build; direct fetch to api.resend.com works in all runtimes — pattern for all future email functions |
+| Express /api/invite kept after Edge Function migration | Phase 20 | Transition safety; can be removed in a cleanup phase post-launch |
 
 ### Deferred Issues
 
@@ -130,7 +132,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: da9dab5 — feat(18.2-ui-design-system): Phase 18.2 complete — UI consistency & design system
+Last commit: 357e622 — feat(19-supabase-local-config): reproducible local dev environment
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -145,9 +147,9 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-04-01
-Stopped at: Phase 19 complete, UNIFY done
-Next action: /paul:plan for Phase 20 (Edge Functions)
-Resume file: .paul/ROADMAP.md
+Stopped at: Plan 20-02 applied (generate-pdf Edge Function + client rewrite)
+Next action: /paul:unify .paul/phases/20-edge-functions/20-02-PLAN.md
+Resume file: .paul/phases/20-edge-functions/20-02-PLAN.md
 
 ---
 *STATE.md — Updated after every significant action*

@@ -35,7 +35,7 @@ Phases: 4 of 4 complete
 | 18.1 | Brand Identity [INSERTED] | 2/2 | ✅ Complete | 2026-03-31 |
 | 18.2 | UI Consistency & Design System [INSERTED] | 4/4 | ✅ Complete | 2026-04-01 |
 | 19 | Supabase Local Config | 1/1 | ✅ Complete | 2026-04-01 |
-| 20 | Edge Functions | TBD | Not started | - |
+| 20 | Edge Functions | 2/2 | Planning | - |
 | 21 | App Quality & Export Enhancements [INSERTED] | TBD | Not started | - |
 | 22 | Activity Log | TBD | Not started | - |
 | 23 | Full Super Admin Panel | TBD | Not started | - |
