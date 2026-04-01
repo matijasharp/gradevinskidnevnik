@@ -14,7 +14,7 @@ Contractors log site progress fast while project leads see shared, audited statu
 |-----------|-------|
 | Type | Application |
 | Version | 1.2 (in progress) |
-| Status | v1.2 Electro MVP Launch — Phase 18.2 complete (design system shipped); Phase 19 next |
+| Status | v1.2 Electro MVP Launch — Phase 19 complete (local dev config shipped); Phase 20 next |
 | Last Updated | 2026-04-01 |
 
 **Production URLs:**
@@ -52,10 +52,11 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 18: Deployment — Railway hosting, PORT env var, live at elektro.gradevinskidnevnik.online — Phase 18
 - ✓ Phase 18.1: Brand Identity — Jost font, GDO SVG icons/logo, GSAP splash screen, landing CTA fix, #6366f1 default color, letter spacing — Phase 18.1
 - ✓ Phase 18.2: UI Consistency & Design System — 15-token design system, sharp corners, status badge tokens, full-width layout, expandable sidebar, /brand living design guide — Phase 18.2
+- ✓ Phase 19: Supabase Local Config — config.toml, auto-generated database.types.ts (14 tables), idempotent seed.sql for local dev — Phase 19
 
 ### Active (In Progress)
 
-- v1.2 Electro MVP Launch — Phase 19: Supabase Local Config (next)
+- v1.2 Electro MVP Launch — Phase 20: Edge Functions (next)
 
 ### Planned (Next)
 
@@ -133,6 +134,8 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | Sidebar active = left border accent, not full bg | Enterprise sidebar convention; matches ROADMAP direction — no white-on-color text for nav items | 2026-04-01 | Active |
 | Sidebar expand state in localStorage (gdo-sidebar-expanded) | User preference persists across sessions; default true (expanded) | 2026-04-01 | Active |
 | /brand route is dev-only, no AppShell nav link | Living design guide for internal use; not a user-facing feature | 2026-04-01 | Active |
+| Supabase client stays untyped (no createClient<Database>) | Typed wiring is Phase 20+ scope; database.types.ts is reference only in Phase 19 | 2026-04-01 | Active |
+| seed.sql: profiles.org_id set via UPDATE after org insert | FK ordering constraint — orgs must exist before profiles can reference them in seed | 2026-04-01 | Active |
 
 ## Success Metrics
 
@@ -163,4 +166,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-04-01 after Phase 18.2 — design system complete; expandable sidebar, /brand route, full token system shipped; Phase 19 Supabase Local Config next*
+*Last updated: 2026-04-01 after Phase 19 — local dev config complete; config.toml, database.types.ts, seed.sql shipped; Phase 20 Edge Functions next*

@@ -5,19 +5,19 @@
 See: .paul/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.2 — Electro MVP Launch (Phase 18.2 complete; Phase 19 Supabase Local Config next).
+**Current focus:** v1.2 — Electro MVP Launch (Phase 19 complete; Phase 20 Edge Functions next).
 
 ## Current Position
 
 Milestone: v1.2 — Electro MVP Launch
-Phase: 19 of 22 (Supabase Local Config) — Not started
+Phase: 20 of 23 (Edge Functions) — Not started
 Plan: Not started
-Status: Ready for next PLAN
-Last activity: 2026-04-01 — Phase 18.2 complete; transitioned to Phase 19
+Status: Ready to plan
+Last activity: 2026-04-01 — Phase 19 complete, transitioned to Phase 20
 
 Progress:
-- v1.2 Milestone: [████████░░] 75%
-- Phase 19: [░░░░░░░░░░] 0%
+- v1.2 Milestone: [████████░░] 78%
+- Phase 20: [░░░░░░░░░░] 0%
 
 ## Loop Position
 
@@ -100,12 +100,16 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | DEFAULT 'approved' on profiles.status migration | Phase 16 | Existing profiles remain unblocked; new signups explicitly set to pending in createOrganizationWithOwner |
 | isSuperAdmin guard inside component, not ProtectedRoute | Phase 16 | Route is intentionally hidden — no nav link; non-admins redirect silently from inside useEffect |
 | Landing CTAs → ROUTES.REPORTS (not '/' or '/login') | Phase 18.1 | No dedicated /login route; `*` catchall → App → LoginView is the auth entry |
+| Added Phase 21: App Quality & Export Enhancements | Phase 18.2 | Inserted after Phase 20 Edge Functions — Google Calendar OAuth, Resend, CSV overhaul, PDF image toggle depend on Edge Functions |
 | SplashScreen only in LoginView loading gate, not per-page | Phase 18.1 | Scope limit: initial auth load only; per-page transitions deferred |
 | #3b82f6 fallback left in 10+ other components | Phase 18.1 | Out of scope; AppShell + CompanySettings were sufficient for visible surfaces |
 | Added Phase 18.2: UI Consistency & Design System | Phase 18.1 | Extends v1.2 scope — brand palette, expandable sidebar, /brand route, full-width layout |
 | Sidebar active = left border accent (not full bg) | Phase 18.2 | border-l-2 border-accent + bg-accent-subtle; enterprise convention, matches ROADMAP direction |
 | Sidebar expand state in localStorage (gdo-sidebar-expanded) | Phase 18.2 | User preference persists across sessions; default true |
 | /brand route: no AppShell nav link | Phase 18.2 | Dev/design tool — accessible at /brand to authenticated users, not a user-facing nav item |
+| Supabase client stays untyped (no createClient<Database>) | Phase 19 | Typed wiring deferred — database.types.ts is reference only; Phase 20+ can wire it |
+| seed.sql profiles.org_id set via UPDATE after org insert | Phase 19 | FK ordering: orgs must exist before profiles can reference them |
+| database.types.ts generated via MCP from live schema | Phase 19 | Always regenerate after new migrations; regen command in file header |
 
 ### Deferred Issues
 
@@ -126,8 +130,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: ddb4e3e — feat(18.1-brand-identity): apply Jost font, GDO branding, custom SVG icons, landing page routing
-Last commit: 5935436 — feat(18.1-brand-identity): Phase 18.1 complete — brand identity pass
+Last commit: da9dab5 — feat(18.2-ui-design-system): Phase 18.2 complete — UI consistency & design system
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -142,8 +145,8 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-04-01
-Stopped at: Phase 18.2 complete — all 4 plans unified
-Next action: Run /paul:plan for Phase 19 (Supabase Local Config)
+Stopped at: Phase 19 complete, UNIFY done
+Next action: /paul:plan for Phase 20 (Edge Functions)
 Resume file: .paul/ROADMAP.md
 
 ---

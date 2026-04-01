@@ -8,7 +8,7 @@ Start from the electrician prototype, deliver a Supabase-backed MVP with full UI
 
 **v1.2 — Electro MVP Launch** (v1.2)
 Status: 🚧 In Progress
-Phases: 6 of 10 complete
+Phases: 6 of 11 complete
 
 ## Previous Milestones
 
@@ -34,10 +34,11 @@ Phases: 4 of 4 complete
 | 18 | Deployment | 1/1 | ✅ Complete | 2026-03-31 |
 | 18.1 | Brand Identity [INSERTED] | 2/2 | ✅ Complete | 2026-03-31 |
 | 18.2 | UI Consistency & Design System [INSERTED] | 4/4 | ✅ Complete | 2026-04-01 |
-| 19 | Supabase Local Config | TBD | Not started | - |
+| 19 | Supabase Local Config | 1/1 | ✅ Complete | 2026-04-01 |
 | 20 | Edge Functions | TBD | Not started | - |
-| 21 | Activity Log | TBD | Not started | - |
-| 22 | Full Super Admin Panel | TBD | Not started | - |
+| 21 | App Quality & Export Enhancements [INSERTED] | TBD | Not started | - |
+| 22 | Activity Log | TBD | Not started | - |
+| 23 | Full Super Admin Panel | TBD | Not started | - |
 
 #### Phase Details
 
@@ -136,14 +137,24 @@ Phases: 4 of 4 complete
 - PDF generation off-client
 **Plans:** TBD
 
-##### Phase 21: Activity Log
+##### Phase 21: App Quality & Export Enhancements [INSERTED]
+**Goal:** QA pass on all major flows, functional Google Calendar integration, improved exports. Builds on Phase 20's Edge Functions for OAuth and off-client PDF/email.
+**Scope:**
+1. QA pass — verify all major flows end-to-end: auth, diary entries, photos, projects, sharing, master projects
+2. Google Calendar integration — connect and make functional (OAuth flow via Edge Function, event sync)
+3. Resend email integration — improve invitation emails (design, delivery, content); builds on Phase 20 Edge Function
+4. CSV export — overhaul: proper Croatian headers, all relevant fields, better structure and formatting
+5. PDF export — add include/exclude images toggle; when included, up to 10 images in two-column rows within the PDF; builds on Phase 20 off-client PDF
+**Plans:** TBD
+
+##### Phase 22: Activity Log
 **Goal:** Audit trail for all project activity.
 **Scope:**
 - `activity_log` migration + RLS policies
 - UI activity feed component
 **Plans:** TBD
 
-##### Phase 22: Full Super Admin Panel
+##### Phase 23: Full Super Admin Panel
 **Goal:** Complete platform oversight for platform owner.
 **Scope:**
 - User management (list, suspend, delete)
@@ -356,4 +367,4 @@ Phases: 4 of 4 complete
 
 ---
 *Roadmap created: 2026-03-27*
-*Last updated: 2026-04-01 — Phase 18.2 complete (design system shipped); Phase 19 Supabase Local Config is next*
+*Last updated: 2026-04-01 — Phase 21 inserted (App Quality & Export Enhancements, after Edge Functions); Activity Log → 22, Super Admin → 23*
