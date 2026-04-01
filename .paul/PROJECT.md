@@ -53,10 +53,11 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 18.1: Brand Identity — Jost font, GDO SVG icons/logo, GSAP splash screen, landing CTA fix, #6366f1 default color, letter spacing — Phase 18.1
 - ✓ Phase 18.2: UI Consistency & Design System — 15-token design system, sharp corners, status badge tokens, full-width layout, expandable sidebar, /brand living design guide — Phase 18.2
 - ✓ Phase 19: Supabase Local Config — config.toml, auto-generated database.types.ts (14 tables), idempotent seed.sql for local dev — Phase 19
+- ✓ Phase 20: Edge Functions — send-invitation Edge Function (Resend REST API); generate-pdf Edge Function built + deployed (v7, pdf-lib, Jost font, RFC 5987 header fix); client PDF reverted to jsPDF pending Phase 21 QA — Phase 20
 
 ### Active (In Progress)
 
-- v1.2 Electro MVP Launch — Phase 20: Edge Functions (next)
+- v1.2 Electro MVP Launch — Phase 21: App Quality & Export Enhancements (next)
 
 ### Planned (Next)
 
@@ -136,6 +137,9 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | /brand route is dev-only, no AppShell nav link | Living design guide for internal use; not a user-facing feature | 2026-04-01 | Active |
 | Supabase client stays untyped (no createClient<Database>) | Typed wiring is Phase 20+ scope; database.types.ts is reference only in Phase 19 | 2026-04-01 | Active |
 | seed.sql: profiles.org_id set via UPDATE after org insert | FK ordering constraint — orgs must exist before profiles can reference them in seed | 2026-04-01 | Active |
+| Resend via fetch REST API in Edge Functions (no SDK) | Resend SDK has no Deno build; direct fetch to api.resend.com works in all runtimes | 2026-04-01 | Active |
+| RFC 5987 Content-Disposition in Edge Functions | Deno rejects non-ASCII ByteString header values; filename*=UTF-8''<encoded> is required for Croatian filenames | 2026-04-01 | Active |
+| generate-pdf client reverted to jsPDF (Phase 20) | Edge Function deployed (v7) but PDF output not user-verified before revert; wiring deferred to Phase 21 | 2026-04-01 | Active |
 
 ## Success Metrics
 
@@ -166,4 +170,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-04-01 after Phase 19 — local dev config complete; config.toml, database.types.ts, seed.sql shipped; Phase 20 Edge Functions next*
+*Last updated: 2026-04-01 after Phase 20 — Edge Functions complete; send-invitation live, generate-pdf deployed (v7); Phase 21 App Quality & Export Enhancements next*

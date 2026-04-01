@@ -5,26 +5,26 @@
 See: .paul/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.2 — Electro MVP Launch (Phase 19 complete; Phase 20 Edge Functions next).
+**Current focus:** v1.2 — Electro MVP Launch (Phase 20 complete; Phase 21 App Quality & Export Enhancements next).
 
 ## Current Position
 
 Milestone: v1.2 — Electro MVP Launch
-Phase: 20 of 23 (Edge Functions) — In Progress (plans 20-01, 20-02 complete)
-Plan: 20-02 applied
-Status: Ready for UNIFY (20-02)
-Last activity: 2026-04-01 — Plan 20-02 applied (generate-pdf Edge Function + client rewrite)
+Phase: 21 of 23 (App Quality & Export Enhancements) — Not started
+Plan: Not started
+Status: Ready to plan Phase 21
+Last activity: 2026-04-01 — Phase 20 complete; generate-pdf Edge Function deployed (v7); client PDF reverted to jsPDF pending Phase 21 QA
 
 Progress:
-- v1.2 Milestone: [████████░░] 78%
-- Phase 20: [█████░░░░░] 50%
+- v1.2 Milestone: [████████░░] 82%
+- Phase 21: [░░░░░░░░░░] 0%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ○     [APPLY complete — ready for UNIFY]
+  ✓        ✓        ✓     [Phase 20 complete — ready for next PLAN]
 ```
 
 ## Performance Metrics
@@ -112,6 +112,8 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | database.types.ts generated via MCP from live schema | Phase 19 | Always regenerate after new migrations; regen command in file header |
 | Resend via fetch REST API in Edge Functions (no SDK) | Phase 20 | Resend SDK has no Deno build; direct fetch to api.resend.com works in all runtimes — pattern for all future email functions |
 | Express /api/invite kept after Edge Function migration | Phase 20 | Transition safety; can be removed in a cleanup phase post-launch |
+| RFC 5987 Content-Disposition in Deno Edge Functions | Phase 20 | filename*=UTF-8''<encoded> required — Deno rejects non-ASCII ByteString header values |
+| generate-pdf client reverted to jsPDF | Phase 20 | Edge Function deployed (v7) but PDF output not user-verified; wiring deferred to Phase 21 |
 
 ### Deferred Issues
 
@@ -132,7 +134,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: 357e622 — feat(19-supabase-local-config): reproducible local dev environment
+Last commit: f3aaf01 — revert(pdf): restore client-side PDF generation
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -147,9 +149,9 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-04-01
-Stopped at: Plan 20-02 applied (generate-pdf Edge Function + client rewrite)
-Next action: /paul:unify .paul/phases/20-edge-functions/20-02-PLAN.md
-Resume file: .paul/phases/20-edge-functions/20-02-PLAN.md
+Stopped at: Phase 20 complete — generate-pdf Edge Function deployed (v7); client PDF reverted to jsPDF
+Next action: /paul:plan for Phase 21 (App Quality & Export Enhancements)
+Resume file: .paul/ROADMAP.md
 
 ---
 *STATE.md — Updated after every significant action*
