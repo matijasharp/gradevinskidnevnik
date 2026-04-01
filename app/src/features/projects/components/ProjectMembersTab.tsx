@@ -20,7 +20,7 @@ export default function ProjectMembersTab({ project, currentUser, orgMembers = [
   const [selectedOrgMemberId, setSelectedOrgMemberId] = useState('');
   const [selectedOrgMemberRole, setSelectedOrgMemberRole] = useState<'lead' | 'contributor' | 'viewer'>('viewer');
   const [saving, setSaving] = useState(false);
-  const brandColor = company?.brandColor || '#3b82f6';
+  const brandColor = company?.brandColor || 'var(--color-accent)';
   const isAdmin = currentUser?.role === 'admin';
 
   const roleLabel = (r: string) => r === 'lead' ? 'Voditelj' : r === 'contributor' ? 'Suradnik' : 'Pregledatelj';

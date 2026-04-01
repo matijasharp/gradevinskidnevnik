@@ -34,6 +34,7 @@ export interface AppUser {
   googleTokens?: GoogleTokens;
   status: 'pending' | 'approved' | 'rejected';
   isSuperAdmin: boolean;
+  avatarUrl?: string;
 }
 
 export interface Project {

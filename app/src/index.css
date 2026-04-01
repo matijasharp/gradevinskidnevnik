@@ -1,15 +1,37 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  
-  --color-primary: #0F172A; /* Slate 900 */
-  --color-accent: #6366f1;  /* Indigo 500 — GDO brand */
-  --color-surface: #F8FAFC; /* Slate 50 */
-  --color-border: #E2E8F0;  /* Slate 200 */
+
+  /* Accent */
+  --color-accent: #3ab9e3;
+  --color-accent-hover: #25a8d4;
+  --color-accent-subtle: #3ab9e315;
+
+  /* Text */
+  --color-text-primary: #192a46;
+  --color-text-secondary: #4a5a72;
+  --color-text-muted: #8fa0b8;
+
+  /* Surfaces */
+  --color-surface: #f1f4f2;
+  --color-surface-raised: #ffffff;
+
+  /* Borders */
+  --color-border: #e0e6ed;
+  --color-border-subtle: #f0f3f5;
+
+  /* Semantic */
+  --color-warning: #fad03d;
+  --color-warning-subtle: #fad03d20;
+  --color-secondary: #816840;
+  --color-error: #e05252;
+  --color-success: #3dba7a;
+
+
 }
 
 @layer base {

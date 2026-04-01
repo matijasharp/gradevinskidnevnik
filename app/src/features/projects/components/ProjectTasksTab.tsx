@@ -18,7 +18,7 @@ export default function ProjectTasksTab({ project, currentUser, orgMembers = [],
   const [newTitle, setNewTitle] = useState('');
   const [newAssignedTo, setNewAssignedTo] = useState('');
   const [saving, setSaving] = useState(false);
-  const brandColor = company?.brandColor || '#3b82f6';
+  const brandColor = company?.brandColor || 'var(--color-accent)';
   const isAdmin = currentUser?.role === 'admin';
 
   const load = async () => {

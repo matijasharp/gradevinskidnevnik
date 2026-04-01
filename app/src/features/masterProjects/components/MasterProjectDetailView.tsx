@@ -17,7 +17,7 @@ export default function MasterProjectDetailView({ masterProject, orgs, stats, ac
   brandColor?: string;
   onBack: () => void;
 }) {
-  const color = brandColor || '#3b82f6';
+  const color = brandColor || 'var(--color-accent)';
   const statusLabel: Record<string, string> = { active: 'Aktivan', completed: 'Završen', archived: 'Arhiviran' };
   const statusColor: Record<string, string> = { active: 'bg-emerald-100 text-emerald-700', completed: 'bg-zinc-100 text-zinc-500', archived: 'bg-amber-100 text-amber-700' };
   const roleLabel: Record<string, string> = { lead: 'Voditelj', contributor: 'Suradnik', viewer: 'Promatrač' };

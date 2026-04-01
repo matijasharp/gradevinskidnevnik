@@ -427,7 +427,7 @@ export default function NewEntryView({ appUser, projects, initialProject, initia
               />
             </div>
 
-            <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100 space-y-3">
+            <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100 space-y-3">
               <div className="flex items-center justify-between">
                 <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-1.5">
                   <CloudSun size={12} /> Vrijeme i temperatura
@@ -497,7 +497,7 @@ export default function NewEntryView({ appUser, projects, initialProject, initia
                   <input
                     type="file"
                     accept="image/*"
-                    capture="environment"
+                    multiple
                     className="hidden"
                     ref={cameraInputRef}
                     onChange={handleCameraCapture}

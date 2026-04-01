@@ -13,7 +13,7 @@ import type { Project } from '../../../shared/types';
 function ProjectsView({ projects, sharedProjects = [], onProjectClick, onSharedProjectClick, onCreateProject, onNewEntry, userRole, company }: any) {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed' | 'archived'>('all');
   const [phaseFilter, setPhaseFilter] = useState<string>('all');
-  const brandColor = company?.brandColor || '#3b82f6';
+  const brandColor = company?.brandColor || 'var(--color-accent)';
 
   const filteredProjects = (projects || []).filter((p: Project) => {
     const statusMatch = filter === 'all' || p.status === filter;
@@ -62,7 +62,7 @@ function ProjectsView({ projects, sharedProjects = [], onProjectClick, onSharedP
               key={opt.value}
               onClick={() => setFilter(opt.value as any)}
               className={cn(
-                "px-4 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap border",
+                "px-4 py-2 rounded text-sm font-bold transition-all whitespace-nowrap border",
                 filter === opt.value
                   ? "text-white border-transparent shadow-lg"
                   : "bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300"
@@ -80,7 +80,7 @@ function ProjectsView({ projects, sharedProjects = [], onProjectClick, onSharedP
               key={opt.value}
               onClick={() => setPhaseFilter(opt.value)}
               className={cn(
-                "px-4 py-2 rounded-full text-[10px] uppercase tracking-wider font-bold transition-all whitespace-nowrap border",
+                "px-4 py-2 rounded text-[10px] uppercase tracking-wider font-bold transition-all whitespace-nowrap border",
                 phaseFilter === opt.value
                   ? "bg-zinc-800 text-white border-transparent"
                   : "bg-white text-zinc-400 border-zinc-100 hover:border-zinc-200"

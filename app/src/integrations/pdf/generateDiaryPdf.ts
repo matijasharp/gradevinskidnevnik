@@ -1,12 +1,12 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import type { Project, DiaryEntry, Company } from '../../shared/types';
+import type { Project, DiaryEntry, Company, DiaryPhoto } from '../../shared/types';
 import { safeFormatDate, stripMarkdown } from '../../shared/utils/format';
 
 // Suppress unused import warning — autoTable registers itself as a jsPDF plugin
 void autoTable;
 
-export const generateDiaryPdf = async (project: Project, entries: DiaryEntry[], company: Company | null): Promise<void> => {
+export const generateDiaryPdf = async (project: Project, entries: DiaryEntry[], company: Company | null, photos: DiaryPhoto[] = []): Promise<void> => {
     const projectEntries = [...entries].sort((a, b) => b.entryDate.localeCompare(a.entryDate));
     const doc = new jsPDF();
 
@@ -43,7 +43,7 @@ export const generateDiaryPdf = async (project: Project, entries: DiaryEntry[], 
       ] : [59, 130, 246]; // Default blue
     };
 
-    const primaryColor = hexToRgb(company?.brandColor || '#3b82f6');
+    const primaryColor = hexToRgb(company?.brandColor || '#3ab9e3');
 
     // Logo
     if (company?.logoUrl) {
@@ -97,7 +97,7 @@ export const generateDiaryPdf = async (project: Project, entries: DiaryEntry[], 
 
     let y = 72;
 
-    projectEntries.forEach((entry, index) => {
+    for (const entry of projectEntries) {
       if (y > 240) {
         doc.addPage();
         y = 20;
@@ -145,6 +145,47 @@ export const generateDiaryPdf = async (project: Project, entries: DiaryEntry[], 
         y += 5;
       }
 
+      // Photos
+      const entryPhotos = photos.filter(p => p.entryId === entry.id);
+      if (entryPhotos.length > 0) {
+        if (y > 230) { doc.addPage(); y = 20; }
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text('Fotografije:', 14, y);
+        y += 4;
+        const photoWidth = 55;
+        const photoHeight = 41;
+        const photosPerRow = 3;
+        const gap = 4;
+        for (let pi = 0; pi < Math.min(entryPhotos.length, 9); pi++) {
+          const col = pi % photosPerRow;
+          const row = Math.floor(pi / photosPerRow);
+          const x = 14 + col * (photoWidth + gap);
+          const rowY = y + row * (photoHeight + gap);
+          if (row > 0 && col === 0 && rowY > 245) break; // page overflow guard
+          try {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            await new Promise<void>((resolve) => {
+              img.onload = () => resolve();
+              img.onerror = () => resolve(); // skip broken images silently
+              img.src = entryPhotos[pi].url;
+            });
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width || 400;
+            canvas.height = img.height || 300;
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(img, 0, 0);
+            const dataURL = canvas.toDataURL('image/jpeg', 0.7);
+            doc.addImage(dataURL, 'JPEG', x, rowY, photoWidth, photoHeight);
+          } catch (_e) {
+            // skip
+          }
+        }
+        const rows = Math.min(Math.ceil(Math.min(entryPhotos.length, 9) / photosPerRow), 3);
+        y += rows * (photoHeight + gap) + 4;
+      }
+
       // Signature
       if (entry.signatureUrl) {
         if (y > 240) { doc.addPage(); y = 20; }
@@ -165,7 +206,7 @@ export const generateDiaryPdf = async (project: Project, entries: DiaryEntry[], 
       doc.setDrawColor(240, 240, 240);
       doc.line(14, y - 2, 196, y - 2);
       y += 5;
-    });
+    }
 
     // Footer
     const pageCount = (doc as any).internal.getNumberOfPages();

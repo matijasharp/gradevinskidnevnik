@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { X, Trash2, CheckCircle2, Download, Plus, Loader2, User as UserIcon, MapPin, History, Clock, Search, Calendar, AlertTriangle } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { fetchProjectPhotos } from '../../../lib/data';
+import { generateDiaryPdf } from '../../../integrations/pdf/generateDiaryPdf';
 import type { DiaryEntry, DiaryPhoto } from '../../../shared/types';
 import { safeFormatDate } from '../../../shared/utils/format';
 import { OperationType, handleFirestoreError } from '../../../shared/utils/error';
@@ -26,12 +27,12 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [activeTab, setActiveTab] = useState<'dnevnik' | 'suradnici' | 'zadaci' | 'dokumenti'>('dnevnik');
 
-  const brandColor = company?.brandColor || '#3b82f6';
+  const brandColor = company?.brandColor || 'var(--color-accent)';
 
   const handleGeneratePDF = async () => {
     setIsGeneratingPDF(true);
     try {
-      await onGeneratePDF();
+      await generateDiaryPdf(project, entries, company, projectPhotos);
     } finally {
       setIsGeneratingPDF(false);
     }

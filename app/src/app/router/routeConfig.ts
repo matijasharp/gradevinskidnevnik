@@ -12,6 +12,7 @@ export const ROUTES = {
   COMPANY_SETTINGS: '/settings/company',
   MASTER_WORKSPACE: '/master',
   SUPER_ADMIN: '/admin/approvals',
+  BRAND: '/brand',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

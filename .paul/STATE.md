@@ -5,18 +5,18 @@
 See: .paul/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.2 — Electro MVP Launch (Phase 18.1 complete; ready for Phase 19 Supabase Local Config).
+**Current focus:** v1.2 — Electro MVP Launch (Phase 18.2 complete; Phase 19 Supabase Local Config next).
 
 ## Current Position
 
 Milestone: v1.2 — Electro MVP Launch
 Phase: 19 of 22 (Supabase Local Config) — Not started
 Plan: Not started
-Status: Ready to plan Phase 19
-Last activity: 2026-03-31 — Phase 18.1 complete; transitioned to Phase 19
+Status: Ready for next PLAN
+Last activity: 2026-04-01 — Phase 18.2 complete; transitioned to Phase 19
 
 Progress:
-- v1.2 Milestone: [██████░░░░] 60%
+- v1.2 Milestone: [████████░░] 75%
 - Phase 19: [░░░░░░░░░░] 0%
 
 ## Loop Position
@@ -24,7 +24,7 @@ Progress:
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ○        ○        ○     [Phase 19 — ready to plan]
+  ✓        ✓        ✓     [Loop complete — ready for next PLAN]
 ```
 
 ## Performance Metrics
@@ -102,6 +102,10 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | Landing CTAs → ROUTES.REPORTS (not '/' or '/login') | Phase 18.1 | No dedicated /login route; `*` catchall → App → LoginView is the auth entry |
 | SplashScreen only in LoginView loading gate, not per-page | Phase 18.1 | Scope limit: initial auth load only; per-page transitions deferred |
 | #3b82f6 fallback left in 10+ other components | Phase 18.1 | Out of scope; AppShell + CompanySettings were sufficient for visible surfaces |
+| Added Phase 18.2: UI Consistency & Design System | Phase 18.1 | Extends v1.2 scope — brand palette, expandable sidebar, /brand route, full-width layout |
+| Sidebar active = left border accent (not full bg) | Phase 18.2 | border-l-2 border-accent + bg-accent-subtle; enterprise convention, matches ROADMAP direction |
+| Sidebar expand state in localStorage (gdo-sidebar-expanded) | Phase 18.2 | User preference persists across sessions; default true |
+| /brand route: no AppShell nav link | Phase 18.2 | Dev/design tool — accessible at /brand to authenticated users, not a user-facing nav item |
 
 ### Deferred Issues
 
@@ -123,7 +127,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 ### Git State
 
 Last commit: ddb4e3e — feat(18.1-brand-identity): apply Jost font, GDO branding, custom SVG icons, landing page routing
-Pending commit: feat(18.1-brand-identity): Phase 18.1 complete — GSAP splash, landing CTA fix, #6366f1 default, letter spacing, dashboard route fix
+Last commit: 5935436 — feat(18.1-brand-identity): Phase 18.1 complete — brand identity pass
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -137,9 +141,9 @@ Feature branches merged: none
 
 ## Session Continuity
 
-Last session: 2026-03-31
-Stopped at: Phase 18.1 transition complete — Phase 19 ready to plan
-Next action: /paul:plan for Phase 19 (Supabase Local Config)
+Last session: 2026-04-01
+Stopped at: Phase 18.2 complete — all 4 plans unified
+Next action: Run /paul:plan for Phase 19 (Supabase Local Config)
 Resume file: .paul/ROADMAP.md
 
 ---

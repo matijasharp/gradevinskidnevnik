@@ -160,7 +160,7 @@ export default function MasterWorkspacePage() {
                     </button>
                     <button
                       className="flex-1 rounded-xl px-4 py-2.5 text-sm font-bold text-white hover:opacity-90 transition-opacity disabled:opacity-50"
-                      style={{ backgroundColor: company.brandColor || '#3b82f6' }}
+                      style={{ backgroundColor: company.brandColor || 'var(--color-accent)' }}
                       disabled={addOrgLoading}
                       onClick={async () => {
                         if (!addOrgSelected || !selectedMasterProject) return;
@@ -270,7 +270,7 @@ export default function MasterWorkspacePage() {
               </button>
               <button
                 className="flex-[2] rounded-xl py-3 text-sm font-bold text-white transition-colors disabled:opacity-50"
-                style={{ backgroundColor: company.brandColor || '#3b82f6' }}
+                style={{ backgroundColor: company.brandColor || 'var(--color-accent)' }}
                 disabled={!newMasterProjectName.trim()}
                 onClick={async () => {
                   if (!newMasterProjectName.trim()) return;

@@ -42,7 +42,7 @@ export default function CalendarView({
 }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewType, setViewType] = useState<'month' | 'week' | 'day'>('month');
-  const brandColor = company?.brandColor || '#3b82f6';
+  const brandColor = company?.brandColor || 'var(--color-accent)';
 
   const getEventColor = (status: string) => {
     switch (status) {
@@ -174,7 +174,7 @@ export default function CalendarView({
     <div className="space-y-6">
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight text-primary">Kalendar</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-text-primary">Kalendar</h1>
           <p className="text-zinc-500">Pratite radove i rokove na jednom mjestu.</p>
         </div>
         {!isConnected && (

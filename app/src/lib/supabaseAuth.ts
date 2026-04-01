@@ -17,6 +17,9 @@ export const signOut = () => supabase.auth.signOut();
 
 export const getSession = () => supabase.auth.getSession();
 
+export const updatePassword = (newPassword: string) =>
+  supabase.auth.updateUser({ password: newPassword });
+
 export const onAuthStateChange = (
   callback: (event: AuthChangeEvent, session: Session | null, user: User | null) => void
 ) => {

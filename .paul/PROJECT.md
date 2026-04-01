@@ -14,8 +14,8 @@ Contractors log site progress fast while project leads see shared, audited statu
 |-----------|-------|
 | Type | Application |
 | Version | 1.2 (in progress) |
-| Status | v1.2 Electro MVP Launch — Phase 17 complete (landing page shipped; deployment next) |
-| Last Updated | 2026-03-31 |
+| Status | v1.2 Electro MVP Launch — Phase 18.2 complete (design system shipped); Phase 19 next |
+| Last Updated | 2026-04-01 |
 
 **Production URLs:**
 - None
@@ -51,6 +51,7 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 17: Landing Page — 9-section Croatian marketing page at /landing; favicon.svg; OG/Twitter metadata; GuestRoute auth guard — Phase 17
 - ✓ Phase 18: Deployment — Railway hosting, PORT env var, live at elektro.gradevinskidnevnik.online — Phase 18
 - ✓ Phase 18.1: Brand Identity — Jost font, GDO SVG icons/logo, GSAP splash screen, landing CTA fix, #6366f1 default color, letter spacing — Phase 18.1
+- ✓ Phase 18.2: UI Consistency & Design System — 15-token design system, sharp corners, status badge tokens, full-width layout, expandable sidebar, /brand living design guide — Phase 18.2
 
 ### Active (In Progress)
 
@@ -129,6 +130,9 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | ReminderOverlay "Vidi detalje" navigates to /projects/:id without setSelectedEntry | selectedEntry is internal to ProjectDetailPage; cross-boundary prop drilling not warranted for overlay UX | 2026-03-31 | Active |
 | Landing CTAs → ROUTES.REPORTS (catchall → App → LoginView) | No dedicated /login route; `*` catchall is the auth entry point | 2026-03-31 | Active |
 | SplashScreen only in LoginView loading gate | Per-page splash out of scope; initial auth load only | 2026-03-31 | Active |
+| Sidebar active = left border accent, not full bg | Enterprise sidebar convention; matches ROADMAP direction — no white-on-color text for nav items | 2026-04-01 | Active |
+| Sidebar expand state in localStorage (gdo-sidebar-expanded) | User preference persists across sessions; default true (expanded) | 2026-04-01 | Active |
+| /brand route is dev-only, no AppShell nav link | Living design guide for internal use; not a user-facing feature | 2026-04-01 | Active |
 
 ## Success Metrics
 
@@ -159,4 +163,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-03-31 after Phase 18.1 — v1.2 Electro MVP Launch in progress; brand identity complete; Phase 19 Supabase Local Config next*
+*Last updated: 2026-04-01 after Phase 18.2 — design system complete; expandable sidebar, /brand route, full token system shipped; Phase 19 Supabase Local Config next*

@@ -3,16 +3,11 @@ import { motion } from 'motion/react';
 import {
   Plus,
   Calendar,
-  CalendarDays,
-  Loader2,
-  ExternalLink,
   Users,
   Building2,
   Briefcase,
   ChevronRight,
-  LogOut,
 } from 'lucide-react';
-import { signOut } from '../../../lib/supabaseAuth';
 import {
   BarChart,
   Bar,
@@ -23,7 +18,6 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts';
-import { safeFormatDate } from '../../../shared/utils/format';
 import { Button, Card } from '../../../shared/ui';
 import type { Project, DiaryEntry } from '../../../shared/types';
 
@@ -32,18 +26,17 @@ function DashboardView({
   projects,
   entries,
   onProjectClick,
+  onProjectsClick,
   onNewEntry,
   onUsersClick,
   onSettingsClick,
   googleTokens,
-  calendarEvents,
-  calendarLoading,
   onConnectCalendar,
   onOpenSecrets,
   company
 }: any) {
   const activeProjects = projects.filter((p: any) => p.status === 'active');
-  const brandColor = company?.brandColor || '#6366f1';
+  const brandColor = company?.brandColor || 'var(--color-accent)';
 
   // Prepare chart data
   const chartData = projects.map((p: Project) => {
@@ -73,9 +66,6 @@ function DashboardView({
             <Plus size={18} />
             Novi unos
           </Button>
-          <Button variant="ghost" onClick={signOut} className="md:hidden text-zinc-400 hover:text-red-500 hover:bg-red-50">
-            <LogOut size={18} />
-          </Button>
         </div>
       </header>
 
@@ -83,7 +73,7 @@ function DashboardView({
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-4 rounded-2xl flex items-center justify-between gap-4"
+          className="p-4 rounded flex items-center justify-between gap-4"
           style={{ backgroundColor: brandColor + '10', borderColor: brandColor + '20', borderStyle: 'solid', borderWidth: '1px' }}
         >
           <div className="flex items-center gap-3">
@@ -152,48 +142,13 @@ function DashboardView({
         </Card>
       </div>
 
-      {googleTokens && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">Google Kalendar</p>
-              <CalendarDays size={16} style={{ color: brandColor }} />
-            </div>
-            <div className="space-y-3">
-              {calendarLoading ? (
-                <div className="flex items-center gap-2 text-sm text-zinc-400">
-                  <Loader2 className="animate-spin" size={14} /> Učitavanje...
-                </div>
-              ) : calendarEvents.length > 0 ? (
-                calendarEvents.slice(0, 2).map((event: any) => (
-                  <div key={event.id} className="flex items-start gap-3 group">
-                    <div className="w-1 h-8 rounded-full mt-1" style={{ backgroundColor: brandColor }} />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold truncate">{event.summary}</p>
-                      <p className="text-[10px] text-zinc-500">
-                        {event.start.dateTime ? safeFormatDate(event.start.dateTime, 'HH:mm') : 'Cijeli dan'}
-                      </p>
-                    </div>
-                    <a href={event.htmlLink} target="_blank" rel="noopener noreferrer" className="opacity-0 group-hover:opacity-100 transition-opacity">
-                      <ExternalLink size={14} className="text-zinc-400 hover:text-accent" />
-                    </a>
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-zinc-400">Nema zakazanih radova.</p>
-              )}
-            </div>
-          </Card>
-        </div>
-      )}
-
       {/* Analytics Section */}
       {chartData.length > 0 && (
         <section className="space-y-4">
           <h2 className="text-xl font-bold">Analitika rada</h2>
           <Card className="p-6">
-            <div className="h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+            <div className="w-full">
+              <ResponsiveContainer width="100%" height={300} minWidth={0}>
                 <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
                   <XAxis
@@ -236,7 +191,7 @@ function DashboardView({
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">Nedavni projekti</h2>
-          <Button variant="ghost" className="text-sm">Vidi sve</Button>
+          <Button variant="ghost" className="text-sm" onClick={onProjectsClick}>Vidi sve</Button>
         </div>
         <div className="space-y-3">
           {activeProjects.slice(0, 3).map((p: Project) => (

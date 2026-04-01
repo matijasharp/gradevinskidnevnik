@@ -25,6 +25,7 @@ import UsersPage from './features/users/components/UsersPage';
 import CompanySettingsPage from './features/organizations/components/CompanySettingsPage';
 import MasterWorkspacePage from './features/masterProjects/components/MasterWorkspacePage';
 import SuperAdminPage from './features/admin/components/SuperAdminPage';
+import BrandPage from './features/brand/BrandPage';
 import NewEntryPage from './features/diary/components/NewEntryPage';
 import EditEntryPage from './features/diary/components/EditEntryPage';
 import ReminderOverlay from './features/diary/components/ReminderOverlay';
@@ -130,6 +131,7 @@ function AppContent() {
           <Route path={ROUTES.COMPANY_SETTINGS} element={<CompanySettingsPage />} />
           <Route path={ROUTES.MASTER_WORKSPACE} element={<MasterWorkspacePage />} />
           <Route path={ROUTES.SUPER_ADMIN} element={<SuperAdminPage />} />
+          <Route path={ROUTES.BRAND} element={<BrandPage />} />
         </Routes>
       </AppShell>
 

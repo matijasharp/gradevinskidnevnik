@@ -8,7 +8,7 @@ Start from the electrician prototype, deliver a Supabase-backed MVP with full UI
 
 **v1.2 — Electro MVP Launch** (v1.2)
 Status: 🚧 In Progress
-Phases: 5 of 9 complete
+Phases: 6 of 10 complete
 
 ## Previous Milestones
 
@@ -33,6 +33,7 @@ Phases: 4 of 4 complete
 | 17 | Landing Page | 1/1 | ✅ Complete | 2026-03-31 |
 | 18 | Deployment | 1/1 | ✅ Complete | 2026-03-31 |
 | 18.1 | Brand Identity [INSERTED] | 2/2 | ✅ Complete | 2026-03-31 |
+| 18.2 | UI Consistency & Design System [INSERTED] | 4/4 | ✅ Complete | 2026-04-01 |
 | 19 | Supabase Local Config | TBD | Not started | - |
 | 20 | Edge Functions | TBD | Not started | - |
 | 21 | Activity Log | TBD | Not started | - |
@@ -76,6 +77,47 @@ Phases: 4 of 4 complete
 - Environment variables (.env production)
 - Landing page deployed alongside app
 - Smoke test post-deploy
+**Plans:** TBD
+
+##### Phase 18.2: UI Consistency & Design System
+**Goal:** Enterprise-grade desktop layout — light sidebar, full-width content, expanded color system, /brand design guide.
+
+**Design Direction:**
+- Sidebar: white/clean, not dark — already `bg-white`, keep and refine
+- `#3ab9e3` = accent only (active nav dot/bar, links, focus rings, primary buttons)
+- `#192a46` = primary text + heading color (high contrast on white)
+- Desktop content: remove `max-w-4xl mx-auto` constraint — fill all space left of sidebar
+- Mobile: do NOT touch — already good
+
+**Full token system (index.css @theme):**
+| Token | Hex | Role |
+|-------|-----|------|
+| `--color-accent` | `#3ab9e3` | Active states, links, primary buttons, focus rings |
+| `--color-accent-hover` | `#25a8d4` | Button/link hover |
+| `--color-accent-subtle` | `#3ab9e315` | Accent bg tint (active nav bg, pill bg) |
+| `--color-text-primary` | `#192a46` | Headings, strong text |
+| `--color-text-secondary` | `#4a5a72` | Labels, secondary text |
+| `--color-text-muted` | `#8fa0b8` | Placeholders, disabled |
+| `--color-surface` | `#f1f4f2` | Page/app background |
+| `--color-surface-raised` | `#ffffff` | Cards, sidebar, modals |
+| `--color-border` | `#e0e6ed` | Default borders |
+| `--color-border-subtle` | `#f0f3f5` | Subtle dividers |
+| `--color-warning` | `#fad03d` | Warnings, badges |
+| `--color-warning-subtle` | `#fad03d20` | Warning bg tint |
+| `--color-secondary` | `#816840` | Secondary accents (rare) |
+| `--color-error` | `#e05252` | Errors, destructive actions |
+| `--color-success` | `#3dba7a` | Success states |
+
+**Scope:**
+1. `/brand` route — living design guide: all tokens as swatches, typography scale (h1–h6, body, label, mono), button variants (primary/secondary/ghost/destructive), badge/status styles, icon set, spacing scale
+2. Replace `#6366f1` (current accent fallback in index.css) and all `#3b82f6` hardcodes with `#3ab9e3`; replace `#192a46` as `--color-text-primary`
+3. AppShell desktop layout: remove `max-w-4xl mx-auto` from content wrapper; add `px-8 py-6` padding only; sidebar gets expandable/collapsible toggle (icon-only at 64px collapsed, 240px expanded); state in localStorage
+4. Sidebar refinements: `#192a46` text for nav labels, `#3ab9e3` accent indicator for active item (left border or dot, not full bg), `--color-border` right divider
+5. Sharp edges: `rounded` (4px) for cards, inputs, buttons — replace all `rounded-xl`/`rounded-2xl` in shared components; `rounded-md` (6px) for dropdowns/modals
+6. Typography: `--color-text-primary` for all headings, `--color-text-secondary` for labels
+7. All status badges use token colors (warning/error/success/accent)
+8. `npm run build` must pass
+
 **Plans:** TBD
 
 ##### Phase 19: Supabase Local Config
@@ -314,4 +356,4 @@ Phases: 4 of 4 complete
 
 ---
 *Roadmap created: 2026-03-27*
-*Last updated: 2026-03-31 — Phase 18.1 Brand Identity complete; Phase 19 Supabase Local Config next*
+*Last updated: 2026-04-01 — Phase 18.2 complete (design system shipped); Phase 19 Supabase Local Config is next*

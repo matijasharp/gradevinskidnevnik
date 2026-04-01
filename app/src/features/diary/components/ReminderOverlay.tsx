@@ -46,7 +46,7 @@ export default function ReminderOverlay() {
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl space-y-6 border-t-8"
-        style={{ borderTopColor: company?.brandColor || '#3b82f6' }}
+        style={{ borderTopColor: company?.brandColor || 'var(--color-accent)' }}
       >
         <div className="flex items-center gap-4 text-accent">
           <div className="w-12 h-12 bg-accent/10 rounded-2xl flex items-center justify-center flex-shrink-0">
@@ -73,7 +73,7 @@ export default function ReminderOverlay() {
           </Button>
           <Button
             className="flex-1 text-white"
-            style={{ backgroundColor: company?.brandColor || '#3b82f6' }}
+            style={{ backgroundColor: company?.brandColor || 'var(--color-accent)' }}
             onClick={() => {
               const project = projects.find(p => p.id === activeReminder.projectId);
               if (project) {

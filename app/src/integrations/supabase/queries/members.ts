@@ -10,6 +10,7 @@ const mapUser = (row: any): AppUser => ({
   googleTokens: row.google_tokens ?? undefined,
   status: (row.status ?? 'approved') as 'pending' | 'approved' | 'rejected',
   isSuperAdmin: row.is_super_admin ?? false,
+  avatarUrl: row.avatar_url ?? undefined,
 });
 
 export const subscribeCompanyUsers = (
@@ -141,5 +142,15 @@ export const approveProfile = async (userId: string): Promise<void> => {
 export const rejectProfile = async (userId: string): Promise<void> => {
   ensureSupabase();
   const { error } = await supabase.from('profiles').update({ status: 'rejected' }).eq('id', userId);
+  if (error) throw error;
+};
+
+export const updateProfileInfo = async (userId: string, data: { name?: string; avatarUrl?: string }): Promise<void> => {
+  ensureSupabase();
+  const payload: Record<string, any> = {};
+  if (data.name !== undefined) payload.name = data.name;
+  if (data.avatarUrl !== undefined) payload.avatar_url = data.avatarUrl;
+  if (Object.keys(payload).length === 0) return;
+  const { error } = await supabase.from('profiles').update(payload).eq('id', userId);
   if (error) throw error;
 };

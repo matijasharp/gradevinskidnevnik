@@ -16,7 +16,7 @@ export default function ProjectDocumentsTab({ project, currentUser, readonly = f
   const [uploading, setUploading] = useState(false);
   const [search, setSearch] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const brandColor = company?.brandColor || '#3b82f6';
+  const brandColor = company?.brandColor || 'var(--color-accent)';
 
   const load = async () => {
     setLoading(true);

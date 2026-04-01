@@ -26,6 +26,7 @@ export default function DashboardPage() {
       projects={projects}
       entries={entries}
       onProjectClick={(p) => navigate(`/projects/${p.id}`)}
+      onProjectsClick={() => navigate(ROUTES.PROJECTS)}
       onNewEntry={() => navigate(ROUTES.NEW_ENTRY)}
       onUsersClick={() => navigate(ROUTES.USERS)}
       onSettingsClick={() => navigate(ROUTES.COMPANY_SETTINGS)}

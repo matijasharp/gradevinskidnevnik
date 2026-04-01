@@ -24,7 +24,7 @@ export default function LandingPage() {
             </Link>
             <Link
               to={ROUTES.REPORTS}
-              className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+              className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded transition-colors"
             >
               Isprobaj besplatno
             </Link>
@@ -67,13 +67,13 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to={ROUTES.REPORTS}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-colors inline-block"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-8 py-4 rounded text-lg transition-colors inline-block"
             >
               Isprobaj besplatno →
             </Link>
             <Link
               to={ROUTES.REPORTS}
-              className="border border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white px-8 py-4 rounded-xl text-lg transition-colors inline-block"
+              className="border border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white px-8 py-4 rounded text-lg transition-colors inline-block"
             >
               Zatraži demo
             </Link>
@@ -302,7 +302,7 @@ export default function LandingPage() {
 
           <Link
             to={ROUTES.REPORTS}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-10 py-4 rounded-xl text-lg inline-block transition-colors"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-10 py-4 rounded text-lg inline-block transition-colors"
           >
             Postani jedan od prvih 10 →
           </Link>
@@ -341,7 +341,7 @@ export default function LandingPage() {
           </p>
           <Link
             to={ROUTES.REPORTS}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-10 py-4 rounded-xl text-lg inline-block transition-colors"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-10 py-4 rounded text-lg inline-block transition-colors"
           >
             Isprobaj besplatno →
           </Link>
