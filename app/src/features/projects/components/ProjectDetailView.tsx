@@ -146,7 +146,8 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
       </header>
 
       {/* Tab bar */}
-      <div className="flex gap-1 p-1 bg-zinc-100 rounded-xl w-fit">
+      <div className="overflow-x-auto">
+      <div className="flex gap-1 p-1 bg-zinc-100 rounded-xl w-fit min-w-max">
         <button
           onClick={() => setActiveTab('dnevnik')}
           className={cn(
@@ -183,6 +184,7 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
         >
           Dokumenti
         </button>
+      </div>
       </div>
 
       {showDeleteConfirm && (

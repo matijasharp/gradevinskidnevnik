@@ -14,7 +14,7 @@ Contractors log site progress fast while project leads see shared, audited statu
 |-----------|-------|
 | Type | Application |
 | Version | 1.2 (in progress) |
-| Status | v1.2 Electro MVP Launch — Phase 19 complete (local dev config shipped); Phase 20 next |
+| Status | v1.2 Electro MVP Launch — Phase 21 complete (calendar nav + mobile fixes); Phase 22 Activity Log next |
 | Last Updated | 2026-04-01 |
 
 **Production URLs:**
@@ -54,10 +54,11 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 18.2: UI Consistency & Design System — 15-token design system, sharp corners, status badge tokens, full-width layout, expandable sidebar, /brand living design guide — Phase 18.2
 - ✓ Phase 19: Supabase Local Config — config.toml, auto-generated database.types.ts (14 tables), idempotent seed.sql for local dev — Phase 19
 - ✓ Phase 20: Edge Functions — send-invitation Edge Function (Resend REST API); generate-pdf Edge Function built + deployed (v7, pdf-lib, Jost font, RFC 5987 header fix); client PDF reverted to jsPDF pending Phase 21 QA — Phase 20
+- ✓ Phase 21: App Quality & Export Enhancements (Plan 01) — calendar day view cards navigate to /projects/:id; mobile arrow buttons fixed with raw button elements (32×32px tap targets); tab bar responsiveness fixed — Phase 21
 
 ### Active (In Progress)
 
-- v1.2 Electro MVP Launch — Phase 21: App Quality & Export Enhancements (next)
+- v1.2 Electro MVP Launch — Phase 22: Activity Log (next)
 
 ### Planned (Next)
 
@@ -170,4 +171,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-04-01 after Phase 20 — Edge Functions complete; send-invitation live, generate-pdf deployed (v7); Phase 21 App Quality & Export Enhancements next*
+*Last updated: 2026-04-01 after Phase 21 — calendar navigation + mobile button fixes shipped; Phase 22 Activity Log next*

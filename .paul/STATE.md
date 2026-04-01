@@ -5,26 +5,26 @@
 See: .paul/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.2 — Electro MVP Launch (Phase 20 complete; Phase 21 App Quality & Export Enhancements next).
+**Current focus:** v1.2 — Electro MVP Launch (Phase 21 complete; Phase 22 Activity Log next).
 
 ## Current Position
 
 Milestone: v1.2 — Electro MVP Launch
-Phase: 21 of 23 (App Quality & Export Enhancements) — Not started
+Phase: 22 of 23 (Activity Log) — Not started
 Plan: Not started
-Status: Ready to plan Phase 21
-Last activity: 2026-04-01 — Phase 20 complete; generate-pdf Edge Function deployed (v7); client PDF reverted to jsPDF pending Phase 21 QA
+Status: Ready to plan
+Last activity: 2026-04-01 — Phase 21 complete, transitioned to Phase 22
 
 Progress:
-- v1.2 Milestone: [████████░░] 82%
-- Phase 21: [░░░░░░░░░░] 0%
+- v1.2 Milestone: [█████████░] 90%
+- Phase 22: [░░░░░░░░░░] 0%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Phase 20 complete — ready for next PLAN]
+  ✓        ✓        ✓     [Loop complete — ready for Phase 22 PLAN]
 ```
 
 ## Performance Metrics
@@ -149,8 +149,8 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-04-01
-Stopped at: Phase 20 complete — generate-pdf Edge Function deployed (v7); client PDF reverted to jsPDF
-Next action: /paul:plan for Phase 21 (App Quality & Export Enhancements)
+Stopped at: Phase 21 complete — calendar nav, mobile arrow fix, tab bar responsiveness shipped
+Next action: /paul:plan for Phase 22 (Activity Log)
 Resume file: .paul/ROADMAP.md
 
 ---

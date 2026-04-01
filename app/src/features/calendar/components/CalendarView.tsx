@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronRight, CalendarDays, Calendar } from 'lucide-react';
 import { Button, Card } from '../../../shared/ui';
 import { cn } from '../../../lib/utils';
@@ -40,6 +41,7 @@ export default function CalendarView({
   isConnected: boolean,
   company: any
 }) {
+  const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewType, setViewType] = useState<'month' | 'week' | 'day'>('month');
   const brandColor = company?.brandColor || 'var(--color-accent)';
@@ -154,16 +156,27 @@ export default function CalendarView({
               Dan
             </button>
           </div>
-          <div className="flex gap-1">
-            <Button variant="ghost" size="icon" onClick={prev} className="h-8 w-8 md:h-10 md:w-10">
+          <div className="flex items-center gap-1">
+            <button
+              onClick={prev}
+              className="flex items-center justify-center h-8 w-8 rounded-md text-zinc-600 hover:bg-zinc-100 active:scale-95 transition-all"
+              aria-label="Prethodno"
+            >
               <ChevronRight className="rotate-180" size={18} />
-            </Button>
-            <Button variant="ghost" onClick={() => setCurrentDate(new Date())} className="text-[10px] md:text-xs font-bold px-2 md:px-3 h-8 md:h-10">
+            </button>
+            <button
+              onClick={() => setCurrentDate(new Date())}
+              className="flex items-center justify-center px-2 h-8 text-[10px] md:text-xs font-bold rounded-md text-zinc-600 hover:bg-zinc-100 active:scale-95 transition-all"
+            >
               Danas
-            </Button>
-            <Button variant="ghost" size="icon" onClick={next} className="h-8 w-8 md:h-10 md:w-10">
+            </button>
+            <button
+              onClick={next}
+              className="flex items-center justify-center h-8 w-8 rounded-md text-zinc-600 hover:bg-zinc-100 active:scale-95 transition-all"
+              aria-label="Sljedeće"
+            >
               <ChevronRight size={18} />
-            </Button>
+            </button>
           </div>
         </div>
       </div>
@@ -199,7 +212,7 @@ export default function CalendarView({
                       {dayProjects.map(p => {
                         const color = getEventColor(p.status);
                         return (
-                          <div key={p.id} className="p-4 rounded-r-xl border-l-4" style={{ backgroundColor: color + '10', borderColor: color }}>
+                          <div key={p.id} onClick={() => navigate(`/projects/${p.id}`)} className="p-4 rounded-r-xl border-l-4 cursor-pointer hover:opacity-80 transition-opacity" style={{ backgroundColor: color + '10', borderColor: color }}>
                             <p className="font-bold" style={{ color: color }}>{p.projectName}</p>
                             <p className="text-sm opacity-70" style={{ color: color }}>{p.clientName} • {p.street}, {p.city}</p>
                           </div>
@@ -213,7 +226,7 @@ export default function CalendarView({
                       {dayEntries.map(e => {
                         const color = getEventColor(e.status);
                         return (
-                          <div key={e.id} className="p-4 rounded-r-xl border-l-4" style={{ backgroundColor: color + '10', borderColor: color }}>
+                          <div key={e.id} onClick={() => navigate(`/projects/${e.projectId}`)} className="p-4 rounded-r-xl border-l-4 cursor-pointer hover:opacity-80 transition-opacity" style={{ backgroundColor: color + '10', borderColor: color }}>
                             <p className="font-bold" style={{ color: color }}>{e.title}</p>
                             <p className="text-sm opacity-70" style={{ color: color }}>{e.workType} • {e.hours}h • {e.workersCount} radnika</p>
                           </div>
