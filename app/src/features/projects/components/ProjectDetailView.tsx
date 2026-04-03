@@ -16,7 +16,17 @@ import ProjectTasksTab from './ProjectTasksTab';
 import ProjectDocumentsTab from './ProjectDocumentsTab';
 import ActivityFeed from './ActivityFeed';
 
-export default function ProjectDetailView({ project, entries, onBack, onNewEntry, onEntryClick, onGeneratePDF, onAddToCalendar, onCompleteProject, onUpdatePhase, onDeleteProject, hasCalendar, userRole, appUser, company, readonly = false, companyUsers = [] }: any) {
+export default function ProjectDetailView({ project, entries, onBack, onNewEntry, onEntryClick, onGeneratePDF, onAddToCalendar, onCompleteProject, onUpdatePhase, onDeleteProject, hasCalendar, userRole, appUser, company, memberRole, companyUsers = [] }: any) {
+  // memberRole is set only for cross-org project members (lead | contributor | viewer | undefined)
+  // undefined = own org member, access gated by userRole (admin | worker) as before
+  const isOrgMember = !memberRole;
+  const canAddEntry    = isOrgMember || memberRole !== 'viewer';
+  const canManageProject = isOrgMember && userRole === 'admin';  // complete, delete, phase change
+  const canViewTabs    = isOrgMember || memberRole !== 'viewer'; // tasks, docs, members, activity
+  const canWriteTasks  = isOrgMember ? userRole === 'admin' : memberRole === 'lead';
+  const canToggleTasks = isOrgMember || memberRole !== 'viewer';
+  const canWriteDocs   = isOrgMember || memberRole === 'lead';
+  const canManageMembers = isOrgMember ? userRole === 'admin' : memberRole === 'lead';
   const [searchQuery, setSearchQuery] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -90,7 +100,7 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
                 <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase whitespace-nowrap">Završeno</span>
               )}
               <span className="bg-zinc-100 text-zinc-500 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase whitespace-nowrap">{project.phase}</span>
-              {userRole === 'admin' && project.status !== 'completed' && (
+              {canManageProject && project.status !== 'completed' && (
                 <select
                   className="text-[10px] font-bold uppercase bg-zinc-50 border-none rounded-full px-2 py-0.5 focus:ring-0 cursor-pointer text-zinc-500"
                   value={project.phase}
@@ -111,13 +121,13 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {userRole === 'admin' && (
+          {canManageProject && (
             <Button variant="outline" onClick={() => setShowDeleteConfirm(true)} className="text-red-500 border-red-100 hover:bg-red-50 p-2.5 md:px-4">
               <Trash2 size={18} />
               <span className="hidden md:inline ml-2 text-xs">Obriši</span>
             </Button>
           )}
-          {project.status !== 'completed' && userRole === 'admin' && (
+          {project.status !== 'completed' && canManageProject && (
             <Button variant="outline" onClick={onCompleteProject} className="text-green-600 border-green-200 hover:bg-green-50 flex-1 md:flex-none">
               <CheckCircle2 size={18} />
               <span className="ml-1 md:ml-2 text-sm md:text-base">Završi</span>
@@ -133,7 +143,7 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
             {isGeneratingPDF ? <Loader2 className="animate-spin" size={18} /> : <Download size={18} />}
             <span className="ml-1 md:ml-2 text-sm md:text-base">{isGeneratingPDF ? 'Generiram...' : 'Izvještaj'}</span>
           </Button>
-          {!readonly && (
+          {canAddEntry && (
             <Button
               onClick={onNewEntry}
               className="flex-1 md:flex-none font-bold shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
@@ -158,42 +168,50 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
         >
           Dnevnik
         </button>
-        <button
-          onClick={() => setActiveTab('suradnici')}
-          className={cn(
-            "px-4 py-2 rounded-lg text-sm font-bold transition-all",
-            activeTab === 'suradnici' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
-          )}
-        >
-          Suradnici
-        </button>
-        <button
-          onClick={() => setActiveTab('zadaci')}
-          className={cn(
-            "px-4 py-2 rounded-lg text-sm font-bold transition-all",
-            activeTab === 'zadaci' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
-          )}
-        >
-          Zadaci
-        </button>
-        <button
-          onClick={() => setActiveTab('dokumenti')}
-          className={cn(
-            "px-4 py-2 rounded-lg text-sm font-bold transition-all",
-            activeTab === 'dokumenti' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
-          )}
-        >
-          Dokumenti
-        </button>
-        <button
-          onClick={() => setActiveTab('aktivnost')}
-          className={cn(
-            "px-4 py-2 rounded-lg text-sm font-bold transition-all",
-            activeTab === 'aktivnost' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
-          )}
-        >
-          Aktivnost
-        </button>
+        {canViewTabs && (
+          <button
+            onClick={() => setActiveTab('suradnici')}
+            className={cn(
+              "px-4 py-2 rounded-lg text-sm font-bold transition-all",
+              activeTab === 'suradnici' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+            )}
+          >
+            Suradnici
+          </button>
+        )}
+        {canViewTabs && (
+          <button
+            onClick={() => setActiveTab('zadaci')}
+            className={cn(
+              "px-4 py-2 rounded-lg text-sm font-bold transition-all",
+              activeTab === 'zadaci' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+            )}
+          >
+            Zadaci
+          </button>
+        )}
+        {canViewTabs && (
+          <button
+            onClick={() => setActiveTab('dokumenti')}
+            className={cn(
+              "px-4 py-2 rounded-lg text-sm font-bold transition-all",
+              activeTab === 'dokumenti' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+            )}
+          >
+            Dokumenti
+          </button>
+        )}
+        {canViewTabs && (
+          <button
+            onClick={() => setActiveTab('aktivnost')}
+            className={cn(
+              "px-4 py-2 rounded-lg text-sm font-bold transition-all",
+              activeTab === 'aktivnost' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+            )}
+          >
+            Aktivnost
+          </button>
+        )}
       </div>
       </div>
 
@@ -228,30 +246,32 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
         </div>
       )}
 
-      {activeTab === 'suradnici' && (
+      {activeTab === 'suradnici' && canViewTabs && (
         <ProjectMembersTab
           project={project}
           currentUser={appUser}
           orgMembers={companyUsers}
           company={company}
+          canManage={canManageMembers}
         />
       )}
 
-      {activeTab === 'zadaci' && (
+      {activeTab === 'zadaci' && canViewTabs && (
         <ProjectTasksTab
           project={project}
           currentUser={appUser}
           orgMembers={companyUsers}
-          readonly={readonly}
+          canWrite={canWriteTasks}
+          canToggle={canToggleTasks}
           company={company}
         />
       )}
 
-      {activeTab === 'dokumenti' && (
+      {activeTab === 'dokumenti' && canViewTabs && (
         <ProjectDocumentsTab
           project={project}
           currentUser={appUser}
-          readonly={readonly}
+          canWrite={canWriteDocs}
           company={company}
         />
       )}

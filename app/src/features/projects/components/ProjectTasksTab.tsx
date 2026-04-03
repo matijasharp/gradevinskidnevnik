@@ -6,11 +6,12 @@ import type { Project } from '../../../shared/types';
 import { Button, Card } from '../../../shared/ui';
 import { cn } from '../../../lib/utils';
 
-export default function ProjectTasksTab({ project, currentUser, orgMembers = [], readonly = false, company }: {
+export default function ProjectTasksTab({ project, currentUser, orgMembers = [], canWrite, canToggle = true, company }: {
   project: Project;
   currentUser: any;
   orgMembers: any[];
-  readonly?: boolean;
+  canWrite?: boolean;
+  canToggle?: boolean;
   company: any;
 }) {
   const [tasks, setTasks] = useState<ProjectTask[]>([]);
@@ -19,7 +20,8 @@ export default function ProjectTasksTab({ project, currentUser, orgMembers = [],
   const [newAssignedTo, setNewAssignedTo] = useState('');
   const [saving, setSaving] = useState(false);
   const brandColor = company?.brandColor || 'var(--color-accent)';
-  const isAdmin = currentUser?.role === 'admin';
+  // canWrite defaults to org admin behaviour when not explicitly passed
+  const showWriteControls = canWrite ?? currentUser?.role === 'admin';
 
   const load = async () => {
     setLoading(true);
@@ -86,8 +88,9 @@ export default function ProjectTasksTab({ project, currentUser, orgMembers = [],
                   <input
                     type="checkbox"
                     checked={task.done}
-                    onChange={() => handleToggle(task)}
-                    className="w-4 h-4 rounded border-zinc-300 cursor-pointer flex-shrink-0"
+                    onChange={() => canToggle && handleToggle(task)}
+                    disabled={!canToggle}
+                    className="w-4 h-4 rounded border-zinc-300 cursor-pointer flex-shrink-0 disabled:cursor-default"
                     style={{ accentColor: brandColor }}
                   />
                   <div className="min-w-0">
@@ -99,7 +102,7 @@ export default function ProjectTasksTab({ project, currentUser, orgMembers = [],
                     )}
                   </div>
                 </div>
-                {!readonly && isAdmin && (
+                {showWriteControls && (
                   <button
                     onClick={() => handleDelete(task.id)}
                     className="p-1.5 text-zinc-300 hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 flex-shrink-0 ml-2"
@@ -113,8 +116,8 @@ export default function ProjectTasksTab({ project, currentUser, orgMembers = [],
         )}
       </section>
 
-      {/* Add task form — admin only, not readonly */}
-      {!readonly && isAdmin && (
+      {/* Add task form */}
+      {showWriteControls && (
         <section className="space-y-3">
           <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Dodaj zadatak</h3>
           <Card className="space-y-3 p-4">

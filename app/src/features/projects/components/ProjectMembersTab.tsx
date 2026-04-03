@@ -5,11 +5,12 @@ import type { ProjectMember, ProjectInvitation } from '../../../lib/data';
 import type { Project } from '../../../shared/types';
 import { Button, Card } from '../../../shared/ui';
 
-export default function ProjectMembersTab({ project, currentUser, orgMembers = [], company }: {
+export default function ProjectMembersTab({ project, currentUser, orgMembers = [], company, canManage }: {
   project: Project;
   currentUser: any;
   orgMembers: any[];
   company: any;
+  canManage?: boolean;
 }) {
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [invitations, setInvitations] = useState<ProjectInvitation[]>([]);
@@ -21,9 +22,10 @@ export default function ProjectMembersTab({ project, currentUser, orgMembers = [
   const [selectedOrgMemberRole, setSelectedOrgMemberRole] = useState<'lead' | 'contributor' | 'viewer'>('viewer');
   const [saving, setSaving] = useState(false);
   const brandColor = company?.brandColor || 'var(--color-accent)';
-  const isAdmin = currentUser?.role === 'admin';
+  // canManage explicitly passed for cross-org members; falls back to org admin check
+  const isAdmin = canManage ?? currentUser?.role === 'admin';
 
-  const roleLabel = (r: string) => r === 'lead' ? 'Voditelj' : r === 'contributor' ? 'Suradnik' : 'Pregledatelj';
+  const roleLabel = (r: string) => r === 'lead' ? 'Voditelj' : r === 'contributor' ? 'Suradnik' : 'Gledatelj';
 
   const load = async () => {
     setLoading(true);
@@ -129,7 +131,7 @@ export default function ProjectMembersTab({ project, currentUser, orgMembers = [
                     >
                       <option value="lead">Voditelj</option>
                       <option value="contributor">Suradnik</option>
-                      <option value="viewer">Pregledatelj</option>
+                      <option value="viewer">Gledatelj</option>
                     </select>
                   ) : (
                     <span className="text-xs bg-zinc-100 text-zinc-500 px-2 py-1 rounded-full font-bold">{roleLabel(m.role)}</span>
@@ -200,7 +202,7 @@ export default function ProjectMembersTab({ project, currentUser, orgMembers = [
                 >
                   <option value="lead">Voditelj</option>
                   <option value="contributor">Suradnik</option>
-                  <option value="viewer">Pregledatelj</option>
+                  <option value="viewer">Gledatelj</option>
                 </select>
                 <Button
                   size="sm"

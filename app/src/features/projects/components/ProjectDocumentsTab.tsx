@@ -5,10 +5,10 @@ import type { ProjectDocument } from '../../../lib/data';
 import type { Project } from '../../../shared/types';
 import { Button, Card } from '../../../shared/ui';
 
-export default function ProjectDocumentsTab({ project, currentUser, readonly = false, company }: {
+export default function ProjectDocumentsTab({ project, currentUser, canWrite = true, company }: {
   project: Project;
   currentUser: any;
-  readonly?: boolean;
+  canWrite?: boolean;
   company: any;
 }) {
   const [docs, setDocs] = useState<ProjectDocument[]>([]);
@@ -109,7 +109,7 @@ export default function ProjectDocumentsTab({ project, currentUser, readonly = f
                   >
                     <Download size={14} />
                   </a>
-                  {!readonly && (
+                  {canWrite && (
                     <button
                       onClick={() => handleDelete(doc)}
                       className="p-1.5 text-zinc-300 hover:text-red-400 transition-colors rounded-lg hover:bg-red-50"
@@ -124,7 +124,7 @@ export default function ProjectDocumentsTab({ project, currentUser, readonly = f
         )}
       </section>
 
-      {!readonly && (
+      {canWrite && (
         <section className="space-y-3">
           <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Dodaj dokument</h3>
           <input

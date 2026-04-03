@@ -134,6 +134,21 @@ export const fetchProjectInvitationByEmail = async (email: string): Promise<Proj
   return data ? mapProjectInvitation(data) : null;
 };
 
+export const fetchProjectMemberRole = async (
+  projectId: string,
+  userId: string
+): Promise<'lead' | 'contributor' | 'viewer' | null> => {
+  ensureSupabase();
+  const { data, error } = await supabase
+    .from('project_members')
+    .select('role')
+    .eq('project_id', projectId)
+    .eq('user_id', userId)
+    .maybeSingle();
+  if (error) return null;
+  return (data?.role as 'lead' | 'contributor' | 'viewer') ?? null;
+};
+
 export const acceptProjectInvitation = async (params: {
   invitation: ProjectInvitation;
   userId: string;

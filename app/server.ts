@@ -138,18 +138,22 @@ app.post('/api/invite', async (req, res) => {
 
   const resend = new Resend(apiKey);
   const loginUrl = appUrl || 'http://localhost:3000';
-  const roleLabel = role === 'admin' ? 'administrator' : 'radnik';
+  const isProjectInvite = req.body.type === 'project_invite';
+  const roleLabel = isProjectInvite
+    ? (role === 'lead' ? 'voditelj' : role === 'contributor' ? 'suradnik' : 'gledatelj')
+    : (role === 'admin' ? 'administrator' : 'radnik');
+  const entityWord = isProjectInvite ? 'projektu' : 'tvrtki';
 
   try {
     await resend.emails.send({
       from,
       to: email,
-      subject: `Pozivnica za tim — ${organizationName}`,
+      subject: `Pozivnica za ${isProjectInvite ? 'projekt' : 'tim'} — ${organizationName}`,
       html: `
         <div style="font-family: sans-serif; max-width: 520px; margin: 0 auto; padding: 32px 24px; color: #18181b;">
-          <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 8px;">Pozivnica za tim</h2>
+          <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 8px;">Pozivnica za ${isProjectInvite ? 'projekt' : 'tim'}</h2>
           <p style="color: #71717a; margin-bottom: 24px; font-size: 15px;">
-            ${inviterName ? `<strong>${inviterName}</strong> vas je pozvao/la` : 'Pozvani ste'} da se pridružite tvrtki
+            ${inviterName ? `<strong>${inviterName}</strong> vas je pozvao/la` : 'Pozvani ste'} da se pridružite ${entityWord}
             <strong>${organizationName}</strong> u aplikaciji Gradevinski Dnevnik kao <strong>${roleLabel}</strong>.
           </p>
           ${name ? `<p style="margin-bottom: 24px; font-size: 15px;">Vaše ime: <strong>${name}</strong></p>` : ''}
