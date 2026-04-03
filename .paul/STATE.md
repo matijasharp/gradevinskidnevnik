@@ -5,26 +5,26 @@
 See: .paul/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.2 — Electro MVP Launch ✅ COMPLETE. All 11 phases shipped. Ready for next milestone.
+**Current focus:** v1.3 — Production Readiness & Monetization Foundation. Fix production bugs, email infrastructure, UX polish, Stripe billing.
 
 ## Current Position
 
-Milestone: v1.2 — Electro MVP Launch
-Phase: 23 of 23 (Full Super Admin Panel) — Complete ✅
-Plan: 23-01 unified
-Status: v1.2 milestone complete — ready for next milestone
-Last activity: 2026-04-03 — Phase 23 complete; v1.2 Electro MVP Launch ✅ all 11 phases done
+Milestone: v1.3 — Production Readiness & Monetization Foundation
+Phase: 25 of 27 (Bug Fixes & UX Polish) — In Progress
+Plan: 25-01 complete, 25-02 pending
+Status: Loop closed — ready for next PLAN (25-02)
+Last activity: 2026-04-03 — UNIFY 25-01: 5 UX fixes shipped, activity_log backfilled to production
 
 Progress:
-- v1.2 Milestone: [██████████] 100% ✅
-- Phase 23: [██████████] 100% ✅
+- v1.3 Milestone: [██░░░░░░░░] 25%
+- Phase 25: [████░░░░░░] 40%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Loop complete — Phase 23 done, v1.2 milestone complete]
+  ✓        ✓        ✓     [Loop complete — ready for 25-02]
 ```
 
 ## Performance Metrics
@@ -139,7 +139,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: 96ae1bc — feat(23-full-super-admin): Phase 23 complete — full super admin panel shipped
+Last commit: d005f59 — fix(24-email-invitations): fix broken invitation emails in both send paths
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -154,9 +154,9 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-04-03
-Stopped at: v1.2 milestone complete — all 11 phases unified
-Next action: /paul:discuss-milestone to plan v1.3, or /paul:complete-milestone to formally close v1.2
-Resume file: .paul/ROADMAP.md
+Stopped at: Plan 25-01 unified
+Next action: Run /paul:plan for Phase 25 Plan 02 (Google OAuth branding + Calendar fix)
+Resume file: .paul/phases/25-bug-fixes-ux-polish/25-01-SUMMARY.md
 
 ---
 *STATE.md — Updated after every significant action*

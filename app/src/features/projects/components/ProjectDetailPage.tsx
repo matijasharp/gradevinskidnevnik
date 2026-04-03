@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../app/providers';
 import { useOrg } from '../../../app/providers';
 import { useGoogleCalendar } from '../../calendar/hooks/useGoogleCalendar';
 import { ROUTES } from '../../../app/router/routeConfig';
 import { generateDiaryPdf } from '../../../integrations/pdf/generateDiaryPdf';
+import { fetchProjectMemberRole } from '../../../lib/data';
 import ProjectDetailView from './ProjectDetailView';
 import DiaryEntryDetailModal from '../../diary/components/DiaryEntryDetailModal';
 import type { DiaryEntry } from '../../../shared/types';
@@ -17,9 +18,17 @@ export default function ProjectDetailPage() {
           completeProject, updateProjectPhase, deleteProject } = useOrg();
   const { googleTokens, addToCalendar } = useGoogleCalendar();
   const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
+  const [memberRole, setMemberRole] = useState<'lead' | 'contributor' | 'viewer' | null>(null);
 
-  const project = projects.find(p => p.id === projectId) ?? null;
+  const project = projects.find(p => p.id === projectId)
+    ?? sharedProjects.find(p => p.id === projectId)
+    ?? null;
   const isShared = sharedProjects.some(sp => sp.id === projectId);
+
+  useEffect(() => {
+    if (!isShared || !projectId || !appUser?.id) return;
+    fetchProjectMemberRole(projectId, appUser.id).then(setMemberRole);
+  }, [isShared, projectId, appUser?.id]);
 
   if (!project) return null;
 
@@ -37,7 +46,7 @@ export default function ProjectDetailPage() {
         project={project}
         entries={projectEntries}
         onBack={() => navigate(ROUTES.PROJECTS)}
-        onNewEntry={() => navigate(ROUTES.NEW_ENTRY)}
+        onNewEntry={() => navigate(ROUTES.NEW_ENTRY, { state: { projectId: project.id } })}
         onEntryClick={setSelectedEntry}
         onGeneratePDF={async () =>
           await generateDiaryPdf(project, projectEntries, company)
@@ -50,7 +59,7 @@ export default function ProjectDetailPage() {
         userRole={appUser?.role}
         appUser={appUser}
         company={company}
-        readonly={isShared}
+        memberRole={isShared ? (memberRole ?? undefined) : undefined}
         companyUsers={companyUsers}
       />
       {selectedEntry && entryProject && (

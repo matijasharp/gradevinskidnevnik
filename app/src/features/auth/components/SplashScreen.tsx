@@ -16,7 +16,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
         gsap.to(containerRef.current, {
           opacity: 0,
           duration: 0.4,
-          delay: 0.5,
+          delay: 0.1,
           onComplete,
         });
       },

@@ -6,11 +6,15 @@ Start from the electrician prototype, deliver a Supabase-backed MVP with full UI
 
 ## Current Milestone
 
+**v1.3 — Production Readiness & Monetization Foundation** (v1.3)
+Status: 🚧 In Progress
+Phases: 0 of 4 complete
+
+## Previous Milestones
+
 **v1.2 — Electro MVP Launch** (v1.2)
 Status: ✅ Complete
 Phases: 11 of 11 complete
-
-## Previous Milestones
 
 **v1.1 — Frontend Architecture Refactor** (v1.1)
 Status: ✅ Complete
@@ -361,10 +365,82 @@ Phases: 4 of 4 complete
 
 ---
 
+---
+
+### v1.3 — Production Readiness & Monetization Foundation
+
+**Goal:** Fix production bugs, establish proper email infrastructure with domain separation (transactional vs outreach), polish UX edge cases, and lay the Stripe billing foundation.
+
+| Phase | Name | Plans | Status | Completed |
+|-------|------|-------|--------|-----------|
+| 24 | Email Infrastructure & Invitations | 1/1 | ✅ Complete | 2026-04-03 |
+| 25 | Bug Fixes & UX Polish | 1/TBD | In Progress | - |
+| 26 | PDF & Export Enhancements | TBD | Not started | - |
+| 27 | Stripe Billing Foundation | TBD | Not started | - |
+
+#### Phase Details
+
+##### Phase 24: Email Infrastructure & Invitations
+
+**Goal:** Fix broken invitation sending. Set up domain separation: transactional domain (`elektro.gradevinskidnevnik.online`, tracking OFF) and cold outreach domain (`outreach.gradevinskidnevnik.online`, tracking ON).
+
+**Scope:**
+- Debug and fix `pozovi korisnika` / `pozovi suradnika` — invitations never arrive
+- Configure transactional from-addresses (tracking OFF): `invites@`, `onboarding@`, `notifications@`, `support@`, `security@`, `updates@` on `elektro.gradevinskidnevnik.online`
+- Configure outreach domain `outreach.gradevinskidnevnik.online` in Resend (click tracking ON, open tracking ON): `matija@`, `hello@`
+- Update Edge Function `send-invitation` to use `invites@elektro.gradevinskidnevnik.online` as from-address
+- Verify invitation email end-to-end
+
+**Plans:** TBD (defined during /paul:plan)
+
+##### Phase 25: Bug Fixes & UX Polish
+
+**Goal:** Fix all known production bugs and UX issues discovered post-launch.
+
+**Scope:**
+1. **Invitation sending** — debug why emails don't arrive (may overlap with Phase 24 root cause)
+2. **Mobile camera** — `take a photo` opens gallery instead of camera; fix `accept` / `capture` attributes on file inputs for both diary entries and avatar upload
+3. **Activity tab** — "Aktivnost" tab broken/empty; diagnose and fix
+4. **Modals at top** — all modals/pages when opened should scroll to top of viewport
+5. **Project pre-selection** — when creating `novi unos` from within a project, project should be pre-selected
+6. **Google OAuth branding** — replace Supabase project URL (`qozoyjuwxjxxwnajlvwt.supabase.co`) with branded domain on OAuth consent screen (Supabase Dashboard → Auth → URL Configuration)
+7. **Google Calendar** — fix `poveži Google Calendar` OAuth flow (likely same branding/redirect URL issue)
+8. **Loading animation performance** — splash screen sometimes too slow; audit and cap animation duration
+
+**Plans:** TBD (defined during /paul:plan)
+
+##### Phase 26: PDF & Export Enhancements
+
+**Goal:** Improve PDF quality and add per-entry export.
+
+**Scope:**
+1. **Image aspect ratio** — images in generated PDF should preserve original aspect ratio (currently distorted/stretched)
+2. **Per-entry download** — when viewing a diary entry, add "Preuzmi PDF" button alongside Uredi/Zatvori
+3. **Edge Function PDF wiring** — connect generate-pdf Edge Function (deployed in Phase 20, deferred) to replace jsPDF client-side generation
+
+**Plans:** TBD (defined during /paul:plan)
+
+##### Phase 27: Stripe Billing Foundation
+
+**Goal:** Integrate Stripe — subscription model scaffold, billing flow, and billing email setup.
+
+**Scope:**
+1. Stripe account setup + API keys in environment
+2. Subscription plans scaffold (free tier / paid tier definition)
+3. Stripe Checkout integration — upgrade flow from app
+4. Webhook handler (Edge Function) for subscription events (paid, cancelled, expired)
+5. `profiles` / `organizations` table: add `subscription_status`, `stripe_customer_id` columns
+6. Gate features by subscription status (basic enforcement)
+7. `billing@elektro.gradevinskidnevnik.online` from-address for Stripe receipts/invoices
+
+**Plans:** TBD (defined during /paul:plan)
+
+---
+
 ## Planned (Future Milestones)
 
-*(none — v1.2 is now active)*
+*(none defined yet)*
 
 ---
 *Roadmap created: 2026-03-27*
-*Last updated: 2026-04-03 — Phase 23 complete; v1.2 Electro MVP Launch milestone complete ✅*
+*Last updated: 2026-04-03 — v1.3 Production Readiness & Monetization Foundation milestone created*
