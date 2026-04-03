@@ -10,21 +10,21 @@ See: .paul/PROJECT.md (updated 2026-03-31)
 ## Current Position
 
 Milestone: v1.3 — Production Readiness & Monetization Foundation
-Phase: 25 of 27 (Bug Fixes & UX Polish) — In Progress
-Plan: 25-03 created, awaiting approval
-Status: PLAN created, ready for APPLY
-Last activity: 2026-04-03 — Created .paul/phases/25-bug-fixes-ux-polish/25-03-PLAN.md
+Phase: 26 of 27 (PDF & Export Enhancements) — Not started
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-04-03 — Phase 25 complete (3/3 plans), transitioned to Phase 26
 
 Progress:
-- v1.3 Milestone: [██░░░░░░░░] 25%
-- Phase 25: [████░░░░░░] 40% (2 plans complete, 25-03 in progress)
+- v1.3 Milestone: [████░░░░░░] 50%
+- Phase 26: [░░░░░░░░░░] 0%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ○        ○     [Plan created, awaiting approval]
+  ✓        ✓        ✓     [Phase 25 loop complete — ready for Phase 26 PLAN]
 ```
 
 ## Performance Metrics
@@ -119,6 +119,8 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | ActivityFeed one-time fetch on tab mount | Phase 22 | No realtime subscription for MVP; additive upgrade path open |
 | is_super_admin() SECURITY DEFINER for RLS | Phase 23 | Avoids infinite recursion — profiles policies cannot subquery profiles directly |
 | Sidebar Super Admin link (isSuperAdmin guard) | Phase 23 | Entry point to /admin/approvals now discoverable for super admin users |
+| APP_URL env var drives all OAuth redirect URIs | Phase 25 | Never hardcode domain in server.ts — enables zero-config domain swap |
+| useCallback stabilizes GSAP useEffect dep | Phase 25 | Empty-dep useCallback on onComplete prevents animation replay on re-render |
 
 ### Deferred Issues
 
@@ -154,9 +156,9 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-04-03
-Stopped at: Plan 25-03 created
-Next action: Review and approve plan, then run /paul:apply .paul/phases/25-bug-fixes-ux-polish/25-03-PLAN.md
-Resume file: .paul/phases/25-bug-fixes-ux-polish/25-03-PLAN.md
+Stopped at: Phase 25 complete — all 3 plans unified, transitioned to Phase 26
+Next action: /paul:plan for Phase 26 (PDF & Export Enhancements)
+Resume file: .paul/ROADMAP.md
 
 ---
 *STATE.md — Updated after every significant action*

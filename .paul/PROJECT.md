@@ -57,10 +57,12 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 21: App Quality & Export Enhancements (Plan 01) — calendar day view cards navigate to /projects/:id; mobile arrow buttons fixed with raw button elements (32×32px tap targets); tab bar responsiveness fixed — Phase 21
 - ✓ Phase 22: Activity Log — activity_log table + RLS, logActivity (fire-and-forget), ActivityFeed component, "Aktivnost" tab in ProjectDetailView, diary_entry_created write point — Phase 22
 - ✓ Phase 23: Full Super Admin Panel — two-tab SuperAdminPage (Odobrenje + Korisnici), fetchAllProfiles/suspend/unsuspend, is_super_admin() SECURITY DEFINER RLS bypass, sidebar Super Admin nav link — Phase 23
+- ✓ Phase 24: Email Infrastructure & Invitations — invitation sending fixed (send-invitation Edge Function wired to Resend), transactional domain `elektro.gradevinskidnevnik.online` configured, outreach domain scaffolded — Phase 24
+- ✓ Phase 25: Bug Fixes & UX Polish — mobile camera, scroll reset on modal open, project pre-selection, activity log RLS, Google Calendar OAuth production wiring, splash animation replay fix, animation duration reduced to ~0.8s — Phase 25
 
 ### Active (In Progress)
 
-- None — v1.2 milestone complete
+- None — v1.3 phases 24–25 complete
 
 ### Planned (Next)
 
@@ -148,6 +150,8 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | ActivityFeed one-time fetch on tab mount (no realtime) | Sufficient for MVP; realtime can be added in a future phase | 2026-04-03 | Active |
 | is_super_admin() SECURITY DEFINER function for RLS | Direct subquery inside a policy on profiles causes infinite recursion; SECURITY DEFINER bypasses RLS internally — pattern for all future super-admin policies | 2026-04-03 | Active |
 | Sidebar Super Admin nav link visible for isSuperAdmin | Entry point to /admin/approvals was undiscoverable post-launch; surfaced conditionally for super admin users | 2026-04-03 | Active |
+| APP_URL env var drives all OAuth redirect URIs | Never hardcode domain in server.ts; enables zero-config domain swap for Google Calendar and future OAuth flows | 2026-04-03 | Active |
+| useCallback stabilizes GSAP useEffect callback dep | GSAP `useEffect([onComplete])` re-fires when function reference changes; useCallback with [] prevents animation replay on re-render | 2026-04-03 | Active |
 
 ## Success Metrics
 
@@ -178,4 +182,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-04-03 after Phase 23 — v1.2 Electro MVP Launch milestone complete*
+*Last updated: 2026-04-03 after Phase 25 — v1.3 phases 24–25 complete*
