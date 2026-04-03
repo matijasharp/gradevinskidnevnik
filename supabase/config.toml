@@ -82,3 +82,6 @@ policy = "oneshot"
 
 [analytics]
 enabled = false
+
+[functions.send-invitation]
+verify_jwt = false

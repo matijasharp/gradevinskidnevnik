@@ -59,7 +59,7 @@ export default function ProjectMembersTab({ project, currentUser, orgMembers = [
       await fetch('/api/invite', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: addEmail, name: addName, type: 'project_invite', projectName: project.projectName, inviterName: currentUser.name })
+        body: JSON.stringify({ email: addEmail, name: addName, type: 'project_invite', organizationName: project.projectName, inviterName: currentUser.name })
       }).catch(() => null);
       setAddEmail('');
       setAddName('');

@@ -122,13 +122,14 @@ app.post('/api/calendar/add', async (req, res) => {
 // --- Invite Endpoint ---
 
 app.post('/api/invite', async (req, res) => {
-  const { email, name, role, organizationName, inviterName, appUrl } = req.body;
+  const { email, name, role, organizationName: orgNameParam, projectName, inviterName, appUrl } = req.body;
+  const organizationName = orgNameParam ?? projectName;
   if (!email || !organizationName) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM || 'Gradevinski Dnevnik <noreply@gradevinski-dnevnik.com>';
+  const from = process.env.RESEND_FROM || 'Gradevinski Dnevnik <invites@elektro.gradevinskidnevnik.online>';
 
   if (!apiKey) {
     console.warn('RESEND_API_KEY not set — skipping email send');

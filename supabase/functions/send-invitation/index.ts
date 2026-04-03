@@ -21,7 +21,7 @@ serve(async (req) => {
     }
 
     const apiKey = Deno.env.get('RESEND_API_KEY')
-    const from = Deno.env.get('RESEND_FROM') ?? 'Gradevinski Dnevnik <noreply@gradevinski-dnevnik.com>'
+    const from = Deno.env.get('RESEND_FROM') ?? 'Gradevinski Dnevnik <invites@elektro.gradevinskidnevnik.online>'
 
     if (!apiKey) {
       return new Response(
