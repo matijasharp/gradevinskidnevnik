@@ -127,6 +127,9 @@ export default function AppShell({ company, appUser, children }: any) {
           {appUser?.role === 'admin' && (
             <NavItem active={location.pathname === ROUTES.COMPANY_SETTINGS} onClick={() => navigate(ROUTES.COMPANY_SETTINGS)} icon={<img src="/icons/tvrtka.svg" className="w-10 h-10 shrink-0" alt="" />} label="Postavke tvrtke" expanded={sidebarExpanded} />
           )}
+          {appUser?.isSuperAdmin && (
+            <NavItem active={location.pathname === ROUTES.SUPER_ADMIN} onClick={() => navigate(ROUTES.SUPER_ADMIN)} icon={<img src="/icons/tvrtka.svg" className="w-10 h-10 shrink-0" alt="" />} label="Super Admin" expanded={sidebarExpanded} />
+          )}
         </nav>
         <button
           onClick={toggleSidebar}

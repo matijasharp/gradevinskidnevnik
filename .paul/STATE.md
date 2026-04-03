@@ -5,26 +5,26 @@
 See: .paul/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.2 — Electro MVP Launch (Phase 22 complete; Phase 23 Full Super Admin Panel next).
+**Current focus:** v1.2 — Electro MVP Launch ✅ COMPLETE. All 11 phases shipped. Ready for next milestone.
 
 ## Current Position
 
 Milestone: v1.2 — Electro MVP Launch
-Phase: 23 of 23 (Full Super Admin Panel) — Not started
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-04-03 — Phase 22 complete, transitioned to Phase 23
+Phase: 23 of 23 (Full Super Admin Panel) — Complete ✅
+Plan: 23-01 unified
+Status: v1.2 milestone complete — ready for next milestone
+Last activity: 2026-04-03 — Phase 23 complete; v1.2 Electro MVP Launch ✅ all 11 phases done
 
 Progress:
-- v1.2 Milestone: [██████████] 95%
-- Phase 23: [░░░░░░░░░░] 0%
+- v1.2 Milestone: [██████████] 100% ✅
+- Phase 23: [██████████] 100% ✅
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Loop complete — ready for Phase 23 PLAN]
+  ✓        ✓        ✓     [Loop complete — Phase 23 done, v1.2 milestone complete]
 ```
 
 ## Performance Metrics
@@ -117,6 +117,8 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | logActivity fire-and-forget (not awaited) | Phase 22 | Activity log errors must never block diary entry save or surface to user |
 | activity_log append-only (no UPDATE/DELETE RLS) | Phase 22 | Immutable audit trail — rows cannot be edited or deleted |
 | ActivityFeed one-time fetch on tab mount | Phase 22 | No realtime subscription for MVP; additive upgrade path open |
+| is_super_admin() SECURITY DEFINER for RLS | Phase 23 | Avoids infinite recursion — profiles policies cannot subquery profiles directly |
+| Sidebar Super Admin link (isSuperAdmin guard) | Phase 23 | Entry point to /admin/approvals now discoverable for super admin users |
 
 ### Deferred Issues
 
@@ -137,7 +139,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: (Phase 22 commit pending)
+Last commit: (pending phase 23 commit)
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -152,8 +154,8 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-04-03
-Stopped at: Phase 22 complete — activity_log migration, ActivityFeed component, Aktivnost tab, logActivity write point shipped
-Next action: /paul:plan for Phase 23 (Full Super Admin Panel)
+Stopped at: v1.2 milestone complete — all 11 phases unified
+Next action: /paul:discuss-milestone to plan v1.3, or /paul:complete-milestone to formally close v1.2
 Resume file: .paul/ROADMAP.md
 
 ---

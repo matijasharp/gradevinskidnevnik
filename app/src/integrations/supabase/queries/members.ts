@@ -8,7 +8,7 @@ const mapUser = (row: any): AppUser => ({
   email: row.email ?? '',
   role: row.role ?? 'worker',
   googleTokens: row.google_tokens ?? undefined,
-  status: (row.status ?? 'approved') as 'pending' | 'approved' | 'rejected',
+  status: (row.status ?? 'approved') as 'pending' | 'approved' | 'rejected' | 'suspended',
   isSuperAdmin: row.is_super_admin ?? false,
   avatarUrl: row.avatar_url ?? undefined,
 });
@@ -142,6 +142,29 @@ export const approveProfile = async (userId: string): Promise<void> => {
 export const rejectProfile = async (userId: string): Promise<void> => {
   ensureSupabase();
   const { error } = await supabase.from('profiles').update({ status: 'rejected' }).eq('id', userId);
+  if (error) throw error;
+};
+
+export const fetchAllProfiles = async (
+  filter?: 'pending' | 'approved' | 'rejected' | 'suspended'
+): Promise<AppUser[]> => {
+  ensureSupabase();
+  let query = supabase.from('profiles').select('*').order('created_at', { ascending: false });
+  if (filter) query = query.eq('status', filter);
+  const { data, error } = await query;
+  if (error) throw error;
+  return (data ?? []).map(mapUser);
+};
+
+export const suspendProfile = async (userId: string): Promise<void> => {
+  ensureSupabase();
+  const { error } = await supabase.from('profiles').update({ status: 'suspended' }).eq('id', userId);
+  if (error) throw error;
+};
+
+export const unsuspendProfile = async (userId: string): Promise<void> => {
+  ensureSupabase();
+  const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
   if (error) throw error;
 };
 

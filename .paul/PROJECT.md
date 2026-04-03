@@ -13,9 +13,9 @@ Contractors log site progress fast while project leads see shared, audited statu
 | Attribute | Value |
 |-----------|-------|
 | Type | Application |
-| Version | 1.2 (in progress) |
-| Status | v1.2 Electro MVP Launch — Phase 21 complete (calendar nav + mobile fixes); Phase 22 Activity Log next |
-| Last Updated | 2026-04-01 |
+| Version | 1.2 (complete) |
+| Status | v1.2 Electro MVP Launch — ✅ All 11 phases complete |
+| Last Updated | 2026-04-03 |
 
 **Production URLs:**
 - None
@@ -56,10 +56,11 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 20: Edge Functions — send-invitation Edge Function (Resend REST API); generate-pdf Edge Function built + deployed (v7, pdf-lib, Jost font, RFC 5987 header fix); client PDF reverted to jsPDF pending Phase 21 QA — Phase 20
 - ✓ Phase 21: App Quality & Export Enhancements (Plan 01) — calendar day view cards navigate to /projects/:id; mobile arrow buttons fixed with raw button elements (32×32px tap targets); tab bar responsiveness fixed — Phase 21
 - ✓ Phase 22: Activity Log — activity_log table + RLS, logActivity (fire-and-forget), ActivityFeed component, "Aktivnost" tab in ProjectDetailView, diary_entry_created write point — Phase 22
+- ✓ Phase 23: Full Super Admin Panel — two-tab SuperAdminPage (Odobrenje + Korisnici), fetchAllProfiles/suspend/unsuspend, is_super_admin() SECURITY DEFINER RLS bypass, sidebar Super Admin nav link — Phase 23
 
 ### Active (In Progress)
 
-- v1.2 Electro MVP Launch — Phase 23: Full Super Admin Panel (next)
+- None — v1.2 milestone complete
 
 ### Planned (Next)
 
@@ -145,6 +146,8 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | logActivity is fire-and-forget (not awaited) | Activity log errors must never surface to user or block the diary entry save flow | 2026-04-03 | Active |
 | activity_log is append-only (no UPDATE/DELETE RLS) | Immutable audit trail — rows cannot be edited or deleted | 2026-04-03 | Active |
 | ActivityFeed one-time fetch on tab mount (no realtime) | Sufficient for MVP; realtime can be added in a future phase | 2026-04-03 | Active |
+| is_super_admin() SECURITY DEFINER function for RLS | Direct subquery inside a policy on profiles causes infinite recursion; SECURITY DEFINER bypasses RLS internally — pattern for all future super-admin policies | 2026-04-03 | Active |
+| Sidebar Super Admin nav link visible for isSuperAdmin | Entry point to /admin/approvals was undiscoverable post-launch; surfaced conditionally for super admin users | 2026-04-03 | Active |
 
 ## Success Metrics
 
@@ -175,4 +178,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-04-03 after Phase 22 — activity log shipped; Phase 23 Full Super Admin Panel next*
+*Last updated: 2026-04-03 after Phase 23 — v1.2 Electro MVP Launch milestone complete*

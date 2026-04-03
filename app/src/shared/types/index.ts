@@ -32,7 +32,7 @@ export interface AppUser {
   email: string;
   role: 'admin' | 'worker';
   googleTokens?: GoogleTokens;
-  status: 'pending' | 'approved' | 'rejected';
+  status: 'pending' | 'approved' | 'rejected' | 'suspended';
   isSuperAdmin: boolean;
   avatarUrl?: string;
 }
