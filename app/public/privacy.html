@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Politika privatnosti — Gradevinski Dnevnik</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f1f4f2;
+      color: #192a46;
+      padding: 40px 24px 80px;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid #e0e6ed;
+      border-radius: 4px;
+      padding: 48px 56px;
+    }
+
+    .back {
+      display: inline-block;
+      font-size: 13px;
+      color: #8fa0b8;
+      text-decoration: none;
+      margin-bottom: 32px;
+    }
+
+    .back:hover { color: #3ab9e3; }
+
+    .site-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #3ab9e3;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #192a46;
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      font-size: 13px;
+      color: #8fa0b8;
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #e0e6ed;
+    }
+
+    h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #192a46;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+
+    p, li {
+      font-size: 15px;
+      color: #4a5a72;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+
+    a { color: #3ab9e3; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .footer-nav {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #e0e6ed;
+      font-size: 13px;
+      color: #8fa0b8;
+    }
+
+    .footer-nav a { color: #8fa0b8; margin-right: 16px; }
+    .footer-nav a:hover { color: #3ab9e3; }
+
+    @media (max-width: 600px) {
+      .container { padding: 32px 24px; }
+      h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back">← Povratak na početnu</a>
+
+    <div class="site-name">Gradevinski Dnevnik</div>
+    <h1>Politika privatnosti</h1>
+    <div class="meta">Zadnja izmjena: travanj 2026.</div>
+
+    <p>
+      Ova politika privatnosti opisuje kako Gradevinski Dnevnik (<strong>gradevinskidnevnik.online</strong>) prikuplja, koristi i štiti vaše osobne podatke pri korištenju naše usluge.
+    </p>
+
+    <h2>1. Tko smo</h2>
+    <p>
+      Gradevinski Dnevnik je platforma za digitalno vođenje građevinskog dnevnika, namijenjena izvođačima radova i voditeljima projekata. Operator usluge je fizička ili pravna osoba koja vodi projekt pod domenom gradevinskidnevnik.online.
+    </p>
+    <p>Za pitanja u vezi privatnosti možete nas kontaktirati na: <a href="mailto:support@elektro.gradevinskidnevnik.online">support@elektro.gradevinskidnevnik.online</a></p>
+
+    <h2>2. Koji podaci se prikupljaju</h2>
+    <p>Pri korištenju naše usluge prikupljamo sljedeće podatke:</p>
+    <ul>
+      <li><strong>Podaci računa:</strong> ime, prezime, e-mail adresa, naziv tvrtke i logo — unosi ih korisnik pri registraciji.</li>
+      <li><strong>Podaci dnevnika radova:</strong> opisi radova, faze projekta, fotografije s gradilišta, potpisi, lokacijski podaci koje korisnik unosi ručno.</li>
+      <li><strong>Podaci projekta:</strong> nazivi projekata, članovi tima, zadaci, dokumenti koje korisnik učita.</li>
+      <li><strong>Tehnički podaci:</strong> IP adresa, vrsta preglednika, vrsta uređaja i zapisnici pristupa radi sigurnosti i dijagnostike.</li>
+      <li><strong>Google podaci (opcionalno):</strong> ako povežete Google Calendar, dobivamo pristup vašem kalendaru isključivo za čitanje i dodavanje događaja koje vi inicirarate. Ne pristupamo vašim e-mailovima niti ostalim Google uslugama.</li>
+    </ul>
+
+    <h2>3. Kako koristimo vaše podatke</h2>
+    <ul>
+      <li>Pružanje i poboljšanje usluge (čuvanje dnevnika radova, generiranje izvještaja, slanje obavijesti).</li>
+      <li>Slanje e-mail pozivnica kada ih vi pokrenete (pozivanje suradnika ili članova tima).</li>
+      <li>Sinkronizacija s Google Kalendarom isključivo na vaš zahtjev.</li>
+      <li>Sigurnost — zaštita od zlouporabe, otkrivanje neovlaštenog pristupa.</li>
+      <li>Kontaktiranje u slučaju tehničkih problema ili promjena uvjeta usluge.</li>
+    </ul>
+    <p>Vaše podatke <strong>ne prodajemo</strong> niti ne dijelimo s trećim stranama u svrhe oglašavanja.</p>
+
+    <h2>4. Pohrana podataka</h2>
+    <p>
+      Podaci su pohranjeni u <strong>Supabase</strong> infrastrukturi (PostgreSQL baza podataka i S3-kompatibilno skladište datoteka) koja se nalazi u podatkovnim centrima unutar EU. Supabase je naš procesor podataka i podliježe GDPR-u.
+    </p>
+    <p>
+      Fotografije i dokumenti pohranjuju se u Supabase Storage s kontrolom pristupa na razini korisnika i organizacije.
+    </p>
+
+    <h2>5. Treće strane (procesori podataka)</h2>
+    <ul>
+      <li><strong>Supabase</strong> — baza podataka i autentifikacija (EU infrastruktura).</li>
+      <li><strong>Resend</strong> — slanje transakcijskih e-mailova (pozivnice, obavijesti). Resend prima samo e-mail adresu primatelja i sadržaj poruke.</li>
+      <li><strong>Google</strong> — ako se prijavite Google računom ili povežete Google Calendar, podaci se dijele s Google sukladno <a href="https://policies.google.com/privacy" target="_blank">Googleovoj politici privatnosti</a>.</li>
+      <li><strong>Railway</strong> — hosting infrastruktura na kojoj se izvodi aplikacija.</li>
+    </ul>
+
+    <h2>6. Kolačići (cookies)</h2>
+    <p>
+      Koristimo isključivo funkcionalne kolačiće koji su nužni za rad usluge (sesija prijave, korisničke postavke). Ne koristimo kolačiće za praćenje niti analitičke kolačiće trećih strana.
+    </p>
+
+    <h2>7. Vaša prava (GDPR)</h2>
+    <p>Ako se nalazite u EU, imate pravo:</p>
+    <ul>
+      <li><strong>Pristupa</strong> — zatražiti kopiju svih podataka koje čuvamo o vama.</li>
+      <li><strong>Ispravka</strong> — ispraviti netočne ili nepotpune podatke.</li>
+      <li><strong>Brisanja</strong> — zatražiti brisanje vašeg računa i svih povezanih podataka.</li>
+      <li><strong>Prijenosa</strong> — primiti vaše podatke u strojno čitljivom formatu.</li>
+      <li><strong>Prigovora</strong> — uložiti prigovor nadležnom nadzornom tijelu (Agencija za zaštitu osobnih podataka, AZOP).</li>
+    </ul>
+    <p>Za ostvarivanje ovih prava kontaktirajte nas na <a href="mailto:support@elektro.gradevinskidnevnik.online">support@elektro.gradevinskidnevnik.online</a>.</p>
+
+    <h2>8. Sigurnost podataka</h2>
+    <p>
+      Svi podaci prenose se putem HTTPS-a. Pristup bazi podataka zaštićen je Row Level Security (RLS) politikama — korisnici mogu pristupiti isključivo podacima svoje organizacije. Lozinke se ne pohranjuju — autentifikacija se vrši putem Supabase Auth ili Google OAuth.
+    </p>
+
+    <h2>9. Zadržavanje podataka</h2>
+    <p>
+      Podaci se čuvaju dok je vaš račun aktivan. Nakon brisanja računa, podaci se trajno uklanjaju u roku od 30 dana. Arhivirani dnevnici radova koje ste eksportirali (PDF, CSV) ostaju isključivo na vašem uređaju.
+    </p>
+
+    <h2>10. Promjene politike privatnosti</h2>
+    <p>
+      Zadržavamo pravo izmjene ove politike privatnosti. O značajnim izmjenama obavijestit ćemo vas e-mailom ili obavijesti unutar aplikacije. Nastavak korištenja usluge nakon obavijesti smatra se prihvaćanjem izmjena.
+    </p>
+
+    <div class="footer-nav">
+      <a href="/">Početna</a>
+      <a href="/terms">Uvjeti korištenja</a>
+    </div>
+  </div>
+</body>
+</html>

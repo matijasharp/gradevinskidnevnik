@@ -173,6 +173,28 @@ app.post('/api/invite', async (req, res) => {
   }
 });
 
+// --- Static pages (privacy, terms, homepage) ---
+
+const publicPath = path.join(__dirname, 'public');
+
+app.get('/privacy', (_req, res) => {
+  res.sendFile(path.join(publicPath, 'privacy.html'));
+});
+
+app.get('/terms', (_req, res) => {
+  res.sendFile(path.join(publicPath, 'terms.html'));
+});
+
+// Root domain homepage (gradevinskidnevnik.online without subdomain)
+app.get('/', (req, res, next) => {
+  const host = req.hostname;
+  if (host === 'gradevinskidnevnik.online' || host === 'www.gradevinskidnevnik.online') {
+    res.sendFile(path.join(publicPath, 'homepage.html'));
+    return;
+  }
+  next();
+});
+
 // --- Vite Middleware ---
 
 async function setupVite() {

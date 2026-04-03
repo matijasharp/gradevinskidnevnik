@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gradevinski Dnevnik</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f1f4f2;
+      color: #192a46;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 4px;
+      border: 1px solid #e0e6ed;
+      padding: 48px 40px;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: #192a46;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: #3ab9e3;
+    }
+
+    .logo-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #192a46;
+      letter-spacing: -0.3px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #3ab9e315;
+      color: #3ab9e3;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #192a46;
+      line-height: 1.25;
+      margin-bottom: 16px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #4a5a72;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #192a46;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .btn:hover {
+      background: #3ab9e3;
+    }
+
+    .btn-arrow {
+      margin-left: 6px;
+    }
+
+    footer {
+      margin-top: 48px;
+      font-size: 13px;
+      color: #8fa0b8;
+    }
+
+    footer a {
+      color: #8fa0b8;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: #3ab9e3;
+    }
+
+    @media (max-width: 540px) {
+      .card { padding: 36px 24px; }
+      h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-5 9H6v-2h1v2zm0-4H6V9h1v2zm4 4H9v-2h2v2zm0-4H9V9h2v2zm4 4h-2v-2h2v2zm0-4h-2V9h2v2zm3 4h-1v-2h1v2zm0-4h-1V9h1v2z"/>
+        </svg>
+      </div>
+      <span class="logo-name">Gradevinski Dnevnik</span>
+    </div>
+
+    <span class="badge">Uskoro dostupno</span>
+
+    <h1>Platforma je u završnoj fazi razvoja</h1>
+
+    <p>
+      Digitalni dnevnik radova za elektroinstalatere i izvođače. Logiranje napretka na gradilištu, dijeljeni pregled s voditeljima projekta i potpuna revizijska staza — sve na jednom mjestu.
+    </p>
+
+    <a href="https://elektro.gradevinskidnevnik.online/" class="btn">
+      Pristupite kao elektro izvođač <span class="btn-arrow">→</span>
+    </a>
+  </div>
+
+  <footer>
+    <a href="/privacy">Politika privatnosti</a>
+    &nbsp;·&nbsp;
+    <a href="/terms">Uvjeti korištenja</a>
+  </footer>
+
+</body>
+</html>
