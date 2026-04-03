@@ -3,161 +3,1492 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gradevinski Dnevnik</title>
+  <title>Građevinski Dnevnik Online — Digitalna evidencija za gradilišta</title>
+  <meta name="description" content="Digitalni građevinski dnevnik za inženjere i glavne izvođače. Pratite sve struke, upravljajte projektima i generirajte izvještaje — s terena, u stvarnom vremenu." />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --navy: #192a46;
+      --navy-deep: #111e30;
+      --accent: #3ab9e3;
+      --accent-hover: #25a8d4;
+      --accent-subtle: rgba(58,185,227,0.08);
+      --surface: #f1f4f2;
+      --border: #e0e6ed;
+      --border-subtle: #f0f3f5;
+      --text-primary: #192a46;
+      --text-secondary: #4a5a72;
+      --text-muted: #8fa0b8;
+    }
+
+    html { scroll-behavior: smooth; }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f1f4f2;
-      color: #192a46;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .card {
       background: #ffffff;
-      border-radius: 4px;
-      border: 1px solid #e0e6ed;
-      padding: 48px 40px;
-      max-width: 520px;
-      width: 100%;
-      text-align: center;
+      color: var(--text-primary);
+      line-height: 1.6;
     }
 
-    .logo {
-      display: inline-flex;
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 32px;
+      text-decoration: none;
     }
 
-    .logo-icon {
-      width: 40px;
-      height: 40px;
-      background: #192a46;
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--navy);
       border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
-    .logo-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: #3ab9e3;
-    }
+    .nav-logo-icon svg { width: 20px; height: 20px; fill: var(--accent); }
 
-    .logo-name {
-      font-size: 18px;
+    .nav-logo-name {
+      font-size: 15px;
       font-weight: 700;
-      color: #192a46;
-      letter-spacing: -0.3px;
+      color: var(--navy);
+      letter-spacing: -0.2px;
     }
 
-    .badge {
-      display: inline-block;
-      background: #3ab9e315;
-      color: #3ab9e3;
-      font-size: 12px;
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-link {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-link:hover { color: var(--accent); text-decoration: none; }
+
+    .nav-cta {
+      font-size: 13px;
       font-weight: 600;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      padding: 4px 12px;
+      color: var(--navy);
+      text-decoration: none;
+      padding: 7px 16px;
+      border: 1.5px solid var(--border);
       border-radius: 4px;
-      margin-bottom: 24px;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
     }
 
-    h1 {
-      font-size: 28px;
+    .nav-cta:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-subtle); text-decoration: none; }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy);
+      padding: 100px 32px 120px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(58,185,227,0.10) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(58,185,227,0.3), transparent);
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
       font-weight: 700;
-      color: #192a46;
-      line-height: 1.25;
-      margin-bottom: 16px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(58,185,227,0.08);
+      border: 1px solid rgba(58,185,227,0.18);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 28px;
     }
 
-    p {
-      font-size: 16px;
-      color: #4a5a72;
-      line-height: 1.6;
-      margin-bottom: 32px;
-    }
-
-    .btn {
-      display: inline-block;
-      background: #192a46;
+    .hero h1 {
+      font-size: clamp(32px, 5.5vw, 56px);
+      font-weight: 800;
       color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      max-width: 780px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero h1 em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: rgba(255,255,255,0.6);
+      max-width: 560px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover { background: var(--accent-hover); text-decoration: none; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.75);
       font-size: 15px;
       font-weight: 600;
       padding: 14px 28px;
       border-radius: 4px;
       text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.5); color: #ffffff; text-decoration: none; }
+
+    /* ── SOCIAL PROOF BAR ── */
+    .proof-bar {
+      background: var(--navy-deep);
+      padding: 18px 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .proof-bar-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+
+    .proof-stat {
+      text-align: center;
+    }
+
+    .proof-stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+
+    .proof-stat-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+
+    .proof-divider {
+      width: 1px;
+      height: 28px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 88px 32px; }
+
+    .section-inner { max-width: 1080px; margin: 0 auto; }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(24px, 3.5vw, 36px);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 560px;
+      line-height: 1.75;
+      margin-bottom: 56px;
+    }
+
+    /* ── FEATURES ── */
+    .features { background: var(--surface); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 32px 28px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(58,185,227,0.35);
+      box-shadow: 0 4px 24px rgba(25,42,70,0.06);
+    }
+
+    .feature-icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 20px;
+      object-fit: contain;
+    }
+
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 10px;
+      letter-spacing: -0.2px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ── MOBILE SCREENSHOTS ── */
+    .screenshots { background: #ffffff; }
+
+    .screenshots-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .screenshots-copy h2 { margin-bottom: 16px; }
+    .screenshots-copy .section-desc { margin-bottom: 32px; }
+
+    .screenshots-copy-points {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .screenshots-point {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .screenshots-point-dot {
+      width: 24px;
+      height: 24px;
+      background: var(--accent-subtle);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .screenshots-point-dot svg { width: 12px; height: 12px; fill: var(--accent); }
+
+    .screenshots-point p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    .screenshots-point p strong { color: var(--navy); font-weight: 600; }
+
+    .screenshots-phones {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .phone-frame {
+      background: var(--navy);
+      border-radius: 24px;
+      overflow: hidden;
+      border: 3px solid rgba(255,255,255,0.12);
+      box-shadow: 0 24px 64px rgba(25,42,70,0.20), 0 4px 16px rgba(25,42,70,0.10);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .phone-frame::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 0 0 4px 4px;
+      z-index: 2;
+    }
+
+    .phone-frame.tall {
+      width: 140px;
+      height: 300px;
+    }
+
+    .phone-frame.medium {
+      width: 130px;
+      height: 270px;
+    }
+
+    .phone-frame.short {
+      width: 120px;
+      height: 240px;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 10px 10px;
+      gap: 6px;
+    }
+
+    /* Dnevnik screen mock */
+    .mock-header {
+      background: rgba(58,185,227,0.12);
+      border-radius: 3px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      gap: 5px;
+      margin-bottom: 4px;
+    }
+
+    .mock-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+    .mock-title {
+      height: 8px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 2px;
+      flex: 1;
+    }
+
+    .mock-entry {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 3px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .mock-entry-title { height: 6px; background: rgba(255,255,255,0.5); border-radius: 2px; width: 75%; }
+    .mock-entry-sub { height: 5px; background: rgba(255,255,255,0.2); border-radius: 2px; width: 55%; }
+
+    .mock-photo-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .mock-photo {
+      border-radius: 3px;
+      background: rgba(58,185,227,0.15);
+      aspect-ratio: 1;
+    }
+
+    .mock-badge {
+      height: 14px;
+      border-radius: 100px;
+      background: rgba(58,185,227,0.2);
+      width: 48px;
+      margin-top: 2px;
+    }
+
+    .mock-stat-row {
+      display: flex;
+      gap: 5px;
+      margin-top: 2px;
+    }
+
+    .mock-stat {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 3px;
+      height: 36px;
+      padding: 4px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .mock-stat-val { height: 8px; background: rgba(58,185,227,0.5); border-radius: 2px; width: 60%; }
+    .mock-stat-lbl { height: 5px; background: rgba(255,255,255,0.15); border-radius: 2px; width: 80%; }
+
+    /* ── ICP — WHO WE'RE FOR ── */
+    .icp { background: var(--surface); }
+
+    .icp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .icp-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 32px 28px;
+      position: relative;
+    }
+
+    .icp-card.primary {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .icp-card.primary::after {
+      content: 'Primarni korisnik';
+      position: absolute;
+      top: -1px;
+      right: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--accent);
+      padding: 3px 10px;
+      border-radius: 0 0 4px 4px;
+    }
+
+    .icp-icon {
+      width: 56px;
+      height: 56px;
+      margin-bottom: 18px;
+      object-fit: contain;
+    }
+
+    .icp-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 10px;
+      letter-spacing: -0.2px;
+    }
+
+    .icp-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ── DISCIPLINES ── */
+    .disciplines { background: #ffffff; }
+
+    .disciplines-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .discipline-card {
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      padding: 32px 28px;
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .discipline-card.live {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(58,185,227,0.3);
+    }
+
+    .discipline-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .badge-live {
+      background: rgba(58,185,227,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(58,185,227,0.2);
+    }
+
+    .badge-live::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .badge-soon {
+      background: var(--surface);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .discipline-card h3 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
+    }
+
+    .discipline-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .waitlist-form { display: flex; flex-direction: column; gap: 10px; }
+
+    .waitlist-form input {
+      width: 100%;
+      padding: 11px 14px;
+      font-size: 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-primary);
+      background: var(--surface);
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+      font-family: inherit;
+    }
+
+    .waitlist-form input:focus { border-color: var(--accent); background: #fff; }
+
+    .waitlist-form input::placeholder { color: var(--text-muted); }
+
+    .waitlist-form button {
+      padding: 11px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
       transition: background 0.15s;
+      font-family: inherit;
     }
 
-    .btn:hover {
-      background: #3ab9e3;
+    .waitlist-form button:hover { background: var(--accent); }
+    .waitlist-form button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .form-success {
+      font-size: 14px;
+      font-weight: 600;
+      color: #2b9a5e;
+      padding: 11px 14px;
+      background: rgba(43,154,94,0.08);
+      border: 1px solid rgba(43,154,94,0.2);
+      border-radius: 4px;
     }
 
-    .btn-arrow {
-      margin-left: 6px;
+    .form-error { font-size: 13px; color: #e05252; }
+
+    /* ── DATA PRIVACY ── */
+    .data-section {
+      background: var(--navy);
     }
 
-    footer {
-      margin-top: 48px;
+    .data-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .data-section .section-eyebrow { color: rgba(58,185,227,0.8); }
+    .data-section .section-title { color: #ffffff; }
+    .data-section .section-desc { color: rgba(255,255,255,0.55); }
+
+    .data-permissions {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .data-permission {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+      padding: 18px 20px;
+    }
+
+    .data-permission-scope {
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: var(--accent);
+      margin-bottom: 6px;
+      letter-spacing: 0.2px;
+    }
+
+    .data-permission-text {
       font-size: 13px;
-      color: #8fa0b8;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.65;
     }
 
-    footer a {
-      color: #8fa0b8;
+    .data-optional-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #2dba7a;
+      background: rgba(45,186,122,0.1);
+      border: 1px solid rgba(45,186,122,0.2);
+      padding: 3px 8px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .data-guarantees {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .data-guarantee {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+    }
+
+    .data-guarantee::before {
+      content: '';
+      width: 16px;
+      height: 16px;
+      background: rgba(58,185,227,0.12);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.5 11.5L3 8l1-1L6.5 9.5l5-5 1 1z' fill='%233ab9e3'/%3E%3C/svg%3E");
+      background-size: 16px;
+    }
+
+    .data-revoke-note {
+      margin-top: 20px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.7;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 16px;
+    }
+
+    .data-revoke-note a { color: rgba(58,185,227,0.7); }
+    .data-revoke-note a:hover { color: var(--accent); }
+
+    /* ── MASTER CTA ── */
+    .master-cta {
+      background: var(--navy-deep);
+      padding: 72px 32px;
+    }
+
+    .master-cta-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .master-cta h2 {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.4px;
+      margin-bottom: 10px;
+    }
+
+    .master-cta p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.5);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    .master-cta-action { flex-shrink: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      padding: 32px 32px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       text-decoration: none;
     }
 
-    footer a:hover {
-      color: #3ab9e3;
+    .footer-logo-icon {
+      width: 28px;
+      height: 28px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    @media (max-width: 540px) {
-      .card { padding: 36px 24px; }
-      h1 { font-size: 22px; }
+    .footer-logo-icon svg { width: 14px; height: 14px; fill: var(--accent); }
+
+    .footer-logo-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      section { padding: 60px 20px; }
+      .hero { padding: 72px 20px 88px; }
+      .master-cta { padding: 52px 20px; }
+
+      .nav-inner { padding: 0 20px; height: 56px; }
+      .nav-links .nav-link { display: none; }
+
+      .screenshots-layout { grid-template-columns: 1fr; gap: 40px; }
+      .screenshots-phones { margin: 0 auto; }
+
+      .data-inner { grid-template-columns: 1fr; gap: 40px; }
+
+      .master-cta-inner { grid-template-columns: 1fr; gap: 24px; }
+      .master-cta-action { width: 100%; }
+      .master-cta-action .btn-primary { width: 100%; justify-content: center; }
+
+      .proof-bar-inner { gap: 24px; }
+      .proof-divider { display: none; }
+
+      .footer-inner { flex-direction: column; gap: 20px; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <div class="logo">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-5 9H6v-2h1v2zm0-4H6V9h1v2zm4 4H9v-2h2v2zm0-4H9V9h2v2zm4 4h-2v-2h2v2zm0-4h-2V9h2v2zm3 4h-1v-2h1v2zm0-4h-1V9h1v2z"/>
-        </svg>
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="Građevinski Dnevnik Online">
+        <div class="nav-logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-5 9H6v-2h1v2zm0-4H6V9h1v2zm4 4H9v-2h2v2zm0-4H9V9h2v2zm4 4h-2v-2h2v2zm0-4h-2V9h2v2zm3 4h-1v-2h1v2zm0-4h-1V9h1v2z"/>
+          </svg>
+        </div>
+        <span class="nav-logo-name">Građevinski Dnevnik Online</span>
+      </a>
+      <div class="nav-links">
+        <a href="/privacy" class="nav-link">Politika privatnosti</a>
+        <a href="#struke" class="nav-link">Struke</a>
+        <a href="https://elektro.gradevinskidnevnik.online/" class="nav-cta">Prijavite se</a>
       </div>
-      <span class="logo-name">Gradevinski Dnevnik</span>
     </div>
+  </nav>
 
-    <span class="badge">Uskoro dostupno</span>
-
-    <h1>Platforma je u završnoj fazi razvoja</h1>
-
-    <p>
-      Digitalni dnevnik radova za elektroinstalatere i izvođače. Logiranje napretka na gradilištu, dijeljeni pregled s voditeljima projekta i potpuna revizijska staza — sve na jednom mjestu.
+  <!-- HERO -->
+  <section class="hero">
+    <span class="hero-eyebrow">Digitalni građevinski dnevnik</span>
+    <h1>Potpuni uvid u gradilište.<br><em>Sve struke. Jedan sustav.</em></h1>
+    <p class="hero-sub">
+      Građevinski Dnevnik Online daje glavnim inženjerima i investitorima
+      pregled svakog radnog naloga, svake fotografije i svakog potpisa —
+      u stvarnom vremenu, s bilo kojeg uređaja.
     </p>
+    <div class="hero-actions">
+      <a href="https://elektro.gradevinskidnevnik.online/" class="btn-primary">
+        Počnite besplatno — elektroinstalatere
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M3 8h8.5l-2.5-2.5.7-.7L13 8l-3.3 3.2-.7-.7L11.5 8H3z"/></svg>
+      </a>
+      <a href="#struke" class="btn-secondary">Ostale struke uskoro</a>
+    </div>
+  </section>
 
-    <a href="https://elektro.gradevinskidnevnik.online/" class="btn">
-      Pristupite kao elektro izvođač <span class="btn-arrow">→</span>
-    </a>
+  <!-- SOCIAL PROOF -->
+  <div class="proof-bar">
+    <div class="proof-bar-inner">
+      <div class="proof-stat">
+        <p class="proof-stat-value">PDF</p>
+        <p class="proof-stat-label">Izvještaj u 1 klik</p>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <p class="proof-stat-value">100%</p>
+        <p class="proof-stat-label">Sukladnost sa zakonom o gradnji</p>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <p class="proof-stat-value">Mobitel</p>
+        <p class="proof-stat-label">Radi s terena, bez stalnog interneta</p>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <p class="proof-stat-value">4+</p>
+        <p class="proof-stat-label">Izvođačkih struka</p>
+      </div>
+    </div>
   </div>
 
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="section-inner">
+      <p class="section-eyebrow">Funkcionalnosti</p>
+      <h2 class="section-title">Sve što trebate za urednu dokumentaciju gradilišta</h2>
+      <p class="section-desc">
+        Od prvog unosa na terenu do potpisanog PDF-a za arhivu — platforma pokriva
+        cjelokupni tijek dokumentacije i koordinacije na jednom objektu.
+      </p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <img src="/icons/gradevinski-dnevnik-dnevnik-icon.svg" alt="" class="feature-icon" loading="lazy" />
+          <h3>Dnevnik radova</h3>
+          <p>Izvođači unose što je izvedeno svaki dan — opis, fazu, radnike, materijale i digitalni potpis. Unosi su vremenski žigosani i nepromjenjivi.</p>
+        </div>
+
+        <div class="feature-card">
+          <img src="/icons/gradevinski-dnevnik-projekt-icon.svg" alt="" class="feature-icon" loading="lazy" />
+          <h3>Upravljanje projektima</h3>
+          <p>Organizirajte projekte po fazama gradnje i strukama. Pratite tko je odgovoran za što i koji su rokovi aktivni — sve na jednom ekranu.</p>
+        </div>
+
+        <div class="feature-card">
+          <img src="/icons/gradevinski-dnevnik-izvjestaji-icon.svg" alt="" class="feature-icon" loading="lazy" />
+          <h3>PDF i CSV izvještaji</h3>
+          <p>Generirajte PDF dokumentaciju za klijenta ili arhivu u jednom kliku. Izvoz CSV-a za daljnju obradu. Sukladno zahtjevima Zakona o gradnji.</p>
+        </div>
+
+        <div class="feature-card">
+          <img src="/icons/gradevinski-dnevnik-dokumenti-icon.svg" alt="" class="feature-icon" loading="lazy" />
+          <h3>Projektna dokumentacija</h3>
+          <p>Priložite sheme, ateste, dozvole i ugovore direktno uz projekt. Svi sudionici imaju pristup aktualnoj verziji dokumentacije u svakom trenutku.</p>
+        </div>
+
+        <div class="feature-card">
+          <img src="/icons/gradevinski-dnevnik-zadaci-icon.svg" alt="" class="feature-icon" loading="lazy" />
+          <h3>Zadaci i checkliste</h3>
+          <p>Definirajte zadatke po projektu, dodjelite odgovornosti i pratite status. Checkliste osiguravaju da ništa nije zaboravljeno na gradilištu.</p>
+        </div>
+
+        <div class="feature-card">
+          <img src="/icons/gradevinski-dnevnik-suradnici-icon.svg" alt="" class="feature-icon" loading="lazy" />
+          <h3>Višetvrtkinsko dijeljenje</h3>
+          <p>Povežite više izvođačkih tvrtki na jedan projekt. Svaka vidi samo svoje unose, a nadzorni inženjer ima pregled svih. Pristup se dodjeljuje po ulozi.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOBILE SCREENSHOTS -->
+  <section class="screenshots">
+    <div class="section-inner">
+      <div class="screenshots-layout">
+        <div class="screenshots-copy">
+          <p class="section-eyebrow">Mobilna aplikacija</p>
+          <h2 class="section-title">Dizajnirano za rad<br>s terena</h2>
+          <p class="section-desc">
+            Vaši izvođači unose radove s mobitela dok su još na gradilištu.
+            Fotografije, potpisi, materijali — sve odmah dostupno u sustavu.
+          </p>
+          <div class="screenshots-copy-points">
+            <div class="screenshots-point">
+              <div class="screenshots-point-dot">
+                <svg viewBox="0 0 12 12"><path d="M2 6l2.5 2.5L10 3.5"/></svg>
+              </div>
+              <p><strong>Fotografije s kamere ili galerije</strong> — priložite direktno uz unos radova, odmah s gradilišta</p>
+            </div>
+            <div class="screenshots-point">
+              <div class="screenshots-point-dot">
+                <svg viewBox="0 0 12 12"><path d="M2 6l2.5 2.5L10 3.5"/></svg>
+              </div>
+              <p><strong>Digitalni potpis prstom</strong> — naručitelj potpiše na ekranu, dokaz je odmah u sustavu</p>
+            </div>
+            <div class="screenshots-point">
+              <div class="screenshots-point-dot">
+                <svg viewBox="0 0 12 12"><path d="M2 6l2.5 2.5L10 3.5"/></svg>
+              </div>
+              <p><strong>Radi bez stalnog interneta</strong> — unosi se pohranjuju lokalno, sinkroniziraju kad veza postoji</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="screenshots-phones">
+          <div class="phone-frame medium">
+            <div class="phone-screen">
+              <div class="mock-header">
+                <div class="mock-dot"></div>
+                <div class="mock-title"></div>
+              </div>
+              <div class="mock-entry">
+                <div class="mock-entry-title"></div>
+                <div class="mock-entry-sub"></div>
+              </div>
+              <div class="mock-photo-row">
+                <div class="mock-photo"></div>
+                <div class="mock-photo"></div>
+                <div class="mock-photo"></div>
+              </div>
+              <div class="mock-entry" style="margin-top:4px">
+                <div class="mock-entry-title"></div>
+                <div class="mock-entry-sub"></div>
+              </div>
+              <div class="mock-badge"></div>
+              <div class="mock-entry">
+                <div class="mock-entry-title"></div>
+                <div class="mock-entry-sub"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="phone-frame tall">
+            <div class="phone-screen">
+              <div class="mock-header">
+                <div class="mock-dot"></div>
+                <div class="mock-title"></div>
+              </div>
+              <div class="mock-stat-row">
+                <div class="mock-stat">
+                  <div class="mock-stat-val"></div>
+                  <div class="mock-stat-lbl"></div>
+                </div>
+                <div class="mock-stat">
+                  <div class="mock-stat-val"></div>
+                  <div class="mock-stat-lbl"></div>
+                </div>
+              </div>
+              <div class="mock-entry" style="margin-top:6px">
+                <div class="mock-entry-title"></div>
+                <div class="mock-entry-sub"></div>
+              </div>
+              <div class="mock-photo-row">
+                <div class="mock-photo"></div>
+                <div class="mock-photo"></div>
+                <div class="mock-photo"></div>
+              </div>
+              <div class="mock-entry">
+                <div class="mock-entry-title"></div>
+                <div class="mock-entry-sub"></div>
+              </div>
+              <div class="mock-badge"></div>
+              <div class="mock-entry">
+                <div class="mock-entry-title"></div>
+                <div class="mock-entry-sub"></div>
+              </div>
+              <div class="mock-entry">
+                <div class="mock-entry-title"></div>
+                <div class="mock-entry-sub"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="phone-frame short">
+            <div class="phone-screen">
+              <div class="mock-header">
+                <div class="mock-dot"></div>
+                <div class="mock-title"></div>
+              </div>
+              <div class="mock-stat-row">
+                <div class="mock-stat">
+                  <div class="mock-stat-val"></div>
+                  <div class="mock-stat-lbl"></div>
+                </div>
+                <div class="mock-stat">
+                  <div class="mock-stat-val"></div>
+                  <div class="mock-stat-lbl"></div>
+                </div>
+              </div>
+              <div class="mock-entry" style="margin-top:6px">
+                <div class="mock-entry-title"></div>
+                <div class="mock-entry-sub"></div>
+              </div>
+              <div class="mock-badge"></div>
+              <div class="mock-entry">
+                <div class="mock-entry-title"></div>
+                <div class="mock-entry-sub"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO WE'RE FOR -->
+  <section class="icp">
+    <div class="section-inner">
+      <p class="section-eyebrow">Za koga</p>
+      <h2 class="section-title">Za inženjere i tvrtke koje ne mogu sebi priuštiti kaos na gradilištu</h2>
+      <p class="section-desc">
+        Platforma je namijenjena tvrtkama koje koordiniraju više izvođačkih struka —
+        gdje revizijska staza, jasna odgovornost i uredna dokumentacija nisu opcija, nego svakodnevica.
+      </p>
+
+      <div class="icp-grid">
+        <div class="icp-card primary">
+          <img src="/icons/gradevinski-dnevnik-organizacija-icon.svg" alt="" class="icp-icon" loading="lazy" />
+          <h3>Glavni inženjer gradilišta</h3>
+          <p>
+            Vodite više izvođačkih tvrtki i trebate pregled napretka svake struke
+            bez stalnog obilaska terena. Tko je što napravio, kada i s kojim materijalima —
+            sve dokumentirano, s potpunom revizijskom stazom.
+          </p>
+        </div>
+
+        <div class="icp-card">
+          <img src="/icons/gradevinski-dnevnik-klijenti-icon.svg" alt="" class="icp-icon" loading="lazy" />
+          <h3>Investitor i vlasnik projekta</h3>
+          <p>
+            Pratite napredak gradnje bez poziva i čekanja na tjedne izvještaje.
+            Fotografska dokumentacija, dnevni radovi i PDF arhiva dostupni u svakom
+            trenutku — jasan dokaz da se posao odvija kako je ugovoreno.
+          </p>
+        </div>
+
+        <div class="icp-card">
+          <img src="/icons/gradevinski-dnevnik-tvrtka-icon.svg" alt="" class="icp-icon" loading="lazy" />
+          <h3>Generalni izvođač</h3>
+          <p>
+            Upravljate desetcima podizvođača na jednom objektu. Master modul daje
+            jedinstven pogled na sve struke u stvarnom vremenu — od elektroinstalatere
+            do HVAC-a i vodoinstalatere — sve na jednom ekranu.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISCIPLINES -->
+  <section class="disciplines" id="struke">
+    <div class="section-inner">
+      <p class="section-eyebrow">Struke</p>
+      <h2 class="section-title">Dostupno odmah, više uskoro</h2>
+      <p class="section-desc">
+        Elektroinstalatere mogu se prijaviti već danas. Vodoinstalaterske tvrtke i
+        HVAC izvođači na čekanju su — prijavite se i bit ćete među prvima kad otvorimo.
+      </p>
+
+      <div class="disciplines-grid">
+        <!-- Elektro — LIVE -->
+        <div class="discipline-card live">
+          <span class="discipline-badge badge-live">Otvorena registracija</span>
+          <h3>Elektroinstalatere</h3>
+          <p>
+            Digitalni dnevnik za elektroinstalacijske projekte. Faze instalacije,
+            slike razvoda, sheme, atesti i potpisi naručitelja — sve na jednom mjestu.
+            Generiranje PDF izvještaja sukladnih pravilima struke.
+          </p>
+          <a href="https://elektro.gradevinskidnevnik.online/" class="btn-primary" style="font-size:14px;padding:11px 22px;">
+            Registrirajte se besplatno →
+          </a>
+        </div>
+
+        <!-- Voda i plin — COMING SOON -->
+        <div class="discipline-card">
+          <span class="discipline-badge badge-soon">Uskoro</span>
+          <h3>Vodoinstalacije i plin</h3>
+          <p>
+            Digitalna evidencija za vodoinstalatere i izvođače plinskih instalacija.
+            Pritisni testovi, atesti, sheme cjevovoda i fotografije izvedenog stanja.
+            Prijavite se za obavijest o dostupnosti.
+          </p>
+          <form class="waitlist-form" onsubmit="submitWaitlist(event, 'voda_plin', this)">
+            <input type="email" name="email" placeholder="vas@email.com" required autocomplete="email" />
+            <button type="submit">Prijavite se za rani pristup</button>
+            <span class="form-error" style="display:none"></span>
+          </form>
+        </div>
+
+        <!-- Klima i ventilacija — COMING SOON -->
+        <div class="discipline-card">
+          <span class="discipline-badge badge-soon">Uskoro</span>
+          <h3>Klima i ventilacija</h3>
+          <p>
+            Evidencija radova za HVAC i ventilacijske sustave. Ugradnja opreme,
+            balansiranje, servisni zapisi i atesti — dokumentirani i dostupni svim
+            sudionicima projekta. Prijavite se za rani pristup.
+          </p>
+          <form class="waitlist-form" onsubmit="submitWaitlist(event, 'klima_ventilacija', this)">
+            <input type="email" name="email" placeholder="vas@email.com" required autocomplete="email" />
+            <button type="submit">Prijavite se za rani pristup</button>
+            <span class="form-error" style="display:none"></span>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOOGLE DATA USAGE — required for OAuth review -->
+  <section class="data-section" id="podaci-i-privatnost">
+    <div class="section-inner">
+      <div class="data-inner">
+        <div>
+          <p class="section-eyebrow">Podaci i privatnost</p>
+          <h2 class="section-title">Transparentno korištenje vaših podataka</h2>
+          <p class="section-desc">
+            Naša aplikacija traži pristup Google Kalendaru isključivo kada ga vi
+            sami aktivirate. Osnovno funkcioniranje aplikacije ne zahtijeva niti
+            jedan Google podatak.
+          </p>
+
+          <div class="data-guarantees">
+            <div class="data-guarantee">Ne pristupamo vašoj e-pošti, kontaktima, Google Driveu ni ostalim Google uslugama</div>
+            <div class="data-guarantee">Ne dijelimo podatke iz vašeg kalendara s trećim stranama</div>
+            <div class="data-guarantee">Ne pohranjujemo sadržaj kalendarskih događaja na naše poslužitelje</div>
+            <div class="data-guarantee">Pristup možete opozvati u svakom trenutku putem Google postavki</div>
+          </div>
+
+          <p class="data-revoke-note">
+            Opoziv pristupa: <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">myaccount.google.com/permissions</a>
+            &nbsp;·&nbsp; <a href="/privacy">Politika privatnosti</a>
+          </p>
+        </div>
+
+        <div class="data-permissions">
+          <span class="data-optional-tag">Opcionalna integracija</span>
+
+          <div class="data-permission">
+            <p class="data-permission-scope">calendar.readonly</p>
+            <p class="data-permission-text">
+              <strong style="color:rgba(255,255,255,0.8)">Zašto:</strong> Čitanje nadolazećih događaja za prikaz pregleda rokova projekata
+              uz vaš raspored u aplikaciji. Ništa se ne mijenja niti briše.
+            </p>
+          </div>
+
+          <div class="data-permission">
+            <p class="data-permission-scope">calendar.events</p>
+            <p class="data-permission-text">
+              <strong style="color:rgba(255,255,255,0.8)">Zašto:</strong> Dodavanje kalendarskog podsjetnika isključivo na vaš eksplicitan
+              zahtjev — primjerice "Dodaj rok završetka faze u kalendar". Nikada automatski,
+              nikada bez vaše radnje.
+            </p>
+          </div>
+
+          <div class="data-permission" style="background:rgba(58,185,227,0.04);border-color:rgba(58,185,227,0.15);">
+            <p class="data-permission-text" style="font-size:12px;color:rgba(255,255,255,0.4)">
+              Google Kalendar integracija može se aktivirati ili deaktivirati u postavkama
+              aplikacije. Bez aktivacije — nijedna Google usluga se ne koristi.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MASTER CTA -->
+  <div class="master-cta">
+    <div class="master-cta-inner">
+      <div>
+        <h2>Koordinirate više struka na jednom objektu?</h2>
+        <p>
+          Master modul za generalne izvođače i investitore dolazi uskoro.
+          Ostavite kontakt — bit ćete među prvima koji dobiju pristup
+          centralnom nadzornom sučelju za cijelo gradilište.
+        </p>
+      </div>
+      <div class="master-cta-action">
+        <form onsubmit="submitWaitlist(event, 'master', this)" style="display:flex;flex-direction:column;gap:10px;min-width:280px;">
+          <input type="text" name="name" placeholder="Ime i prezime" autocomplete="name"
+            style="padding:11px 14px;font-size:14px;border:1.5px solid rgba(255,255,255,0.12);border-radius:4px;color:#fff;background:rgba(255,255,255,0.06);outline:none;font-family:inherit;transition:border-color 0.15s;"
+            onfocus="this.style.borderColor='#3ab9e3'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'" />
+          <input type="email" name="email" placeholder="Email adresa" required autocomplete="email"
+            style="padding:11px 14px;font-size:14px;border:1.5px solid rgba(255,255,255,0.12);border-radius:4px;color:#fff;background:rgba(255,255,255,0.06);outline:none;font-family:inherit;transition:border-color 0.15s;"
+            onfocus="this.style.borderColor='#3ab9e3'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'" />
+          <button type="submit" class="btn-primary" style="justify-content:center;">Prijavite se za master platformu</button>
+          <span class="form-error" style="display:none;font-size:13px;color:#ff8080;"></span>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
   <footer>
-    <a href="/privacy">Politika privatnosti</a>
-    &nbsp;·&nbsp;
-    <a href="/terms">Uvjeti korištenja</a>
+    <div class="footer-inner">
+      <a href="/" class="footer-logo">
+        <div class="footer-logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-5 9H6v-2h1v2zm0-4H6V9h1v2zm4 4H9v-2h2v2zm0-4H9V9h2v2zm4 4h-2v-2h2v2zm0-4h-2V9h2v2zm3 4h-1v-2h1v2zm0-4h-1V9h1v2z"/>
+          </svg>
+        </div>
+        <span class="footer-logo-name">Građevinski Dnevnik Online</span>
+      </a>
+      <div class="footer-links">
+        <a href="/privacy">Politika privatnosti</a>
+        <a href="/terms">Uvjeti korištenja</a>
+        <a href="https://elektro.gradevinskidnevnik.online/">Prijava</a>
+      </div>
+    </div>
   </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    // Placeholder color via style injection
+    const style = document.createElement('style');
+    style.textContent = '.master-cta input::placeholder { color: rgba(255,255,255,0.3); }';
+    document.head.appendChild(style);
+
+    // ── GSAP Animations ──
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Hero entrance
+    gsap.from('.hero-eyebrow', { opacity: 0, y: 16, duration: 0.6, ease: 'power2.out', delay: 0.1 });
+    gsap.from('.hero h1', { opacity: 0, y: 24, duration: 0.7, ease: 'power2.out', delay: 0.25 });
+    gsap.from('.hero-sub', { opacity: 0, y: 20, duration: 0.6, ease: 'power2.out', delay: 0.4 });
+    gsap.from('.hero-actions', { opacity: 0, y: 16, duration: 0.5, ease: 'power2.out', delay: 0.55 });
+
+    // Proof bar stats
+    gsap.from('.proof-stat', {
+      opacity: 0, y: 12, duration: 0.5, stagger: 0.08, ease: 'power2.out',
+      scrollTrigger: { trigger: '.proof-bar', start: 'top 90%' }
+    });
+
+    // Features
+    gsap.from('.feature-card', {
+      opacity: 0, y: 32, duration: 0.55, stagger: 0.1, ease: 'power2.out',
+      scrollTrigger: { trigger: '.features-grid', start: 'top 82%' }
+    });
+
+    // Screenshots phones — staggered from bottom
+    gsap.from('.phone-frame', {
+      opacity: 0, y: 48, duration: 0.7, stagger: 0.15, ease: 'power2.out',
+      scrollTrigger: { trigger: '.screenshots-phones', start: 'top 85%' }
+    });
+
+    // Gentle float on the center phone
+    gsap.to('.phone-frame.tall', {
+      y: -10, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.5
+    });
+    gsap.to('.phone-frame.medium', {
+      y: -7, duration: 3.2, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.0
+    });
+    gsap.to('.phone-frame.short', {
+      y: -5, duration: 2.5, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.2
+    });
+
+    // Screenshots copy
+    gsap.from('.screenshots-copy', {
+      opacity: 0, x: -32, duration: 0.7, ease: 'power2.out',
+      scrollTrigger: { trigger: '.screenshots', start: 'top 80%' }
+    });
+
+    // ICP cards
+    gsap.from('.icp-card', {
+      opacity: 0, y: 28, duration: 0.55, stagger: 0.12, ease: 'power2.out',
+      scrollTrigger: { trigger: '.icp-grid', start: 'top 82%' }
+    });
+
+    // Discipline cards
+    gsap.from('.discipline-card', {
+      opacity: 0, y: 28, duration: 0.55, stagger: 0.12, ease: 'power2.out',
+      scrollTrigger: { trigger: '.disciplines-grid', start: 'top 82%' }
+    });
+
+    // Data section
+    gsap.from('.data-permissions', {
+      opacity: 0, x: 32, duration: 0.7, ease: 'power2.out',
+      scrollTrigger: { trigger: '.data-section', start: 'top 80%' }
+    });
+
+    // Master CTA
+    gsap.from('.master-cta-inner > *', {
+      opacity: 0, y: 24, duration: 0.6, stagger: 0.15, ease: 'power2.out',
+      scrollTrigger: { trigger: '.master-cta', start: 'top 85%' }
+    });
+
+    async function submitWaitlist(event, discipline, form) {
+      event.preventDefault();
+
+      const emailInput = form.querySelector('input[name="email"]');
+      const nameInput = form.querySelector('input[name="name"]');
+      const companyInput = form.querySelector('input[name="company"]');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const errorEl = form.querySelector('.form-error');
+
+      if (errorEl) { errorEl.style.display = 'none'; errorEl.textContent = ''; }
+      submitBtn.disabled = true;
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Šaljem...';
+
+      const payload = {
+        email: emailInput.value.trim(),
+        discipline,
+        name: nameInput ? nameInput.value.trim() || undefined : undefined,
+        company: companyInput ? companyInput.value.trim() || undefined : undefined,
+      };
+
+      try {
+        const res = await fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          const successMsg = document.createElement('div');
+          successMsg.className = 'form-success';
+          successMsg.textContent = 'Hvala! Obavijestit ćemo vas čim struka bude dostupna.';
+          form.replaceWith(successMsg);
+        } else {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          if (errorEl) {
+            errorEl.textContent = data.error || 'Greška. Pokušajte ponovo.';
+            errorEl.style.display = 'block';
+          }
+        }
+      } catch (e) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+        if (errorEl) {
+          errorEl.textContent = 'Greška veze. Pokušajte ponovo.';
+          errorEl.style.display = 'block';
+        }
+      }
+    }
+  </script>
 
 </body>
 </html>

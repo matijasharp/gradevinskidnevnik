@@ -162,6 +162,25 @@ export const suspendProfile = async (userId: string): Promise<void> => {
   if (error) throw error;
 };
 
+export interface WaitlistEntry {
+  id: string;
+  email: string;
+  discipline: 'voda_plin' | 'klima_ventilacija' | 'master';
+  name: string | null;
+  company: string | null;
+  created_at: string;
+}
+
+export const fetchWaitlist = async (): Promise<WaitlistEntry[]> => {
+  ensureSupabase();
+  const { data, error } = await supabase
+    .from('waitlist')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as WaitlistEntry[];
+};
+
 export const unsuspendProfile = async (userId: string): Promise<void> => {
   ensureSupabase();
   const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);

@@ -173,6 +173,72 @@ app.post('/api/invite', async (req, res) => {
   }
 });
 
+// --- Waitlist Endpoint ---
+
+app.post('/api/waitlist', async (req, res) => {
+  const { email, discipline, name, company } = req.body;
+
+  if (!email || !discipline) {
+    return res.status(400).json({ error: 'Nedostaju obavezni podaci.' });
+  }
+
+  const validDisciplines = ['voda_plin', 'klima_ventilacija', 'master'];
+  if (!validDisciplines.includes(discipline)) {
+    return res.status(400).json({ error: 'Nepoznata disciplina.' });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: 'Neispravna email adresa.' });
+  }
+
+  try {
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(
+      process.env.VITE_SUPABASE_URL!,
+      process.env.VITE_SUPABASE_PUBLISHABLE_KEY!
+    );
+
+    const { error: dbError } = await supabase
+      .from('waitlist')
+      .insert({ email, discipline, name: name || null, company: company || null });
+
+    if (dbError && dbError.code !== '23505') {
+      console.error('Waitlist insert error:', dbError);
+      return res.status(500).json({ error: 'Greška pri pohrani.' });
+    }
+
+    const apiKey = process.env.RESEND_API_KEY;
+    const notifyEmail = process.env.NOTIFY_EMAIL;
+    if (apiKey && notifyEmail) {
+      const resend = new Resend(apiKey);
+      const disciplineLabels: Record<string, string> = {
+        voda_plin: 'Voda i plin',
+        klima_ventilacija: 'Klima i ventilacija',
+        master: 'Master platforma (investitori / generalni izvođači)',
+      };
+      resend.emails.send({
+        from: process.env.RESEND_FROM || 'Gradevinski Dnevnik <noreply@elektro.gradevinskidnevnik.online>',
+        to: notifyEmail,
+        subject: `Waitlist — ${disciplineLabels[discipline] || discipline}`,
+        html: `<div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;color:#192a46;">
+          <h2 style="font-size:20px;font-weight:700;margin-bottom:16px;">Nova waitlist prijava</h2>
+          <p><strong>Disciplina:</strong> ${disciplineLabels[discipline] || discipline}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          ${name ? `<p><strong>Ime:</strong> ${name}</p>` : ''}
+          ${company ? `<p><strong>Tvrtka:</strong> ${company}</p>` : ''}
+          <p style="margin-top:24px;font-size:13px;color:#8fa0b8;">Vidljivo u Super Admin → Waitlist</p>
+        </div>`,
+      }).catch(err => console.error('Waitlist notify error:', err));
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Waitlist error:', err);
+    res.status(500).json({ error: 'Greška servera.' });
+  }
+});
+
 // --- Static pages (privacy, terms, homepage) ---
 
 const publicPath = path.join(__dirname, 'public');

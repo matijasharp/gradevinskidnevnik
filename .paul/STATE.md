@@ -11,20 +11,20 @@ See: .paul/PROJECT.md (updated 2026-03-31)
 
 Milestone: v1.3 — Production Readiness & Monetization Foundation
 Phase: 25 of 27 (Bug Fixes & UX Polish) — In Progress
-Plan: 25-01 complete, 25-02 pending
-Status: Loop closed — ready for next PLAN (25-02)
-Last activity: 2026-04-03 — UNIFY 25-01: 5 UX fixes shipped, activity_log backfilled to production
+Plan: 25-03 created, awaiting approval
+Status: PLAN created, ready for APPLY
+Last activity: 2026-04-03 — Created .paul/phases/25-bug-fixes-ux-polish/25-03-PLAN.md
 
 Progress:
 - v1.3 Milestone: [██░░░░░░░░] 25%
-- Phase 25: [████░░░░░░] 40%
+- Phase 25: [████░░░░░░] 40% (2 plans complete, 25-03 in progress)
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Loop complete — ready for 25-02]
+  ✓        ○        ○     [Plan created, awaiting approval]
 ```
 
 ## Performance Metrics
@@ -139,7 +139,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: d005f59 — fix(24-email-invitations): fix broken invitation emails in both send paths
+Last commit: cc95c90 — feat(homepage): add root domain homepage, privacy policy, and terms of service
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -154,9 +154,9 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-04-03
-Stopped at: Plan 25-01 unified
-Next action: Run /paul:plan for Phase 25 Plan 02 (Google OAuth branding + Calendar fix)
-Resume file: .paul/phases/25-bug-fixes-ux-polish/25-01-SUMMARY.md
+Stopped at: Plan 25-03 created
+Next action: Review and approve plan, then run /paul:apply .paul/phases/25-bug-fixes-ux-polish/25-03-PLAN.md
+Resume file: .paul/phases/25-bug-fixes-ux-polish/25-03-PLAN.md
 
 ---
 *STATE.md — Updated after every significant action*

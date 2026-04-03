@@ -15,8 +15,8 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
       onComplete: () => {
         gsap.to(containerRef.current, {
           opacity: 0,
-          duration: 0.4,
-          delay: 0.1,
+          duration: 0.25,
+          delay: 0.05,
           onComplete,
         });
       },
@@ -25,12 +25,12 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
     tl.fromTo(
       logoRef.current,
       { opacity: 0, y: 24 },
-      { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
+      { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
     ).fromTo(
       textRef.current,
       { opacity: 0, y: 12 },
-      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
-      '-=0.3'
+      { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' },
+      '-=0.2'
     );
 
     return () => { tl.kill(); };

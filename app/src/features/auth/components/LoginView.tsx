@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { Button, Card, Input } from '../../../shared/ui';
 import { DISCIPLINE_LABELS, DISCIPLINE_SUBTITLES, type Discipline } from '../../../lib/disciplineConfig';
@@ -21,9 +21,10 @@ export default function LoginView({
   handleOnboarding,
 }: any) {
   const [splashDone, setSplashDone] = useState(false);
+  const handleSplashComplete = useCallback(() => setSplashDone(true), []);
 
   if (loading || !splashDone) {
-    return <SplashScreen onComplete={() => setSplashDone(true)} />;
+    return <SplashScreen onComplete={handleSplashComplete} />;
   }
 
   if (!showOnboarding) {

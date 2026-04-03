@@ -8,9 +8,11 @@ import {
   fetchAllProfiles,
   suspendProfile,
   unsuspendProfile,
+  fetchWaitlist,
 } from '../../../lib/data';
 import { ROUTES } from '../../../app/router/routeConfig';
 import type { AppUser } from '../../../shared/types';
+import type { WaitlistEntry } from '../../../integrations/supabase/queries/members';
 
 type StatusFilter = 'all' | 'pending' | 'approved' | 'rejected' | 'suspended';
 
@@ -40,7 +42,11 @@ export default function SuperAdminPage() {
   const [users, setUsers] = useState<AppUser[]>([]);
   const [usersLoading, setUsersLoading] = useState(false);
   const [filter, setFilter] = useState<StatusFilter>('all');
-  const [activeTab, setActiveTab] = useState<'odobrenje' | 'korisnici'>('odobrenje');
+  const [activeTab, setActiveTab] = useState<'odobrenje' | 'korisnici' | 'waitlist'>('odobrenje');
+
+  // Waitlist tab state
+  const [waitlist, setWaitlist] = useState<WaitlistEntry[]>([]);
+  const [waitlistLoading, setWaitlistLoading] = useState(false);
 
   useEffect(() => {
     if (!appUser?.isSuperAdmin) {
@@ -60,6 +66,15 @@ export default function SuperAdminPage() {
       .catch(() => setUsers([]))
       .finally(() => setUsersLoading(false));
   }, [activeTab, filter]);
+
+  useEffect(() => {
+    if (activeTab !== 'waitlist') return;
+    setWaitlistLoading(true);
+    fetchWaitlist()
+      .then(setWaitlist)
+      .catch(() => setWaitlist([]))
+      .finally(() => setWaitlistLoading(false));
+  }, [activeTab]);
 
   const handleApprove = async (userId: string) => {
     await approveProfile(userId);
@@ -83,7 +98,7 @@ export default function SuperAdminPage() {
 
   if (pendingLoading) return null;
 
-  const tabBtn = (tab: 'odobrenje' | 'korisnici', label: string) => (
+  const tabBtn = (tab: 'odobrenje' | 'korisnici' | 'waitlist', label: string, count?: number) => (
     <button
       onClick={() => setActiveTab(tab)}
       className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
@@ -93,9 +108,9 @@ export default function SuperAdminPage() {
       }`}
     >
       {label}
-      {tab === 'odobrenje' && pending.length > 0 && (
+      {count !== undefined && count > 0 && (
         <span className="ml-1.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-amber-500 text-white text-[10px] font-bold">
-          {pending.length}
+          {count}
         </span>
       )}
     </button>
@@ -110,8 +125,9 @@ export default function SuperAdminPage() {
 
       {/* Tab bar */}
       <div className="flex gap-1 bg-zinc-100 rounded-xl p-1 w-fit">
-        {tabBtn('odobrenje', 'Odobrenje')}
+        {tabBtn('odobrenje', 'Odobrenje', pending.length)}
         {tabBtn('korisnici', 'Korisnici')}
+        {tabBtn('waitlist', 'Waitlist')}
       </div>
 
       {/* Odobrenje tab — Phase 16 logic, unchanged */}
@@ -215,6 +231,54 @@ export default function SuperAdminPage() {
                 </div>
               ))}
             </div>
+          )}
+        </div>
+      )}
+
+      {/* Waitlist tab */}
+      {activeTab === 'waitlist' && (
+        <div className="space-y-4">
+          {waitlistLoading ? (
+            <div className="text-center py-16 text-zinc-400 text-sm">Učitavanje...</div>
+          ) : waitlist.length === 0 ? (
+            <div className="text-center py-16 text-zinc-400 text-sm">Nema waitlist prijava.</div>
+          ) : (
+            <>
+              {(['voda_plin', 'klima_ventilacija', 'master'] as const).map(disc => {
+                const entries = waitlist.filter(e => e.discipline === disc);
+                if (entries.length === 0) return null;
+                const labels: Record<string, string> = {
+                  voda_plin: 'Voda i plin',
+                  klima_ventilacija: 'Klima i ventilacija',
+                  master: 'Master platforma',
+                };
+                return (
+                  <div key={disc}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">{labels[disc]}</p>
+                      <span className="text-xs bg-zinc-100 text-zinc-600 px-2 py-0.5 rounded font-semibold">{entries.length}</span>
+                    </div>
+                    <div className="space-y-2">
+                      {entries.map(entry => (
+                        <div key={entry.id} className="bg-white border border-zinc-100 rounded p-4 flex items-center justify-between gap-4">
+                          <div className="min-w-0">
+                            <p className="font-semibold text-zinc-900 truncate">{entry.email}</p>
+                            {(entry.name || entry.company) && (
+                              <p className="text-sm text-zinc-500 truncate">
+                                {[entry.name, entry.company].filter(Boolean).join(' · ')}
+                              </p>
+                            )}
+                          </div>
+                          <p className="text-xs text-zinc-400 flex-shrink-0">
+                            {new Date(entry.created_at).toLocaleDateString('hr-HR')}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </>
           )}
         </div>
       )}
