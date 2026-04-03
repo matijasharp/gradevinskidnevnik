@@ -20,7 +20,7 @@ function NavItem({ active, onClick, icon, label, expanded = true }: any) {
       )}
     >
       {icon}
-      {expanded && <span className="font-medium tracking-wide">{label}</span>}
+      {expanded && <span className="font-medium tracking-wide whitespace-nowrap">{label}</span>}
     </button>
   );
 }
@@ -114,7 +114,7 @@ export default function AppShell({ company, appUser, children }: any) {
               <img src="/brand/logo.svg" alt="GDO" className="w-6 h-6" />
             )}
           </div>
-          {sidebarExpanded && <span className="font-bold text-xl tracking-tight text-text-primary">Građevinski Dnevnik</span>}
+          {sidebarExpanded && <span className="font-bold text-base tracking-tight text-text-primary whitespace-nowrap">Građevinski Dnevnik</span>}
         </div>
         <nav className="space-y-2 flex-1">
           <NavItem active={location.pathname === ROUTES.DASHBOARD} onClick={() => navigate(ROUTES.DASHBOARD)} icon={<img src="/icons/nadzorna-ploca.svg" className="w-10 h-10 shrink-0" alt="" />} label="Nadzorna ploča" expanded={sidebarExpanded} />
