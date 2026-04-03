@@ -7,7 +7,7 @@ import { useDropzone } from 'react-dropzone';
 import { format } from 'date-fns';
 import { hr } from 'date-fns/locale';
 import { GoogleGenAI, Type } from '@google/genai';
-import { fetchDiaryPhotos, createDiaryEntry, updateDiaryEntry, createDiaryPhoto, uploadDiaryPhoto, updateDiaryPhoto, deleteDiaryPhoto } from '../../../lib/data';
+import { fetchDiaryPhotos, createDiaryEntry, updateDiaryEntry, createDiaryPhoto, uploadDiaryPhoto, updateDiaryPhoto, deleteDiaryPhoto, logActivity } from '../../../lib/data';
 import type { DiaryEntry, DiaryPhoto, Project } from '../../../shared/types';
 import { compressImage, trimCanvas } from '../../../shared/utils/image';
 import { OperationType, handleFirestoreError } from '../../../shared/utils/error';
@@ -302,6 +302,17 @@ export default function NewEntryView({ appUser, projects, initialProject, initia
           createdByName: appUser.name,
           aiSummary
         } as DiaryEntry);
+        // Fire-and-forget activity log — must not block or throw
+        logActivity({
+          organizationId: appUser.companyId,
+          projectId: data.projectId,
+          actorId: appUser.id,
+          actorName: appUser.name,
+          action: 'diary_entry_created',
+          entityType: 'diary_entry',
+          entityId: entryId,
+          entityName: data.title,
+        });
       }
 
       for (const photo of photos) {

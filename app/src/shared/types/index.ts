@@ -204,3 +204,16 @@ export interface ProjectDocument {
   uploadedBy?: string;
   createdAt: string;
 }
+
+export interface ActivityLogItem {
+  id: string;
+  organizationId: string;
+  projectId: string | null;
+  actorId: string | null;
+  actorName: string;
+  action: string;
+  entityType: string;
+  entityId: string | null;
+  entityName: string | null;
+  createdAt: string;
+}

@@ -8,6 +8,7 @@ export * from './queries/projectMembers';
 export * from './queries/tasks';
 export * from './queries/documents';
 export * from './queries/masterProjects';
+export * from './queries/activityLog';
 
 // Preserve type re-exports for backwards compat with data.ts consumers
 export type { Invitation } from '../../shared/types';

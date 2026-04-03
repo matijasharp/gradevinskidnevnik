@@ -14,6 +14,7 @@ import PhotoGallery from '../../diary/components/PhotoGallery';
 import ProjectMembersTab from './ProjectMembersTab';
 import ProjectTasksTab from './ProjectTasksTab';
 import ProjectDocumentsTab from './ProjectDocumentsTab';
+import ActivityFeed from './ActivityFeed';
 
 export default function ProjectDetailView({ project, entries, onBack, onNewEntry, onEntryClick, onGeneratePDF, onAddToCalendar, onCompleteProject, onUpdatePhase, onDeleteProject, hasCalendar, userRole, appUser, company, readonly = false, companyUsers = [] }: any) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,7 +26,7 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
   const [projectPhotos, setProjectPhotos] = useState<DiaryPhoto[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState<DiaryPhoto | null>(null);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-  const [activeTab, setActiveTab] = useState<'dnevnik' | 'suradnici' | 'zadaci' | 'dokumenti'>('dnevnik');
+  const [activeTab, setActiveTab] = useState<'dnevnik' | 'suradnici' | 'zadaci' | 'dokumenti' | 'aktivnost'>('dnevnik');
 
   const brandColor = company?.brandColor || 'var(--color-accent)';
 
@@ -184,6 +185,15 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
         >
           Dokumenti
         </button>
+        <button
+          onClick={() => setActiveTab('aktivnost')}
+          className={cn(
+            "px-4 py-2 rounded-lg text-sm font-bold transition-all",
+            activeTab === 'aktivnost' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+          )}
+        >
+          Aktivnost
+        </button>
       </div>
       </div>
 
@@ -243,6 +253,13 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
           currentUser={appUser}
           readonly={readonly}
           company={company}
+        />
+      )}
+
+      {activeTab === 'aktivnost' && (
+        <ActivityFeed
+          projectId={project.id}
+          brandColor={brandColor}
         />
       )}
 

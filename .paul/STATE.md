@@ -5,26 +5,26 @@
 See: .paul/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.2 — Electro MVP Launch (Phase 21 complete; Phase 22 Activity Log next).
+**Current focus:** v1.2 — Electro MVP Launch (Phase 22 complete; Phase 23 Full Super Admin Panel next).
 
 ## Current Position
 
 Milestone: v1.2 — Electro MVP Launch
-Phase: 22 of 23 (Activity Log) — Not started
+Phase: 23 of 23 (Full Super Admin Panel) — Not started
 Plan: Not started
 Status: Ready to plan
-Last activity: 2026-04-01 — Phase 21 complete, transitioned to Phase 22
+Last activity: 2026-04-03 — Phase 22 complete, transitioned to Phase 23
 
 Progress:
-- v1.2 Milestone: [█████████░] 90%
-- Phase 22: [░░░░░░░░░░] 0%
+- v1.2 Milestone: [██████████] 95%
+- Phase 23: [░░░░░░░░░░] 0%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Loop complete — ready for Phase 22 PLAN]
+  ✓        ✓        ✓     [Loop complete — ready for Phase 23 PLAN]
 ```
 
 ## Performance Metrics
@@ -114,6 +114,9 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | Express /api/invite kept after Edge Function migration | Phase 20 | Transition safety; can be removed in a cleanup phase post-launch |
 | RFC 5987 Content-Disposition in Deno Edge Functions | Phase 20 | filename*=UTF-8''<encoded> required — Deno rejects non-ASCII ByteString header values |
 | generate-pdf client reverted to jsPDF | Phase 20 | Edge Function deployed (v7) but PDF output not user-verified; wiring deferred to Phase 21 |
+| logActivity fire-and-forget (not awaited) | Phase 22 | Activity log errors must never block diary entry save or surface to user |
+| activity_log append-only (no UPDATE/DELETE RLS) | Phase 22 | Immutable audit trail — rows cannot be edited or deleted |
+| ActivityFeed one-time fetch on tab mount | Phase 22 | No realtime subscription for MVP; additive upgrade path open |
 
 ### Deferred Issues
 
@@ -134,7 +137,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: f3aaf01 — revert(pdf): restore client-side PDF generation
+Last commit: (Phase 22 commit pending)
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -148,9 +151,9 @@ Feature branches merged: none
 
 ## Session Continuity
 
-Last session: 2026-04-01
-Stopped at: Phase 21 complete — calendar nav, mobile arrow fix, tab bar responsiveness shipped
-Next action: /paul:plan for Phase 22 (Activity Log)
+Last session: 2026-04-03
+Stopped at: Phase 22 complete — activity_log migration, ActivityFeed component, Aktivnost tab, logActivity write point shipped
+Next action: /paul:plan for Phase 23 (Full Super Admin Panel)
 Resume file: .paul/ROADMAP.md
 
 ---

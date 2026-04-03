@@ -55,10 +55,11 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 19: Supabase Local Config — config.toml, auto-generated database.types.ts (14 tables), idempotent seed.sql for local dev — Phase 19
 - ✓ Phase 20: Edge Functions — send-invitation Edge Function (Resend REST API); generate-pdf Edge Function built + deployed (v7, pdf-lib, Jost font, RFC 5987 header fix); client PDF reverted to jsPDF pending Phase 21 QA — Phase 20
 - ✓ Phase 21: App Quality & Export Enhancements (Plan 01) — calendar day view cards navigate to /projects/:id; mobile arrow buttons fixed with raw button elements (32×32px tap targets); tab bar responsiveness fixed — Phase 21
+- ✓ Phase 22: Activity Log — activity_log table + RLS, logActivity (fire-and-forget), ActivityFeed component, "Aktivnost" tab in ProjectDetailView, diary_entry_created write point — Phase 22
 
 ### Active (In Progress)
 
-- v1.2 Electro MVP Launch — Phase 22: Activity Log (next)
+- v1.2 Electro MVP Launch — Phase 23: Full Super Admin Panel (next)
 
 ### Planned (Next)
 
@@ -141,6 +142,9 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | Resend via fetch REST API in Edge Functions (no SDK) | Resend SDK has no Deno build; direct fetch to api.resend.com works in all runtimes | 2026-04-01 | Active |
 | RFC 5987 Content-Disposition in Edge Functions | Deno rejects non-ASCII ByteString header values; filename*=UTF-8''<encoded> is required for Croatian filenames | 2026-04-01 | Active |
 | generate-pdf client reverted to jsPDF (Phase 20) | Edge Function deployed (v7) but PDF output not user-verified before revert; wiring deferred to Phase 21 | 2026-04-01 | Active |
+| logActivity is fire-and-forget (not awaited) | Activity log errors must never surface to user or block the diary entry save flow | 2026-04-03 | Active |
+| activity_log is append-only (no UPDATE/DELETE RLS) | Immutable audit trail — rows cannot be edited or deleted | 2026-04-03 | Active |
+| ActivityFeed one-time fetch on tab mount (no realtime) | Sufficient for MVP; realtime can be added in a future phase | 2026-04-03 | Active |
 
 ## Success Metrics
 
@@ -171,4 +175,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-04-01 after Phase 21 — calendar navigation + mobile button fixes shipped; Phase 22 Activity Log next*
+*Last updated: 2026-04-03 after Phase 22 — activity log shipped; Phase 23 Full Super Admin Panel next*
