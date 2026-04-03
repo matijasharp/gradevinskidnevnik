@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Građevinski Dnevnik Online — Digitalna evidencija za gradilišta</title>
-  <meta name="description" content="Digitalni građevinski dnevnik za inženjere i glavne izvođače. Pratite sve struke, upravljajte projektima i generirajte izvještaje — s terena, u stvarnom vremenu." />
+  <title>Građevinski Dnevnik Online — Evidencija radova za elektroinstalatere</title>
+  <meta name="description" content="Digitalni građevinski dnevnik za elektroinstalatere. Unesite radove u manje od minute — glasovni unos, automatsko vrijeme, fotografije i PDF za klijenta u jednom kliku." />
+  <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -25,7 +29,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #ffffff;
       color: var(--text-primary);
       line-height: 1.6;
@@ -61,18 +65,12 @@
       text-decoration: none;
     }
 
-    .nav-logo-icon {
+    .nav-logo img {
       width: 36px;
       height: 36px;
-      background: var(--navy);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      object-fit: contain;
       flex-shrink: 0;
     }
-
-    .nav-logo-icon svg { width: 20px; height: 20px; fill: var(--accent); }
 
     .nav-logo-name {
       font-size: 15px;
@@ -152,7 +150,7 @@
       background: rgba(58,185,227,0.08);
       border: 1px solid rgba(58,185,227,0.18);
       padding: 5px 14px;
-      border-radius: 100px;
+      border-radius: 4px;
       margin-bottom: 28px;
     }
 
@@ -176,7 +174,7 @@
     .hero-sub {
       font-size: 18px;
       color: rgba(255,255,255,0.6);
-      max-width: 560px;
+      max-width: 580px;
       margin: 0 auto 48px;
       line-height: 1.7;
     }
@@ -201,6 +199,7 @@
       text-decoration: none;
       transition: background 0.15s;
       white-space: nowrap;
+      font-family: 'Jost', sans-serif;
     }
 
     .btn-primary:hover { background: var(--accent-hover); text-decoration: none; }
@@ -296,6 +295,62 @@
       margin-bottom: 56px;
     }
 
+    /* ── SPEED HIGHLIGHTS ── */
+    .speed-section { background: var(--navy); }
+
+    .speed-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .speed-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+      padding: 32px 28px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .speed-card:hover {
+      border-color: rgba(58,185,227,0.35);
+      background: rgba(58,185,227,0.04);
+    }
+
+    .speed-card-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 20px;
+    }
+
+    .speed-card-icon svg {
+      width: 48px;
+      height: 48px;
+    }
+
+    .speed-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 10px;
+      letter-spacing: -0.2px;
+    }
+
+    .speed-card p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.75;
+    }
+
+    .speed-card p strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .speed-section .section-eyebrow { color: rgba(58,185,227,0.8); }
+    .speed-section .section-title { color: #ffffff; }
+    .speed-section .section-desc { color: rgba(255,255,255,0.55); }
+
     /* ── FEATURES ── */
     .features { background: var(--surface); }
 
@@ -319,8 +374,8 @@
     }
 
     .feature-icon {
-      width: 64px;
-      height: 64px;
+      width: 56px;
+      height: 56px;
       margin-bottom: 20px;
       object-fit: contain;
     }
@@ -336,7 +391,7 @@
     .feature-card p {
       font-size: 14px;
       color: var(--text-secondary);
-      line-height: 1.7;
+      line-height: 1.75;
     }
 
     /* ── MOBILE SCREENSHOTS ── */
@@ -368,7 +423,7 @@
       width: 24px;
       height: 24px;
       background: var(--accent-subtle);
-      border-radius: 50%;
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -376,7 +431,7 @@
       margin-top: 1px;
     }
 
-    .screenshots-point-dot svg { width: 12px; height: 12px; fill: var(--accent); }
+    .screenshots-point-dot svg { width: 12px; height: 12px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
     .screenshots-point p {
       font-size: 14px;
@@ -416,20 +471,9 @@
       z-index: 2;
     }
 
-    .phone-frame.tall {
-      width: 140px;
-      height: 300px;
-    }
-
-    .phone-frame.medium {
-      width: 130px;
-      height: 270px;
-    }
-
-    .phone-frame.short {
-      width: 120px;
-      height: 240px;
-    }
+    .phone-frame.tall { width: 140px; height: 300px; }
+    .phone-frame.medium { width: 130px; height: 270px; }
+    .phone-frame.short { width: 120px; height: 240px; }
 
     .phone-screen {
       width: 100%;
@@ -440,7 +484,6 @@
       gap: 6px;
     }
 
-    /* Dnevnik screen mock */
     .mock-header {
       background: rgba(58,185,227,0.12);
       border-radius: 3px;
@@ -489,7 +532,7 @@
 
     .mock-badge {
       height: 14px;
-      border-radius: 100px;
+      border-radius: 4px;
       background: rgba(58,185,227,0.2);
       width: 48px;
       margin-top: 2px;
@@ -571,7 +614,7 @@
     .icp-card p {
       font-size: 14px;
       color: var(--text-secondary);
-      line-height: 1.7;
+      line-height: 1.75;
     }
 
     /* ── DISCIPLINES ── */
@@ -605,7 +648,7 @@
       letter-spacing: 0.8px;
       text-transform: uppercase;
       padding: 4px 10px;
-      border-radius: 100px;
+      border-radius: 4px;
       margin-bottom: 20px;
     }
 
@@ -641,7 +684,7 @@
     .discipline-card p {
       font-size: 14px;
       color: var(--text-secondary);
-      line-height: 1.7;
+      line-height: 1.75;
       margin-bottom: 24px;
     }
 
@@ -657,11 +700,10 @@
       background: var(--surface);
       outline: none;
       transition: border-color 0.15s, background 0.15s;
-      font-family: inherit;
+      font-family: 'Jost', sans-serif;
     }
 
     .waitlist-form input:focus { border-color: var(--accent); background: #fff; }
-
     .waitlist-form input::placeholder { color: var(--text-muted); }
 
     .waitlist-form button {
@@ -674,7 +716,7 @@
       border-radius: 4px;
       cursor: pointer;
       transition: background 0.15s;
-      font-family: inherit;
+      font-family: 'Jost', sans-serif;
     }
 
     .waitlist-form button:hover { background: var(--accent); }
@@ -693,9 +735,7 @@
     .form-error { font-size: 13px; color: #e05252; }
 
     /* ── DATA PRIVACY ── */
-    .data-section {
-      background: var(--navy);
-    }
+    .data-section { background: var(--navy); }
 
     .data-inner {
       display: grid;
@@ -746,7 +786,7 @@
       background: rgba(45,186,122,0.1);
       border: 1px solid rgba(45,186,122,0.2);
       padding: 3px 8px;
-      border-radius: 100px;
+      border-radius: 4px;
       margin-bottom: 20px;
     }
 
@@ -820,7 +860,7 @@
       font-size: 15px;
       color: rgba(255,255,255,0.5);
       max-width: 480px;
-      line-height: 1.7;
+      line-height: 1.75;
     }
 
     .master-cta-action { flex-shrink: 0; }
@@ -849,17 +889,12 @@
       text-decoration: none;
     }
 
-    .footer-logo-icon {
-      width: 28px;
-      height: 28px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .footer-logo img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+      opacity: 0.7;
     }
-
-    .footer-logo-icon svg { width: 14px; height: 14px; fill: var(--accent); }
 
     .footer-logo-name {
       font-size: 13px;
@@ -870,6 +905,7 @@
     .footer-links {
       display: flex;
       gap: 24px;
+      align-items: center;
     }
 
     .footer-links a {
@@ -881,7 +917,16 @@
 
     .footer-links a:hover { color: var(--accent); }
 
+    .footer-copy {
+      font-size: 12px;
+      color: rgba(255,255,255,0.2);
+    }
+
     /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .speed-grid { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 768px) {
       section { padding: 60px 20px; }
       .hero { padding: 72px 20px 88px; }
@@ -912,16 +957,12 @@
   <nav>
     <div class="nav-inner">
       <a href="/" class="nav-logo" aria-label="Građevinski Dnevnik Online">
-        <div class="nav-logo-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-5 9H6v-2h1v2zm0-4H6V9h1v2zm4 4H9v-2h2v2zm0-4H9V9h2v2zm4 4h-2v-2h2v2zm0-4h-2V9h2v2zm3 4h-1v-2h1v2zm0-4h-1V9h1v2z"/>
-          </svg>
-        </div>
+        <img src="/brand/logo.svg" alt="Građevinski Dnevnik Online" />
         <span class="nav-logo-name">Građevinski Dnevnik Online</span>
       </a>
       <div class="nav-links">
-        <a href="/privacy" class="nav-link">Politika privatnosti</a>
         <a href="#struke" class="nav-link">Struke</a>
+        <a href="#podaci-i-privatnost" class="nav-link">Privatnost</a>
         <a href="https://elektro.gradevinskidnevnik.online/" class="nav-cta">Prijavite se</a>
       </div>
     </div>
@@ -929,16 +970,16 @@
 
   <!-- HERO -->
   <section class="hero">
-    <span class="hero-eyebrow">Digitalni građevinski dnevnik</span>
-    <h1>Potpuni uvid u gradilište.<br><em>Sve struke. Jedan sustav.</em></h1>
+    <span class="hero-eyebrow">Za elektroinstalatere — dostupno odmah</span>
+    <h1>Cjelodnevni radovi dokumentirani<br><em>za manje od minute.</em></h1>
     <p class="hero-sub">
-      Građevinski Dnevnik Online daje glavnim inženjerima i investitorima
-      pregled svakog radnog naloga, svake fotografije i svakog potpisa —
-      u stvarnom vremenu, s bilo kojeg uređaja.
+      Unesite što ste radili glasom dok ste još na ljestvama. Aplikacija zabilježi
+      opis, fotografije i automatski povuče vremensku prognozu —
+      PDF za klijenta spreman je u jednom kliku.
     </p>
     <div class="hero-actions">
       <a href="https://elektro.gradevinskidnevnik.online/" class="btn-primary">
-        Počnite besplatno — elektroinstalatere
+        Isprobajte besplatno — elektroinstalatere
         <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M3 8h8.5l-2.5-2.5.7-.7L13 8l-3.3 3.2-.7-.7L11.5 8H3z"/></svg>
       </a>
       <a href="#struke" class="btn-secondary">Ostale struke uskoro</a>
@@ -949,13 +990,13 @@
   <div class="proof-bar">
     <div class="proof-bar-inner">
       <div class="proof-stat">
-        <p class="proof-stat-value">PDF</p>
-        <p class="proof-stat-label">Izvještaj u 1 klik</p>
+        <p class="proof-stat-value">&lt; 1 min</p>
+        <p class="proof-stat-label">Prosječno vrijeme unosa</p>
       </div>
       <div class="proof-divider"></div>
       <div class="proof-stat">
-        <p class="proof-stat-value">100%</p>
-        <p class="proof-stat-label">Sukladnost sa zakonom o gradnji</p>
+        <p class="proof-stat-value">PDF</p>
+        <p class="proof-stat-label">Izvještaj u jednom kliku</p>
       </div>
       <div class="proof-divider"></div>
       <div class="proof-stat">
@@ -965,16 +1006,80 @@
       <div class="proof-divider"></div>
       <div class="proof-stat">
         <p class="proof-stat-value">4+</p>
-        <p class="proof-stat-label">Izvođačkih struka</p>
+        <p class="proof-stat-label">Izvođačkih struka u razvoju</p>
       </div>
     </div>
   </div>
 
+  <!-- SPEED DIFFERENTIATORS -->
+  <section class="speed-section">
+    <div class="section-inner">
+      <p class="section-eyebrow">Zašto baš ovaj alat</p>
+      <h2 class="section-title">Napravljeno za rad rukama</h2>
+      <p class="section-desc">
+        Nismo kopirali uredsku aplikaciju i pretvorili je u mobilnu.
+        Svaka funkcionalnost osmišljena je za čovjeka koji drži alat u ruci.
+      </p>
+
+      <div class="speed-grid">
+
+        <div class="speed-card">
+          <div class="speed-card-icon">
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none">
+              <circle cx="24" cy="24" r="18" stroke="#3ab9e3" stroke-width="2.5"/>
+              <path d="M24 14v12l7 4" stroke="#3ab9e3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Unos za minutu</h3>
+          <p>
+            Aplikacija vas vodi kroz unos korak po korak — faza, opis, radnici, materijali.
+            Nema praznih polja, nema zaboravljenih podataka.
+            <strong>Prosjek ispod 60 sekundi,</strong> čak i na kraju teškog radnog dana.
+          </p>
+        </div>
+
+        <div class="speed-card">
+          <div class="speed-card-icon">
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none">
+              <rect x="18" y="8" width="12" height="20" rx="6" stroke="#3ab9e3" stroke-width="2.5"/>
+              <path d="M10 26c0 7.7 6.3 14 14 14s14-6.3 14-14" stroke="#3ab9e3" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="24" y1="40" x2="24" y2="46" stroke="#3ab9e3" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="18" y1="46" x2="30" y2="46" stroke="#3ab9e3" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Glasovni unos</h3>
+          <p>
+            Diktirajte opis radova glasom — aplikacija prepiše govor u tekst.
+            <strong>Bez tipkanja na rukavicama,</strong> bez bilježnica.
+            Radi i kad ste još na ljestvama ili u ormaru.
+          </p>
+        </div>
+
+        <div class="speed-card">
+          <div class="speed-card-icon">
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none">
+              <circle cx="20" cy="22" r="10" stroke="#3ab9e3" stroke-width="2.5"/>
+              <path d="M8 22H5M20 10V7M32 22h3M20 34v3M11.5 13.5l-2-2M28.5 13.5l2-2M11.5 30.5l-2 2M28.5 30.5l2 2" stroke="#3ab9e3" stroke-width="2" stroke-linecap="round"/>
+              <path d="M32 36c0-3.3-2.7-6-6-6-1.2 0-2.3.4-3.2 1C22 28 19.5 26 16.5 26 13.4 26 11 28.7 11 31.5S13.4 37 16.5 37H32z" stroke="#3ab9e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Automatsko vrijeme jednim dodirom</h3>
+          <p>
+            Pritisnite gumb — aplikacija povuče temperaturu i uvjete
+            na lokaciji gradilišta i priloži ih uz unos.
+            <strong>Kraj ručnog bilježenja</strong> temperature i padavina u svaki dnevnik.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- FEATURES -->
   <section class="features">
     <div class="section-inner">
-      <p class="section-eyebrow">Funkcionalnosti</p>
-      <h2 class="section-title">Sve što trebate za urednu dokumentaciju gradilišta</h2>
+      <p class="section-eyebrow">Sve funkcionalnosti</p>
+      <h2 class="section-title">Kompletna evidencija gradilišta</h2>
       <p class="section-desc">
         Od prvog unosa na terenu do potpisanog PDF-a za arhivu — platforma pokriva
         cjelokupni tijek dokumentacije i koordinacije na jednom objektu.
@@ -984,37 +1089,37 @@
         <div class="feature-card">
           <img src="/icons/gradevinski-dnevnik-dnevnik-icon.svg" alt="" class="feature-icon" loading="lazy" />
           <h3>Dnevnik radova</h3>
-          <p>Izvođači unose što je izvedeno svaki dan — opis, fazu, radnike, materijale i digitalni potpis. Unosi su vremenski žigosani i nepromjenjivi.</p>
+          <p>Svaki dan se zabilježi što je izvedeno, tko je radio i koji materijali — vremenski žigosano i nepromjenjivo. Nadzorni inženjer vidi sve u stvarnom vremenu.</p>
         </div>
 
         <div class="feature-card">
           <img src="/icons/gradevinski-dnevnik-projekt-icon.svg" alt="" class="feature-icon" loading="lazy" />
           <h3>Upravljanje projektima</h3>
-          <p>Organizirajte projekte po fazama gradnje i strukama. Pratite tko je odgovoran za što i koji su rokovi aktivni — sve na jednom ekranu.</p>
+          <p>Organizirajte radove po fazama i projektu. Vidite koji su rokovi aktivni, tko je odgovoran za što — sve na jednom ekranu, bez traženja po emailovima.</p>
         </div>
 
         <div class="feature-card">
           <img src="/icons/gradevinski-dnevnik-izvjestaji-icon.svg" alt="" class="feature-icon" loading="lazy" />
           <h3>PDF i CSV izvještaji</h3>
-          <p>Generirajte PDF dokumentaciju za klijenta ili arhivu u jednom kliku. Izvoz CSV-a za daljnju obradu. Sukladno zahtjevima Zakona o gradnji.</p>
+          <p>Cijeli dnevnik spreman za klijenta ili arhivu u jednom kliku — s fotografijama, potpisima i materijalima. Sukladno Zakonu o gradnji.</p>
         </div>
 
         <div class="feature-card">
           <img src="/icons/gradevinski-dnevnik-dokumenti-icon.svg" alt="" class="feature-icon" loading="lazy" />
           <h3>Projektna dokumentacija</h3>
-          <p>Priložite sheme, ateste, dozvole i ugovore direktno uz projekt. Svi sudionici imaju pristup aktualnoj verziji dokumentacije u svakom trenutku.</p>
+          <p>Sheme, atesti, dozvole i ugovori priloženi uz projekt i dostupni svima na gradilištu. Kraj slanja dokumenata na WhatsAppu.</p>
         </div>
 
         <div class="feature-card">
           <img src="/icons/gradevinski-dnevnik-zadaci-icon.svg" alt="" class="feature-icon" loading="lazy" />
           <h3>Zadaci i checkliste</h3>
-          <p>Definirajte zadatke po projektu, dodjelite odgovornosti i pratite status. Checkliste osiguravaju da ništa nije zaboravljeno na gradilištu.</p>
+          <p>Definirajte što treba napraviti, dodijelite osobi i pratite status. Checkliste sprečavaju da nešto propadne između struka ili izmjena.</p>
         </div>
 
         <div class="feature-card">
           <img src="/icons/gradevinski-dnevnik-suradnici-icon.svg" alt="" class="feature-icon" loading="lazy" />
           <h3>Višetvrtkinsko dijeljenje</h3>
-          <p>Povežite više izvođačkih tvrtki na jedan projekt. Svaka vidi samo svoje unose, a nadzorni inženjer ima pregled svih. Pristup se dodjeljuje po ulozi.</p>
+          <p>Svaki izvođač vidi samo svoje radove, nadzorni inženjer vidi sve. Jedan projekt, više tvrtki — bez kaosa, bez duplih unosa.</p>
         </div>
       </div>
     </div>
@@ -1026,29 +1131,30 @@
       <div class="screenshots-layout">
         <div class="screenshots-copy">
           <p class="section-eyebrow">Mobilna aplikacija</p>
-          <h2 class="section-title">Dizajnirano za rad<br>s terena</h2>
+          <h2 class="section-title">Uneseno dok ste<br>još na gradilištu</h2>
           <p class="section-desc">
-            Vaši izvođači unose radove s mobitela dok su još na gradilištu.
-            Fotografije, potpisi, materijali — sve odmah dostupno u sustavu.
+            Vaši izvođači ne čekaju do ureda. Unose radove s mobitela
+            odmah po završetku — fotografije, potpisi i materijali
+            odmah su u sustavu.
           </p>
           <div class="screenshots-copy-points">
             <div class="screenshots-point">
               <div class="screenshots-point-dot">
-                <svg viewBox="0 0 12 12"><path d="M2 6l2.5 2.5L10 3.5"/></svg>
+                <svg viewBox="0 0 12 12"><polyline points="2,6 4.5,9.5 10,3"/></svg>
               </div>
-              <p><strong>Fotografije s kamere ili galerije</strong> — priložite direktno uz unos radova, odmah s gradilišta</p>
+              <p><strong>Fotografije ravno s kamere</strong> — priložite uz unos, odmah s gradilišta, bez prebacivanja na računalo</p>
             </div>
             <div class="screenshots-point">
               <div class="screenshots-point-dot">
-                <svg viewBox="0 0 12 12"><path d="M2 6l2.5 2.5L10 3.5"/></svg>
+                <svg viewBox="0 0 12 12"><polyline points="2,6 4.5,9.5 10,3"/></svg>
               </div>
               <p><strong>Digitalni potpis prstom</strong> — naručitelj potpiše na ekranu, dokaz je odmah u sustavu</p>
             </div>
             <div class="screenshots-point">
               <div class="screenshots-point-dot">
-                <svg viewBox="0 0 12 12"><path d="M2 6l2.5 2.5L10 3.5"/></svg>
+                <svg viewBox="0 0 12 12"><polyline points="2,6 4.5,9.5 10,3"/></svg>
               </div>
-              <p><strong>Radi bez stalnog interneta</strong> — unosi se pohranjuju lokalno, sinkroniziraju kad veza postoji</p>
+              <p><strong>Radi i bez interneta</strong> — unosi se pohranjuju lokalno i automatski sinkroniziraju kad veza postoji</p>
             </div>
           </div>
         </div>
@@ -1158,30 +1264,30 @@
   <section class="icp">
     <div class="section-inner">
       <p class="section-eyebrow">Za koga</p>
-      <h2 class="section-title">Za inženjere i tvrtke koje ne mogu sebi priuštiti kaos na gradilištu</h2>
+      <h2 class="section-title">Za sve koji vode računa o dokumentaciji — ne samo o poslu</h2>
       <p class="section-desc">
-        Platforma je namijenjena tvrtkama koje koordiniraju više izvođačkih struka —
-        gdje revizijska staza, jasna odgovornost i uredna dokumentacija nisu opcija, nego svakodnevica.
+        Platforma je namijenjena tvrtkama koje koordiniraju više izvođačkih struka
+        i kojima uredno vođena evidencija nije opcija, nego zakonska obaveza.
       </p>
 
       <div class="icp-grid">
         <div class="icp-card primary">
           <img src="/icons/gradevinski-dnevnik-organizacija-icon.svg" alt="" class="icp-icon" loading="lazy" />
-          <h3>Glavni inženjer gradilišta</h3>
+          <h3>Elektroinstalatere</h3>
           <p>
-            Vodite više izvođačkih tvrtki i trebate pregled napretka svake struke
-            bez stalnog obilaska terena. Tko je što napravio, kada i s kojim materijalima —
-            sve dokumentirano, s potpunom revizijskom stazom.
+            Svakodnevno vodite dnevnik, a na kraju projekta imate kompletnu
+            dokumentaciju — faze instalacije, materijali, potpisi, fotografije.
+            Sve što trebate za predaju investitoru ili inspekciji.
           </p>
         </div>
 
         <div class="icp-card">
           <img src="/icons/gradevinski-dnevnik-klijenti-icon.svg" alt="" class="icp-icon" loading="lazy" />
-          <h3>Investitor i vlasnik projekta</h3>
+          <h3>Nadzorni inženjer</h3>
           <p>
-            Pratite napredak gradnje bez poziva i čekanja na tjedne izvještaje.
-            Fotografska dokumentacija, dnevni radovi i PDF arhiva dostupni u svakom
-            trenutku — jasan dokaz da se posao odvija kako je ugovoreno.
+            Pratite napredak svake struke bez stalnog obilaska terena.
+            Tko je što napravio, kada, s kojim materijalima —
+            sve dokumentirano, s potpunom revizijskom stazom.
           </p>
         </div>
 
@@ -1189,9 +1295,9 @@
           <img src="/icons/gradevinski-dnevnik-tvrtka-icon.svg" alt="" class="icp-icon" loading="lazy" />
           <h3>Generalni izvođač</h3>
           <p>
-            Upravljate desetcima podizvođača na jednom objektu. Master modul daje
-            jedinstven pogled na sve struke u stvarnom vremenu — od elektroinstalatere
-            do HVAC-a i vodoinstalatere — sve na jednom ekranu.
+            Upravljate više podizvođača na jednom objektu.
+            Master modul daje jedinstven pogled na sve struke u stvarnom
+            vremenu — od elektro do HVAC-a i vodoinstalatere.
           </p>
         </div>
       </div>
@@ -1202,10 +1308,11 @@
   <section class="disciplines" id="struke">
     <div class="section-inner">
       <p class="section-eyebrow">Struke</p>
-      <h2 class="section-title">Dostupno odmah, više uskoro</h2>
+      <h2 class="section-title">Elektroinstalatere mogu početi danas</h2>
       <p class="section-desc">
-        Elektroinstalatere mogu se prijaviti već danas. Vodoinstalaterske tvrtke i
-        HVAC izvođači na čekanju su — prijavite se i bit ćete među prvima kad otvorimo.
+        Registracija za elektroinstalatere je otvorena. Vodoinstalaterske
+        tvrtke i HVAC izvođači uskoro dolaze — prijavite se i bit ćete
+        prvi obaviješteni.
       </p>
 
       <div class="disciplines-grid">
@@ -1214,9 +1321,10 @@
           <span class="discipline-badge badge-live">Otvorena registracija</span>
           <h3>Elektroinstalatere</h3>
           <p>
-            Digitalni dnevnik za elektroinstalacijske projekte. Faze instalacije,
-            slike razvoda, sheme, atesti i potpisi naručitelja — sve na jednom mjestu.
-            Generiranje PDF izvještaja sukladnih pravilima struke.
+            Digitalni dnevnik za elektroinstalacijske projekte —
+            faze instalacije, slike razvoda, sheme, atesti i potpisi naručitelja
+            na jednom mjestu. PDF izvještaj sukladan pravilima struke,
+            generiran u jednom kliku.
           </p>
           <a href="https://elektro.gradevinskidnevnik.online/" class="btn-primary" style="font-size:14px;padding:11px 22px;">
             Registrirajte se besplatno →
@@ -1228,8 +1336,8 @@
           <span class="discipline-badge badge-soon">Uskoro</span>
           <h3>Vodoinstalacije i plin</h3>
           <p>
-            Digitalna evidencija za vodoinstalatere i izvođače plinskih instalacija.
-            Pritisni testovi, atesti, sheme cjevovoda i fotografije izvedenog stanja.
+            Digitalna evidencija za vodoinstalatere i izvođače plinskih instalacija —
+            pritisni testovi, atesti, sheme cjevovoda i fotografije izvedenog stanja.
             Prijavite se za obavijest o dostupnosti.
           </p>
           <form class="waitlist-form" onsubmit="submitWaitlist(event, 'voda_plin', this)">
@@ -1244,9 +1352,9 @@
           <span class="discipline-badge badge-soon">Uskoro</span>
           <h3>Klima i ventilacija</h3>
           <p>
-            Evidencija radova za HVAC i ventilacijske sustave. Ugradnja opreme,
-            balansiranje, servisni zapisi i atesti — dokumentirani i dostupni svim
-            sudionicima projekta. Prijavite se za rani pristup.
+            Evidencija radova za HVAC i ventilacijske sustave —
+            ugradnja opreme, balansiranje, servisni zapisi i atesti
+            dokumentirani i dostupni svim sudionicima projekta.
           </p>
           <form class="waitlist-form" onsubmit="submitWaitlist(event, 'klima_ventilacija', this)">
             <input type="email" name="email" placeholder="vas@email.com" required autocomplete="email" />
@@ -1264,11 +1372,10 @@
       <div class="data-inner">
         <div>
           <p class="section-eyebrow">Podaci i privatnost</p>
-          <h2 class="section-title">Transparentno korištenje vaših podataka</h2>
+          <h2 class="section-title">Transparentno o tome što koristimo i zašto</h2>
           <p class="section-desc">
-            Naša aplikacija traži pristup Google Kalendaru isključivo kada ga vi
-            sami aktivirate. Osnovno funkcioniranje aplikacije ne zahtijeva niti
-            jedan Google podatak.
+            Pristup Google Kalendaru tražimo samo ako ga vi sami aktivirate.
+            Osnovno funkcioniranje aplikacije ne zahtijeva niti jedan Google podatak.
           </p>
 
           <div class="data-guarantees">
@@ -1321,7 +1428,7 @@
       <div>
         <h2>Koordinirate više struka na jednom objektu?</h2>
         <p>
-          Master modul za generalne izvođače i investitore dolazi uskoro.
+          Master modul za generalne izvođače i nadzorne inženjere dolazi uskoro.
           Ostavite kontakt — bit ćete među prvima koji dobiju pristup
           centralnom nadzornom sučelju za cijelo gradilište.
         </p>
@@ -1329,10 +1436,10 @@
       <div class="master-cta-action">
         <form onsubmit="submitWaitlist(event, 'master', this)" style="display:flex;flex-direction:column;gap:10px;min-width:280px;">
           <input type="text" name="name" placeholder="Ime i prezime" autocomplete="name"
-            style="padding:11px 14px;font-size:14px;border:1.5px solid rgba(255,255,255,0.12);border-radius:4px;color:#fff;background:rgba(255,255,255,0.06);outline:none;font-family:inherit;transition:border-color 0.15s;"
+            style="padding:11px 14px;font-size:14px;border:1.5px solid rgba(255,255,255,0.12);border-radius:4px;color:#fff;background:rgba(255,255,255,0.06);outline:none;font-family:'Jost',sans-serif;transition:border-color 0.15s;"
             onfocus="this.style.borderColor='#3ab9e3'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'" />
           <input type="email" name="email" placeholder="Email adresa" required autocomplete="email"
-            style="padding:11px 14px;font-size:14px;border:1.5px solid rgba(255,255,255,0.12);border-radius:4px;color:#fff;background:rgba(255,255,255,0.06);outline:none;font-family:inherit;transition:border-color 0.15s;"
+            style="padding:11px 14px;font-size:14px;border:1.5px solid rgba(255,255,255,0.12);border-radius:4px;color:#fff;background:rgba(255,255,255,0.06);outline:none;font-family:'Jost',sans-serif;transition:border-color 0.15s;"
             onfocus="this.style.borderColor='#3ab9e3'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'" />
           <button type="submit" class="btn-primary" style="justify-content:center;">Prijavite se za master platformu</button>
           <span class="form-error" style="display:none;font-size:13px;color:#ff8080;"></span>
@@ -1345,11 +1452,7 @@
   <footer>
     <div class="footer-inner">
       <a href="/" class="footer-logo">
-        <div class="footer-logo-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-5 9H6v-2h1v2zm0-4H6V9h1v2zm4 4H9v-2h2v2zm0-4H9V9h2v2zm4 4h-2v-2h2v2zm0-4h-2V9h2v2zm3 4h-1v-2h1v2zm0-4h-1V9h1v2z"/>
-          </svg>
-        </div>
+        <img src="/brand/logo.svg" alt="Građevinski Dnevnik Online" />
         <span class="footer-logo-name">Građevinski Dnevnik Online</span>
       </a>
       <div class="footer-links">
@@ -1357,13 +1460,14 @@
         <a href="/terms">Uvjeti korištenja</a>
         <a href="https://elektro.gradevinskidnevnik.online/">Prijava</a>
       </div>
+      <span class="footer-copy">© 2025 Građevinski Dnevnik Online</span>
     </div>
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
-    // Placeholder color via style injection
+    // Placeholder color for dark inputs
     const style = document.createElement('style');
     style.textContent = '.master-cta input::placeholder { color: rgba(255,255,255,0.3); }';
     document.head.appendChild(style);
@@ -1377,10 +1481,16 @@
     gsap.from('.hero-sub', { opacity: 0, y: 20, duration: 0.6, ease: 'power2.out', delay: 0.4 });
     gsap.from('.hero-actions', { opacity: 0, y: 16, duration: 0.5, ease: 'power2.out', delay: 0.55 });
 
-    // Proof bar stats
+    // Proof bar
     gsap.from('.proof-stat', {
       opacity: 0, y: 12, duration: 0.5, stagger: 0.08, ease: 'power2.out',
       scrollTrigger: { trigger: '.proof-bar', start: 'top 90%' }
+    });
+
+    // Speed cards
+    gsap.from('.speed-card', {
+      opacity: 0, y: 32, duration: 0.55, stagger: 0.12, ease: 'power2.out',
+      scrollTrigger: { trigger: '.speed-grid', start: 'top 82%' }
     });
 
     // Features
@@ -1395,7 +1505,7 @@
       scrollTrigger: { trigger: '.screenshots-phones', start: 'top 85%' }
     });
 
-    // Gentle float on the center phone
+    // Gentle float on phones
     gsap.to('.phone-frame.tall', {
       y: -10, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.5
     });
@@ -1441,7 +1551,6 @@
 
       const emailInput = form.querySelector('input[name="email"]');
       const nameInput = form.querySelector('input[name="name"]');
-      const companyInput = form.querySelector('input[name="company"]');
       const submitBtn = form.querySelector('button[type="submit"]');
       const errorEl = form.querySelector('.form-error');
 
@@ -1454,7 +1563,6 @@
         email: emailInput.value.trim(),
         discipline,
         name: nameInput ? nameInput.value.trim() || undefined : undefined,
-        company: companyInput ? companyInput.value.trim() || undefined : undefined,
       };
 
       try {
