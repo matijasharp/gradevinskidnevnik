@@ -141,7 +141,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: cc95c90 — feat(homepage): add root domain homepage, privacy policy, and terms of service
+Last commit: f8e7f7f — feat(25-bug-fixes-ux-polish): Phase 25 complete — bug fixes & UX polish
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
