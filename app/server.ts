@@ -21,10 +21,16 @@ const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2025-03-31.basil' })
   : null;
 
-const supabaseAdmin = createClient(
-  process.env.VITE_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+let _supabaseAdmin: ReturnType<typeof createClient> | null = null;
+function getSupabaseAdmin() {
+  if (!process.env.VITE_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return null;
+  }
+  if (!_supabaseAdmin) {
+    _supabaseAdmin = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+  }
+  return _supabaseAdmin;
+}
 
 // Must be registered BEFORE express.json() so the Stripe webhook receives the raw body Buffer
 app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
@@ -260,6 +266,11 @@ app.post('/api/billing/create-checkout-session', async (req, res) => {
     return res.status(503).json({ error: 'Billing not configured (STRIPE_SECRET_KEY missing)' });
   }
 
+  const supabaseAdmin = getSupabaseAdmin();
+  if (!supabaseAdmin) {
+    return res.status(503).json({ error: 'Billing not configured (SUPABASE_SERVICE_ROLE_KEY missing)' });
+  }
+
   const { orgId, userEmail } = req.body;
   if (!orgId || !userEmail) {
     return res.status(400).json({ error: 'Missing orgId or userEmail' });
@@ -312,6 +323,11 @@ app.post('/api/billing/create-checkout-session', async (req, res) => {
 app.post('/api/stripe/webhook', async (req, res) => {
   if (!stripe) {
     return res.status(503).json({ error: 'Billing not configured' });
+  }
+
+  const supabaseAdmin = getSupabaseAdmin();
+  if (!supabaseAdmin) {
+    return res.status(503).json({ error: 'Billing not configured (SUPABASE_SERVICE_ROLE_KEY missing)' });
   }
 
   const sig = req.headers['stripe-signature'];
