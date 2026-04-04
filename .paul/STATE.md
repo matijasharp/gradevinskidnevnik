@@ -10,21 +10,21 @@ See: .paul/PROJECT.md (updated 2026-03-31)
 ## Current Position
 
 Milestone: v1.3 — Production Readiness & Monetization Foundation
-Phase: 26 of 27 (PDF & Export Enhancements) — Not started
+Phase: 27 of 27 (Stripe Billing Foundation) — Not started
 Plan: Not started
-Status: Ready to plan
-Last activity: 2026-04-03 — Phase 25 complete (3/3 plans), transitioned to Phase 26
+Status: Phase 26 complete, ready to plan Phase 27
+Last activity: 2026-04-04 — Phase 26 complete: per-entry PDF button, EF v14 (font pinned + fallback), jsPDF table fix
 
 Progress:
-- v1.3 Milestone: [████░░░░░░] 50%
-- Phase 26: [░░░░░░░░░░] 0%
+- v1.3 Milestone: [██████░░░░] 75%
+- Phase 27: [░░░░░░░░░░] 0%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Phase 25 loop complete — ready for Phase 26 PLAN]
+  ✓        ✓        ✓     [Phase 26 complete — ready to plan Phase 27]
 ```
 
 ## Performance Metrics
@@ -121,6 +121,10 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | Sidebar Super Admin link (isSuperAdmin guard) | Phase 23 | Entry point to /admin/approvals now discoverable for super admin users |
 | APP_URL env var drives all OAuth redirect URIs | Phase 25 | Never hardcode domain in server.ts — enables zero-config domain swap |
 | useCallback stabilizes GSAP useEffect dep | Phase 25 | Empty-dep useCallback on onComplete prevents animation replay on re-render |
+| generate-pdf Edge Function: verify_jwt false | Phase 26.1 | Function receives full payload, no DB access — JWT adds no value; was causing 401 |
+| Jost .woff not .woff2 for pdf-lib fontkit 1.x | Phase 26.1 | woff2 causes all-E glyph rendering with @pdf-lib/fontkit@1.1.1 |
+| py(rowYMm) - drawH for top-aligned images in pdf-lib | Phase 26.1 | pdf-lib uses bottom-left origin; top-align = top_pt - height |
+| Pin @fontsource/jost@4.5.0 + Helvetica fallback in EF | Phase 26.2 | Unpinned URL resolved to newer package version with broken file paths — caused v12/v13 500s |
 
 ### Deferred Issues
 
@@ -155,9 +159,9 @@ Feature branches merged: none
 
 ## Session Continuity
 
-Last session: 2026-04-03
-Stopped at: Phase 25 complete — all 3 plans unified, transitioned to Phase 26
-Next action: /paul:plan for Phase 26 (PDF & Export Enhancements)
+Last session: 2026-04-04
+Stopped at: Phase 26 complete, loop closed on 26-02
+Next action: /paul:plan for Phase 27 — Stripe Billing Foundation
 Resume file: .paul/ROADMAP.md
 
 ---

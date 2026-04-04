@@ -1,5 +1,5 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import { PDFDocument, rgb } from 'https://esm.sh/pdf-lib@1.17.1'
+import { PDFDocument, rgb, StandardFonts } from 'https://esm.sh/pdf-lib@1.17.1'
 import fontkitModule from 'https://esm.sh/@pdf-lib/fontkit@1.1.1'
 // Handle CJS default export wrapping from esm.sh
 // deno-lint-ignore no-explicit-any
@@ -85,6 +85,61 @@ function stripMarkdown(text: string): string {
     .replace(/_(.*?)_/g, '$1')
 }
 
+// Parse markdown table lines into rows of cells (excludes separator row)
+function parseMarkdownTable(tableLines: string[]): string[][] {
+  return tableLines
+    .filter(line => !line.trim().match(/^\|[\s:|-]+\|$/))
+    .map(line =>
+      line.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim())
+    )
+}
+
+// Draw a parsed markdown table; returns updated yMm
+function drawTable(page: any, rows: string[][], jost: any, xMm: number, widthMm: number, startYMm: number): number {
+  const rowH = 7
+  const padX = mmToPt(1.5)
+  const padY = mmToPt(1.5)
+  const totalW = mmToPt(widthMm)
+  const colCount = Math.max(...rows.map(r => r.length), 1)
+
+  const firstColW = colCount > 1 ? totalW * 0.55 : totalW
+  const otherColW = colCount > 1 ? (totalW - firstColW) / (colCount - 1) : 0
+  const colWidths = Array.from({ length: colCount }, (_, i) => i === 0 ? firstColW : otherColW)
+
+  let yMm = startYMm
+  for (let ri = 0; ri < rows.length; ri++) {
+    const isHeader = ri === 0
+    const rowBottomPt = py(yMm + rowH)
+    const rowHeightPt = mmToPt(rowH)
+    let xCursor = mmToPt(xMm)
+    for (let ci = 0; ci < colCount; ci++) {
+      const w = colWidths[ci]
+      const cell = (rows[ri]?.[ci] ?? '').slice(0, 50)
+      page.drawRectangle({
+        x: xCursor,
+        y: rowBottomPt,
+        width: w,
+        height: rowHeightPt,
+        color: isHeader ? rgb(0.90, 0.95, 0.99) : ri % 2 === 1 ? rgb(0.97, 0.97, 0.97) : rgb(1, 1, 1),
+        borderColor: rgb(0.80, 0.80, 0.80),
+        borderWidth: 0.4,
+      })
+      if (cell) {
+        page.drawText(cell, {
+          x: xCursor + padX,
+          y: rowBottomPt + padY,
+          size: 8,
+          font: jost,
+          color: isHeader ? rgb(0.1, 0.1, 0.1) : rgb(0.3, 0.3, 0.3),
+        })
+      }
+      xCursor += w
+    }
+    yMm += rowH
+  }
+  return yMm + 3
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -96,11 +151,17 @@ serve(async (req) => {
     const pdfDoc = await PDFDocument.create()
     pdfDoc.registerFontkit(fontkit)
 
-    // Font loading — Jost for Croatian characters
-    const fontRes = await fetch('https://cdn.jsdelivr.net/npm/@fontsource/jost/files/jost-latin-ext-400-normal.woff2')
-    if (!fontRes.ok) throw new Error(`Font fetch failed: ${fontRes.status}`)
-    const fontBytes = new Uint8Array(await fontRes.arrayBuffer())
-    const jost = await pdfDoc.embedFont(fontBytes)
+    // Font loading — Jost for Croatian characters (pinned version; fallback to Helvetica)
+    let jost: any
+    try {
+      const fontRes = await fetch('https://cdn.jsdelivr.net/npm/@fontsource/jost@4.5.0/files/jost-latin-ext-400-normal.woff')
+      if (!fontRes.ok) throw new Error(`Font fetch failed: ${fontRes.status}`)
+      const fontBytes = new Uint8Array(await fontRes.arrayBuffer())
+      jost = await pdfDoc.embedFont(fontBytes)
+    } catch (fontError) {
+      console.warn('Jost font unavailable, falling back to Helvetica:', fontError)
+      jost = await pdfDoc.embedFont(StandardFonts.Helvetica)
+    }
 
     // Brand color
     const [cr, cg, cb] = hexToRgb(company?.brandColor ?? '#3ab9e3')
@@ -190,17 +251,39 @@ serve(async (req) => {
       page.drawText(metaText, { x: mmToPt(14), y: py(yMm), size: 9, font: jost, color: brandColor })
       yMm += 6
 
-      // AI summary
+      // AI summary — process line-by-line to render markdown tables properly
       if (entry.aiSummary) {
-        const clean = stripMarkdown(entry.aiSummary)
-        const lines = wrapText(clean, jost, 10, mmToPt(180))
-        for (const line of lines) {
-          if (yMm > 285) {
-            page = pdfDoc.addPage([595.28, 841.89])
-            yMm = 20
+        const rawLines = entry.aiSummary.split('\n')
+        let li = 0
+        while (li < rawLines.length) {
+          if (yMm > 285) { page = pdfDoc.addPage([595.28, 841.89]); yMm = 20 }
+          const trimmed = rawLines[li].trim()
+          if (trimmed.startsWith('|')) {
+            // Collect all consecutive table lines
+            const tableRawLines: string[] = []
+            while (li < rawLines.length && rawLines[li].trim().startsWith('|')) {
+              tableRawLines.push(rawLines[li])
+              li++
+            }
+            const tableRows = parseMarkdownTable(tableRawLines)
+            if (tableRows.length > 0) {
+              if (yMm + tableRows.length * 7 > 280) { page = pdfDoc.addPage([595.28, 841.89]); yMm = 20 }
+              yMm = drawTable(page, tableRows, jost, 14, 182, yMm)
+            }
+          } else {
+            const text = stripMarkdown(trimmed)
+            if (text) {
+              const wrapped = wrapText(text, jost, 10, mmToPt(180))
+              for (const wl of wrapped) {
+                if (yMm > 285) { page = pdfDoc.addPage([595.28, 841.89]); yMm = 20 }
+                page.drawText(wl, { x: mmToPt(14), y: py(yMm), size: 10, font: jost, color: rgb(0.24, 0.24, 0.24) })
+                yMm += 5
+              }
+            } else if (trimmed === '') {
+              yMm += 2
+            }
+            li++
           }
-          page.drawText(line, { x: mmToPt(14), y: py(yMm), size: 10, font: jost, color: rgb(0.24, 0.24, 0.24) })
-          yMm += 5
         }
         yMm += 5
       }
@@ -238,12 +321,13 @@ serve(async (req) => {
           if (imgBytes) {
             const img = await embedImage(pdfDoc, imgBytes)
             if (img) {
-              page.drawImage(img, {
-                x: xPt,
-                y: py(rowYMm + 41),
-                width: mmToPt(55),
-                height: mmToPt(41),
-              })
+              const maxW = mmToPt(55)
+              const maxH = mmToPt(41)
+              const scale = Math.min(maxW / img.width, maxH / img.height)
+              const drawW = img.width * scale
+              const drawH = img.height * scale
+              const yPt = py(rowYMm) - drawH
+              page.drawImage(img, { x: xPt, y: yPt, width: drawW, height: drawH })
             }
           }
         }

@@ -13,9 +13,9 @@ Contractors log site progress fast while project leads see shared, audited statu
 | Attribute | Value |
 |-----------|-------|
 | Type | Application |
-| Version | 1.2 (complete) |
-| Status | v1.2 Electro MVP Launch — ✅ All 11 phases complete |
-| Last Updated | 2026-04-03 |
+| Version | 1.3 (in progress) |
+| Status | v1.3 Production Readiness — Phase 26 complete (3 of 4 phases done) |
+| Last Updated | 2026-04-04 |
 
 **Production URLs:**
 - None
@@ -59,10 +59,11 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 23: Full Super Admin Panel — two-tab SuperAdminPage (Odobrenje + Korisnici), fetchAllProfiles/suspend/unsuspend, is_super_admin() SECURITY DEFINER RLS bypass, sidebar Super Admin nav link — Phase 23
 - ✓ Phase 24: Email Infrastructure & Invitations — invitation sending fixed (send-invitation Edge Function wired to Resend), transactional domain `elektro.gradevinskidnevnik.online` configured, outreach domain scaffolded — Phase 24
 - ✓ Phase 25: Bug Fixes & UX Polish — mobile camera, scroll reset on modal open, project pre-selection, activity log RLS, Google Calendar OAuth production wiring, splash animation replay fix, animation duration reduced to ~0.8s — Phase 25
+- ✓ Phase 26: PDF & Export Enhancements — Edge Function v14 primary path (pdf-lib, Jost font pinned @4.5.0, Helvetica fallback), aspect-ratio-preserving photos, markdown table renderer, "Preuzmi PDF" per-entry download button in DiaryEntryDetailModal — Phase 26
 
 ### Active (In Progress)
 
-- None — v1.3 phases 24–25 complete
+- None — v1.3 phases 24–26 complete
 
 ### Planned (Next)
 
@@ -144,7 +145,7 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | seed.sql: profiles.org_id set via UPDATE after org insert | FK ordering constraint — orgs must exist before profiles can reference them in seed | 2026-04-01 | Active |
 | Resend via fetch REST API in Edge Functions (no SDK) | Resend SDK has no Deno build; direct fetch to api.resend.com works in all runtimes | 2026-04-01 | Active |
 | RFC 5987 Content-Disposition in Edge Functions | Deno rejects non-ASCII ByteString header values; filename*=UTF-8''<encoded> is required for Croatian filenames | 2026-04-01 | Active |
-| generate-pdf client reverted to jsPDF (Phase 20) | Edge Function deployed (v7) but PDF output not user-verified before revert; wiring deferred to Phase 21 | 2026-04-01 | Active |
+| generate-pdf client reverted to jsPDF (Phase 20) | Edge Function deployed (v7) but PDF output not user-verified before revert; wiring deferred to Phase 21 | 2026-04-01 | Resolved — Phase 26 |
 | logActivity is fire-and-forget (not awaited) | Activity log errors must never surface to user or block the diary entry save flow | 2026-04-03 | Active |
 | activity_log is append-only (no UPDATE/DELETE RLS) | Immutable audit trail — rows cannot be edited or deleted | 2026-04-03 | Active |
 | ActivityFeed one-time fetch on tab mount (no realtime) | Sufficient for MVP; realtime can be added in a future phase | 2026-04-03 | Active |
@@ -152,6 +153,9 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | Sidebar Super Admin nav link visible for isSuperAdmin | Entry point to /admin/approvals was undiscoverable post-launch; surfaced conditionally for super admin users | 2026-04-03 | Active |
 | APP_URL env var drives all OAuth redirect URIs | Never hardcode domain in server.ts; enables zero-config domain swap for Google Calendar and future OAuth flows | 2026-04-03 | Active |
 | useCallback stabilizes GSAP useEffect callback dep | GSAP `useEffect([onComplete])` re-fires when function reference changes; useCallback with [] prevents animation replay on re-render | 2026-04-03 | Active |
+| generate-pdf Edge Function now primary path (v14) | Edge Function v14 with pdf-lib replaces jsPDF for primary generation; jsPDF remains as fallback — wired in Phase 26 | 2026-04-04 | Active |
+| Pin @fontsource/jost@4.5.0 in Edge Function | Unpinned CDN URL broke on package version bump (v5.x changed file paths); pinned + Helvetica fallback ensures resilience | 2026-04-04 | Active |
+| onDownloadPdf?: () => Promise<void> pattern for modal PDF | Optional async prop allows per-entry PDF download from any modal without coupling to project-level generation | 2026-04-04 | Active |
 
 ## Success Metrics
 
@@ -182,4 +186,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-04-03 after Phase 25 — v1.3 phases 24–25 complete*
+*Last updated: 2026-04-04 after Phase 26 — v1.3 phases 24–26 complete*

@@ -2,11 +2,72 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import type { Project, DiaryEntry, Company, DiaryPhoto } from '../../shared/types';
 import { safeFormatDate, stripMarkdown } from '../../shared/utils/format';
+import { supabase } from '../../lib/supabase';
 
-// Suppress unused import warning — autoTable registers itself as a jsPDF plugin
-void autoTable;
+// Parse markdown text into renderable segments (plain text or table)
+type PdfSegment = { type: 'text'; content: string } | { type: 'table'; headers: string[]; rows: string[][] };
+
+function parseMarkdownContent(text: string): PdfSegment[] {
+  const lines = text.split('\n');
+  const segments: PdfSegment[] = [];
+  let textBuffer: string[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    const isTableRow = /^\s*\|/.test(line);
+    const nextIsSeparator = i + 1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1]);
+
+    if (isTableRow && nextIsSeparator) {
+      if (textBuffer.length > 0) {
+        segments.push({ type: 'text', content: textBuffer.join('\n') });
+        textBuffer = [];
+      }
+      const headers = line.split('|').slice(1, -1).map(c => c.trim());
+      i += 2; // skip header + separator row
+      const rows: string[][] = [];
+      while (i < lines.length && /^\s*\|/.test(lines[i])) {
+        rows.push(lines[i].split('|').slice(1, -1).map(c => c.trim()));
+        i++;
+      }
+      segments.push({ type: 'table', headers, rows });
+    } else if (/^\s*\|[\s:|-]+\|\s*$/.test(line)) {
+      i++; // standalone separator — skip
+    } else {
+      textBuffer.push(line);
+      i++;
+    }
+  }
+
+  if (textBuffer.length > 0) {
+    segments.push({ type: 'text', content: textBuffer.join('\n') });
+  }
+
+  return segments;
+}
 
 export const generateDiaryPdf = async (project: Project, entries: DiaryEntry[], company: Company | null, photos: DiaryPhoto[] = []): Promise<void> => {
+    // Primary path: call Edge Function
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-pdf', {
+        body: { project, entries, company, photos },
+      });
+      if (!error && data instanceof Blob) {
+        const url = URL.createObjectURL(data);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${project.projectName}_Izvjestaj.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        return;
+      }
+      console.warn('generate-pdf Edge Function unavailable, falling back to jsPDF:', error);
+    } catch (efError) {
+      console.warn('generate-pdf Edge Function threw, falling back to jsPDF:', efError);
+    }
+
     const projectEntries = [...entries].sort((a, b) => b.entryDate.localeCompare(a.entryDate));
     const doc = new jsPDF();
 
@@ -120,12 +181,33 @@ export const generateDiaryPdf = async (project: Project, entries: DiaryEntry[], 
 
       // Main Content (AI Summary)
       if (entry.aiSummary) {
-        doc.setFontSize(10);
-        doc.setTextColor(60, 60, 60);
-        const cleanSummary = stripMarkdown(entry.aiSummary);
-        const splitSummary = doc.splitTextToSize(cleanSummary, 180);
-        doc.text(splitSummary, 14, y);
-        y += (splitSummary.length * 5) + 5;
+        const segments = parseMarkdownContent(entry.aiSummary);
+        for (const seg of segments) {
+          if (seg.type === 'text') {
+            const clean = stripMarkdown(seg.content).trim();
+            if (clean) {
+              doc.setFontSize(10);
+              doc.setTextColor(60, 60, 60);
+              const splitText = doc.splitTextToSize(clean, 180);
+              if (y + splitText.length * 5 > 275) { doc.addPage(); y = 20; }
+              doc.text(splitText, 14, y);
+              y += splitText.length * 5 + 3;
+            }
+          } else {
+            if (y > 240) { doc.addPage(); y = 20; }
+            autoTable(doc, {
+              startY: y,
+              head: [seg.headers],
+              body: seg.rows,
+              margin: { left: 14, right: 14 },
+              styles: { fontSize: 8, cellPadding: 2 },
+              headStyles: { fillColor: primaryColor as [number, number, number] },
+              theme: 'grid',
+            });
+            y = (doc as any).lastAutoTable.finalY + 5;
+          }
+        }
+        y += 2; // spacing after summary block
       }
 
       // Line Items (Logically organized)
@@ -177,7 +259,12 @@ export const generateDiaryPdf = async (project: Project, entries: DiaryEntry[], 
             const ctx = canvas.getContext('2d');
             ctx?.drawImage(img, 0, 0);
             const dataURL = canvas.toDataURL('image/jpeg', 0.7);
-            doc.addImage(dataURL, 'JPEG', x, rowY, photoWidth, photoHeight);
+            const naturalW = img.width || 400;
+            const naturalH = img.height || 300;
+            const scale = Math.min(photoWidth / naturalW, photoHeight / naturalH);
+            const drawW = naturalW * scale;
+            const drawH = naturalH * scale;
+            doc.addImage(dataURL, 'JPEG', x, rowY, drawW, drawH);
           } catch (_e) {
             // skip
           }

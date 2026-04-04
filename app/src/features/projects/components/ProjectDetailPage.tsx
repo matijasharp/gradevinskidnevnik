@@ -5,6 +5,7 @@ import { useOrg } from '../../../app/providers';
 import { useGoogleCalendar } from '../../calendar/hooks/useGoogleCalendar';
 import { ROUTES } from '../../../app/router/routeConfig';
 import { generateDiaryPdf } from '../../../integrations/pdf/generateDiaryPdf';
+import { fetchDiaryPhotos } from '../../../integrations/supabase/queries/photos';
 import { fetchProjectMemberRole } from '../../../lib/data';
 import ProjectDetailView from './ProjectDetailView';
 import DiaryEntryDetailModal from '../../diary/components/DiaryEntryDetailModal';
@@ -77,6 +78,10 @@ export default function ProjectDetailPage() {
           }}
           hasCalendar={!!googleTokens}
           company={company}
+          onDownloadPdf={async () => {
+            const photos = await fetchDiaryPhotos(selectedEntry.id);
+            await generateDiaryPdf(entryProject!, [selectedEntry], company, photos);
+          }}
         />
       )}
     </>

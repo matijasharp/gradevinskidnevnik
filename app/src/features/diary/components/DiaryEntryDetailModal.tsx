@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { X, Clock, User as UserIcon, CloudSun, Bell, Zap, Edit2, Loader2, Calendar } from 'lucide-react';
+import { X, Clock, User as UserIcon, CloudSun, Bell, Zap, Edit2, Loader2, Calendar, FileDown } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { Button, StatusBadge } from '../../../shared/ui';
 import { safeFormatDate } from '../../../shared/utils/format';
 import type { DiaryEntry, Project, Company } from '../../../shared/types';
 import PhotoGallery from './PhotoGallery';
 
-export default function DiaryEntryDetailModal({ entry, project, onClose, onEdit, onAddToCalendar, hasCalendar, company }: { entry: DiaryEntry, project: Project, onClose: () => void, onEdit: (e: DiaryEntry) => void, onAddToCalendar: (e: DiaryEntry) => Promise<void>, hasCalendar: boolean, company: Company | null }) {
+export default function DiaryEntryDetailModal({ entry, project, onClose, onEdit, onAddToCalendar, hasCalendar, company, onDownloadPdf }: { entry: DiaryEntry, project: Project, onClose: () => void, onEdit: (e: DiaryEntry) => void, onAddToCalendar: (e: DiaryEntry) => Promise<void>, hasCalendar: boolean, company: Company | null, onDownloadPdf?: () => Promise<void> }) {
   const [loading, setLoading] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
   const brandColor = company?.brandColor || 'var(--color-accent)';
+
+  const handleDownloadPdf = async () => {
+    if (!onDownloadPdf) return;
+    setPdfLoading(true);
+    try {
+      await onDownloadPdf();
+    } finally {
+      setPdfLoading(false);
+    }
+  };
 
   const handleAdd = async () => {
     setLoading(true);
@@ -116,6 +127,21 @@ export default function DiaryEntryDetailModal({ entry, project, onClose, onEdit,
             <Edit2 size={18} className="mr-2" />
             Uredi
           </Button>
+          {onDownloadPdf && (
+            <Button
+              variant="outline"
+              className="flex-1 border-zinc-200"
+              onClick={handleDownloadPdf}
+              disabled={loading || pdfLoading}
+            >
+              {pdfLoading ? (
+                <Loader2 className="animate-spin mr-2" size={18} />
+              ) : (
+                <FileDown size={18} className="mr-2" />
+              )}
+              {pdfLoading ? 'Generiranje...' : 'Preuzmi PDF'}
+            </Button>
+          )}
           {hasCalendar && (
             <Button
               className="flex-1 text-white border-none shadow-lg"
