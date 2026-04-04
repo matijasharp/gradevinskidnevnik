@@ -149,7 +149,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: c02fb0f — feat(26-pdf-export-enhancements): Phase 26 complete — PDF quality & per-entry download
+Last commit: a63f199 — feat(27-stripe-billing-foundation): Phase 27 complete — Stripe billing foundation
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
