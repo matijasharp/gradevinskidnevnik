@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Građevinski Dnevnik Online — Evidencija radova za elektroinstalatere</title>
-  <meta name="description" content="Digitalni građevinski dnevnik za elektroinstalatere. Unesite radove u manje od minute — glasovni unos, automatsko vrijeme, fotografije i PDF za klijenta u jednom kliku." />
+  <title>Građevinski Dnevnik Online — Evidencija radova za elektroinstalaterske tvrtke</title>
+  <meta name="description" content="Digitalni građevinski dnevnik za elektroinstalaterske tvrtke. Unesite radove u manje od minute — glasovni unos, automatsko vrijeme, fotografije i PDF za klijenta u jednom kliku." />
   <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -936,7 +936,10 @@
       .nav-links .nav-link { display: none; }
 
       .screenshots-layout { grid-template-columns: 1fr; gap: 40px; }
-      .screenshots-phones { margin: 0 auto; }
+      .screenshots-phones { margin: 0 auto; overflow: hidden; justify-content: center; }
+      .phone-frame.tall   { width: 118px; height: 254px; }
+      .phone-frame.medium { width: 108px; height: 228px; }
+      .phone-frame.short  { width: 98px;  height: 202px; }
 
       .data-inner { grid-template-columns: 1fr; gap: 40px; }
 
@@ -962,7 +965,6 @@
       </a>
       <div class="nav-links">
         <a href="#struke" class="nav-link">Struke</a>
-        <a href="#podaci-i-privatnost" class="nav-link">Privatnost</a>
         <a href="https://elektro.gradevinskidnevnik.online/" class="nav-cta">Prijavite se</a>
       </div>
     </div>
@@ -970,7 +972,7 @@
 
   <!-- HERO -->
   <section class="hero">
-    <span class="hero-eyebrow">Za elektroinstalatere — dostupno odmah</span>
+    <span class="hero-eyebrow">Za elektroinstalaterske tvrtke — dostupno odmah</span>
     <h1>Cjelodnevni radovi dokumentirani<br><em>za manje od minute.</em></h1>
     <p class="hero-sub">
       Unesite što ste radili glasom dok ste još na ljestvama. Aplikacija zabilježi
@@ -979,7 +981,7 @@
     </p>
     <div class="hero-actions">
       <a href="https://elektro.gradevinskidnevnik.online/" class="btn-primary">
-        Isprobajte besplatno — elektroinstalatere
+        Isprobajte besplatno — elektroinstalateri
         <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M3 8h8.5l-2.5-2.5.7-.7L13 8l-3.3 3.2-.7-.7L11.5 8H3z"/></svg>
       </a>
       <a href="#struke" class="btn-secondary">Ostale struke uskoro</a>
@@ -1089,7 +1091,7 @@
         <div class="feature-card">
           <img src="/icons/gradevinski-dnevnik-dnevnik-icon.svg" alt="" class="feature-icon" loading="lazy" />
           <h3>Dnevnik radova</h3>
-          <p>Svaki dan se zabilježi što je izvedeno, tko je radio i koji materijali — vremenski žigosano i nepromjenjivo. Nadzorni inženjer vidi sve u stvarnom vremenu.</p>
+          <p>Svaki dan se zabilježi što je izvedeno, tko je radio i koji materijali. Nadzorni inženjer vidi sve u stvarnom vremenu.</p>
         </div>
 
         <div class="feature-card">
@@ -1130,31 +1132,31 @@
     <div class="section-inner">
       <div class="screenshots-layout">
         <div class="screenshots-copy">
-          <p class="section-eyebrow">Mobilna aplikacija</p>
+          <p class="section-eyebrow">Aplikacija</p>
           <h2 class="section-title">Uneseno dok ste<br>još na gradilištu</h2>
           <p class="section-desc">
-            Vaši izvođači ne čekaju do ureda. Unose radove s mobitela
-            odmah po završetku — fotografije, potpisi i materijali
-            odmah su u sustavu.
+            Vaši izvođači ne čekaju do ureda. Radove unose iz preglednika —
+            s mobitela, tableta ili računala — odmah po završetku,
+            direktno s gradilišta.
           </p>
           <div class="screenshots-copy-points">
             <div class="screenshots-point">
               <div class="screenshots-point-dot">
                 <svg viewBox="0 0 12 12"><polyline points="2,6 4.5,9.5 10,3"/></svg>
               </div>
-              <p><strong>Fotografije ravno s kamere</strong> — priložite uz unos, odmah s gradilišta, bez prebacivanja na računalo</p>
+              <p><strong>Fotografije ravno s kamere</strong> — priložite uz unos direktno s mobitela, bez prebacivanja na računalo</p>
             </div>
             <div class="screenshots-point">
               <div class="screenshots-point-dot">
                 <svg viewBox="0 0 12 12"><polyline points="2,6 4.5,9.5 10,3"/></svg>
               </div>
-              <p><strong>Digitalni potpis prstom</strong> — naručitelj potpiše na ekranu, dokaz je odmah u sustavu</p>
+              <p><strong>Digitalni potpis naručitelja</strong> — naručitelj potpiše na ekranu, dokaz je odmah u sustavu</p>
             </div>
             <div class="screenshots-point">
               <div class="screenshots-point-dot">
                 <svg viewBox="0 0 12 12"><polyline points="2,6 4.5,9.5 10,3"/></svg>
               </div>
-              <p><strong>Radi i bez interneta</strong> — unosi se pohranjuju lokalno i automatski sinkroniziraju kad veza postoji</p>
+              <p><strong>Brz unos s terena</strong> — glasovni opis, automatsko vrijeme i prognoza, PDF spreman u jednom kliku</p>
             </div>
           </div>
         </div>
@@ -1268,17 +1270,21 @@
       <p class="section-desc">
         Platforma je namijenjena tvrtkama koje koordiniraju više izvođačkih struka
         i kojima uredno vođena evidencija nije opcija, nego zakonska obaveza.
+        Prijave za elektroinstalaterske tvrtke su otvorene — vodoinstalateri i HVAC izvođači dolaze uskoro.
       </p>
 
       <div class="icp-grid">
         <div class="icp-card primary">
           <img src="/icons/gradevinski-dnevnik-organizacija-icon.svg" alt="" class="icp-icon" loading="lazy" />
-          <h3>Elektroinstalatere</h3>
+          <h3>Elektroinstalateri</h3>
           <p>
             Svakodnevno vodite dnevnik, a na kraju projekta imate kompletnu
             dokumentaciju — faze instalacije, materijali, potpisi, fotografije.
             Sve što trebate za predaju investitoru ili inspekciji.
           </p>
+          <a href="https://elektro.gradevinskidnevnik.online/" class="btn-primary" style="font-size:13px;padding:9px 18px;margin-top:16px;display:inline-flex;">
+            Registrirajte se besplatno →
+          </a>
         </div>
 
         <div class="icp-card">
@@ -1308,9 +1314,9 @@
   <section class="disciplines" id="struke">
     <div class="section-inner">
       <p class="section-eyebrow">Struke</p>
-      <h2 class="section-title">Elektroinstalatere mogu početi danas</h2>
+      <h2 class="section-title">Elektroinstalateri mogu početi danas</h2>
       <p class="section-desc">
-        Registracija za elektroinstalatere je otvorena. Vodoinstalaterske
+        Registracija za elektroinstalaterske tvrtke je otvorena. Vodoinstalaterske
         tvrtke i HVAC izvođači uskoro dolaze — prijavite se i bit ćete
         prvi obaviješteni.
       </p>
@@ -1319,7 +1325,7 @@
         <!-- Elektro — LIVE -->
         <div class="discipline-card live">
           <span class="discipline-badge badge-live">Otvorena registracija</span>
-          <h3>Elektroinstalatere</h3>
+          <h3>Elektroinstalateri</h3>
           <p>
             Digitalni dnevnik za elektroinstalacijske projekte —
             faze instalacije, slike razvoda, sheme, atesti i potpisi naručitelja

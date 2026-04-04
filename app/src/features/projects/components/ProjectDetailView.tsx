@@ -176,7 +176,7 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
               activeTab === 'suradnici' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
             )}
           >
-            Suradnici
+            Kooperanti
           </button>
         )}
         {canViewTabs && (
@@ -420,7 +420,7 @@ export default function ProjectDetailView({ project, entries, onBack, onNewEntry
             )}
           </div>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <h2 className="text-xl font-bold">Vremenska lenta</h2>
+            <h2 className="text-xl font-bold">Povijest radova</h2>
             <div className="relative max-w-sm w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
               <input

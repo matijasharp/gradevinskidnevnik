@@ -5,7 +5,7 @@ import { cn } from '../../lib/utils';
 import { Button } from '../../shared/ui';
 import { signOut } from '../../lib/supabaseAuth';
 import { useOrg } from '../providers';
-import { LogOut, Plus, User as UserIcon, ChevronLeft, ChevronRight, CreditCard } from 'lucide-react';
+import { LogOut, Plus, User as UserIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 
 function NavItem({ active, onClick, icon, label, expanded = true }: any) {
   return (
@@ -127,7 +127,7 @@ export default function AppShell({ company, appUser, children }: any) {
           {appUser?.role === 'admin' && (
             <NavItem active={location.pathname === ROUTES.COMPANY_SETTINGS} onClick={() => navigate(ROUTES.COMPANY_SETTINGS)} icon={<img src="/icons/tvrtka.svg" className="w-10 h-10 shrink-0" alt="" />} label="Postavke tvrtke" expanded={sidebarExpanded} />
           )}
-          <NavItem active={location.pathname === ROUTES.BILLING} onClick={() => navigate(ROUTES.BILLING)} icon={<CreditCard size={20} className="shrink-0" />} label="Pretplata" expanded={sidebarExpanded} />
+          <NavItem active={location.pathname === ROUTES.BILLING} onClick={() => navigate(ROUTES.BILLING)} icon={<img src="/icons/pretplata.svg" className="w-10 h-10 shrink-0" alt="" />} label="Pretplata" expanded={sidebarExpanded} />
           {appUser?.isSuperAdmin && (
             <NavItem active={location.pathname === ROUTES.SUPER_ADMIN} onClick={() => navigate(ROUTES.SUPER_ADMIN)} icon={<img src="/icons/tvrtka.svg" className="w-10 h-10 shrink-0" alt="" />} label="Super Admin" expanded={sidebarExpanded} />
           )}
