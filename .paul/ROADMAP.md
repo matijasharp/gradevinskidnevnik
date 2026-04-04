@@ -7,8 +7,8 @@ Start from the electrician prototype, deliver a Supabase-backed MVP with full UI
 ## Current Milestone
 
 **v1.3 — Production Readiness & Monetization Foundation** (v1.3)
-Status: 🚧 In Progress
-Phases: 3 of 4 complete
+Status: ✅ Complete
+Phases: 4 of 4 complete
 
 ## Previous Milestones
 
@@ -376,7 +376,7 @@ Phases: 4 of 4 complete
 | 24 | Email Infrastructure & Invitations | 1/1 | ✅ Complete | 2026-04-03 |
 | 25 | Bug Fixes & UX Polish | 3/3 | ✅ Complete | 2026-04-03 |
 | 26 | PDF & Export Enhancements | 2/2 | ✅ Complete | 2026-04-04 |
-| 27 | Stripe Billing Foundation | TBD | Not started | - |
+| 27 | Stripe Billing Foundation | 2/2 | ✅ Complete | 2026-04-04 |
 
 #### Phase Details
 
@@ -443,4 +443,4 @@ Phases: 4 of 4 complete
 
 ---
 *Roadmap created: 2026-03-27*
-*Last updated: 2026-04-04 — Phase 26 complete, Phase 27 next*
+*Last updated: 2026-04-04 — v1.3 complete, Phase 27 (Stripe Billing Foundation) shipped*

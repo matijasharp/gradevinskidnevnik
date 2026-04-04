@@ -5,26 +5,26 @@
 See: .paul/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Contractors log site progress fast while project leads see shared, audited status across all disciplines.
-**Current focus:** v1.3 — Production Readiness & Monetization Foundation. Fix production bugs, email infrastructure, UX polish, Stripe billing.
+**Current focus:** v1.3 complete. Next milestone TBD — Stripe billing foundation shipped, ready for v1.4 planning.
 
 ## Current Position
 
-Milestone: v1.3 — Production Readiness & Monetization Foundation
-Phase: 27 of 27 (Stripe Billing Foundation) — Not started
-Plan: Not started
-Status: Phase 26 complete, ready to plan Phase 27
-Last activity: 2026-04-04 — Phase 26 complete: per-entry PDF button, EF v14 (font pinned + fallback), jsPDF table fix
+Milestone: v1.3 — Production Readiness & Monetization Foundation ✅ COMPLETE
+Phase: 27 of 27 (Stripe Billing Foundation) — Complete
+Plan: 27-02 complete — all plans unified
+Status: v1.3 milestone complete, ready to plan next milestone
+Last activity: 2026-04-04 — Phase 27 complete: Stripe billing backend + BillingPage + feature gate
 
 Progress:
-- v1.3 Milestone: [██████░░░░] 75%
-- Phase 27: [░░░░░░░░░░] 0%
+- v1.3 Milestone: [██████████] 100%
+- Phase 27: [██████████] 100%
 
 ## Loop Position
 
 Current loop state:
 ```
 PLAN ──▶ APPLY ──▶ UNIFY
-  ✓        ✓        ✓     [Phase 26 complete — ready to plan Phase 27]
+  ✓        ✓        ✓     [v1.3 milestone complete]
 ```
 
 ## Performance Metrics
@@ -122,6 +122,10 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | APP_URL env var drives all OAuth redirect URIs | Phase 25 | Never hardcode domain in server.ts — enables zero-config domain swap |
 | useCallback stabilizes GSAP useEffect dep | Phase 25 | Empty-dep useCallback on onComplete prevents animation replay on re-render |
 | generate-pdf Edge Function: verify_jwt false | Phase 26.1 | Function receives full payload, no DB access — JWT adds no value; was causing 401 |
+| subscription_status on organizations (not profiles) | Phase 27.1 | Billing is per-org; all org members share one plan; read from OrganizationProvider |
+| Stripe client null-safe init (STRIPE_SECRET_KEY absent → null) | Phase 27.1 | Server starts cleanly in dev without keys; billing routes return 503 gracefully |
+| No RLS UPDATE on subscription_status | Phase 27.1 | Webhook (service role) is sole writer — prevents client-side plan spoofing |
+| Stripe customer created lazily at checkout | Phase 27.1 | No Stripe customers for orgs that never upgrade; stored in organizations.stripe_customer_id |
 | Jost .woff not .woff2 for pdf-lib fontkit 1.x | Phase 26.1 | woff2 causes all-E glyph rendering with @pdf-lib/fontkit@1.1.1 |
 | py(rowYMm) - drawH for top-aligned images in pdf-lib | Phase 26.1 | pdf-lib uses bottom-left origin; top-align = top_pt - height |
 | Pin @fontsource/jost@4.5.0 + Helvetica fallback in EF | Phase 26.2 | Unpinned URL resolved to newer package version with broken file paths — caused v12/v13 500s |
@@ -145,7 +149,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
 
 ### Git State
 
-Last commit: f8e7f7f — feat(25-bug-fixes-ux-polish): Phase 25 complete — bug fixes & UX polish
+Last commit: c02fb0f — feat(26-pdf-export-enhancements): Phase 26 complete — PDF quality & per-entry download
 Branch: main
 Remote: https://github.com/matijasharp/gradevinskidnevnik.git
 Feature branches merged: none
@@ -160,8 +164,8 @@ Feature branches merged: none
 ## Session Continuity
 
 Last session: 2026-04-04
-Stopped at: Phase 26 complete, loop closed on 26-02
-Next action: /paul:plan for Phase 27 — Stripe Billing Foundation
+Stopped at: v1.3 milestone complete — all 4 phases (24–27) unified
+Next action: /paul:milestone to define v1.4, or /paul:plan if next milestone already known
 Resume file: .paul/ROADMAP.md
 
 ---

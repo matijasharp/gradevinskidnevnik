@@ -6,6 +6,8 @@ import { google } from 'googleapis';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { Resend } from 'resend';
+import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
 
 dotenv.config();
 
@@ -14,6 +16,18 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
+
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2025-03-31.basil' })
+  : null;
+
+const supabaseAdmin = createClient(
+  process.env.VITE_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+// Must be registered BEFORE express.json() so the Stripe webhook receives the raw body Buffer
+app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -236,6 +250,128 @@ app.post('/api/waitlist', async (req, res) => {
   } catch (err) {
     console.error('Waitlist error:', err);
     res.status(500).json({ error: 'Greška servera.' });
+  }
+});
+
+// --- Billing Endpoints ---
+
+app.post('/api/billing/create-checkout-session', async (req, res) => {
+  if (!stripe) {
+    return res.status(503).json({ error: 'Billing not configured (STRIPE_SECRET_KEY missing)' });
+  }
+
+  const { orgId, userEmail } = req.body;
+  if (!orgId || !userEmail) {
+    return res.status(400).json({ error: 'Missing orgId or userEmail' });
+  }
+
+  const priceId = process.env.STRIPE_PRICE_ID_PRO;
+  if (!priceId) {
+    return res.status(503).json({ error: 'Billing not configured (STRIPE_PRICE_ID_PRO missing)' });
+  }
+
+  try {
+    // Retrieve or create Stripe customer for this org
+    const { data: org } = await supabaseAdmin
+      .from('organizations')
+      .select('stripe_customer_id')
+      .eq('id', orgId)
+      .single();
+
+    let customerId: string | undefined = org?.stripe_customer_id ?? undefined;
+
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: userEmail,
+        metadata: { orgId },
+      });
+      customerId = customer.id;
+      await supabaseAdmin
+        .from('organizations')
+        .update({ stripe_customer_id: customerId })
+        .eq('id', orgId);
+    }
+
+    const appUrl = process.env.APP_URL || 'http://localhost:3000';
+    const session = await stripe.checkout.sessions.create({
+      customer: customerId,
+      mode: 'subscription',
+      line_items: [{ price: priceId, quantity: 1 }],
+      success_url: `${appUrl}/billing?upgraded=true`,
+      cancel_url: `${appUrl}/billing?cancelled=true`,
+      metadata: { orgId },
+    });
+
+    res.json({ url: session.url });
+  } catch (error: any) {
+    console.error('Stripe checkout error:', error);
+    res.status(500).json({ error: 'Failed to create checkout session' });
+  }
+});
+
+app.post('/api/stripe/webhook', async (req, res) => {
+  if (!stripe) {
+    return res.status(503).json({ error: 'Billing not configured' });
+  }
+
+  const sig = req.headers['stripe-signature'];
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  if (!sig || !webhookSecret) {
+    return res.status(400).json({ error: 'Missing signature or webhook secret' });
+  }
+
+  let event: Stripe.Event;
+  try {
+    event = stripe.webhooks.constructEvent(req.body as Buffer, sig, webhookSecret);
+  } catch (err: any) {
+    console.error('Stripe webhook signature error:', err.message);
+    return res.status(400).json({ error: `Webhook signature verification failed: ${err.message}` });
+  }
+
+  try {
+    switch (event.type) {
+      case 'checkout.session.completed': {
+        const session = event.data.object as Stripe.Checkout.Session;
+        const orgId = session.metadata?.orgId;
+        if (orgId) {
+          await supabaseAdmin
+            .from('organizations')
+            .update({
+              subscription_status: 'pro',
+              stripe_customer_id: session.customer as string,
+            })
+            .eq('id', orgId);
+        }
+        break;
+      }
+      case 'customer.subscription.deleted': {
+        const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
+        await supabaseAdmin
+          .from('organizations')
+          .update({ subscription_status: 'cancelled' })
+          .eq('stripe_customer_id', customerId);
+        break;
+      }
+      case 'invoice.payment_failed': {
+        const invoice = event.data.object as Stripe.Invoice;
+        const customerId = invoice.customer as string;
+        await supabaseAdmin
+          .from('organizations')
+          .update({ subscription_status: 'past_due' })
+          .eq('stripe_customer_id', customerId);
+        break;
+      }
+      default:
+        // Unhandled event type — no action needed
+        break;
+    }
+
+    res.json({ received: true });
+  } catch (error: any) {
+    console.error('Stripe webhook handler error:', error);
+    res.status(500).json({ error: 'Webhook handler failed' });
   }
 });
 

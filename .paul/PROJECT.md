@@ -13,8 +13,8 @@ Contractors log site progress fast while project leads see shared, audited statu
 | Attribute | Value |
 |-----------|-------|
 | Type | Application |
-| Version | 1.3 (in progress) |
-| Status | v1.3 Production Readiness — Phase 26 complete (3 of 4 phases done) |
+| Version | 1.3 (complete) |
+| Status | v1.3 Production Readiness — all 4 phases complete |
 | Last Updated | 2026-04-04 |
 
 **Production URLs:**
@@ -60,10 +60,11 @@ Contractors log site progress fast while project leads see shared, audited statu
 - ✓ Phase 24: Email Infrastructure & Invitations — invitation sending fixed (send-invitation Edge Function wired to Resend), transactional domain `elektro.gradevinskidnevnik.online` configured, outreach domain scaffolded — Phase 24
 - ✓ Phase 25: Bug Fixes & UX Polish — mobile camera, scroll reset on modal open, project pre-selection, activity log RLS, Google Calendar OAuth production wiring, splash animation replay fix, animation duration reduced to ~0.8s — Phase 25
 - ✓ Phase 26: PDF & Export Enhancements — Edge Function v14 primary path (pdf-lib, Jost font pinned @4.5.0, Helvetica fallback), aspect-ratio-preserving photos, markdown table renderer, "Preuzmi PDF" per-entry download button in DiaryEntryDetailModal — Phase 26
+- ✓ Phase 27: Stripe Billing Foundation — organizations.subscription_status + stripe_customer_id migration; Stripe Checkout + webhook endpoints in server.ts; BillingPage at /billing; subscriptionStatus in OrgContext; free-tier project gate (cap 3 active) — Phase 27
 
 ### Active (In Progress)
 
-- None — v1.3 phases 24–26 complete
+- None — v1.3 complete
 
 ### Planned (Next)
 
@@ -156,6 +157,11 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 | generate-pdf Edge Function now primary path (v14) | Edge Function v14 with pdf-lib replaces jsPDF for primary generation; jsPDF remains as fallback — wired in Phase 26 | 2026-04-04 | Active |
 | Pin @fontsource/jost@4.5.0 in Edge Function | Unpinned CDN URL broke on package version bump (v5.x changed file paths); pinned + Helvetica fallback ensures resilience | 2026-04-04 | Active |
 | onDownloadPdf?: () => Promise<void> pattern for modal PDF | Optional async prop allows per-entry PDF download from any modal without coupling to project-level generation | 2026-04-04 | Active |
+| subscription_status on organizations (not profiles) | Billing is per-org; all org members share one plan | 2026-04-04 | Active |
+| Stripe client null-safe init (absent key → null, routes return 503) | Server starts cleanly in dev without Stripe keys | 2026-04-04 | Active |
+| No RLS UPDATE on subscription_status from client | Webhook (service role) is sole writer — prevents client-side plan spoofing | 2026-04-04 | Active |
+| Stripe customer created lazily at checkout | No Stripe customers for orgs that never upgrade | 2026-04-04 | Active |
+| Client-side feature gate only for MVP | Server-side enforcement deferred — trust-based gate sufficient for launch | 2026-04-04 | Active |
 
 ## Success Metrics
 
@@ -186,4 +192,4 @@ Prototype exists in `site-diary-mini`. Main app must match prototype UI/UX and i
 
 ---
 *PROJECT.md — Updated when requirements or context change*
-*Last updated: 2026-04-04 after Phase 26 — v1.3 phases 24–26 complete*
+*Last updated: 2026-04-04 after Phase 27 — v1.3 complete*

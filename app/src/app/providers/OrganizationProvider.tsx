@@ -32,6 +32,9 @@ interface OrgContextValue {
   sharedProjects: Project[];
   masterProjects: MasterProject[];
   refreshMasterProjects: () => Promise<void>;
+  // Billing
+  subscriptionStatus: 'free' | 'pro' | 'cancelled' | 'past_due';
+  stripeCustomerId: string | null;
   // Derived
   materialHistory: string[];
   materialUnits: Record<string, string>;
@@ -61,6 +64,8 @@ export function OrganizationProvider({ children }: { children: React.ReactNode }
   const [masterProjects, setMasterProjects] = useState<MasterProject[]>([]);
   const [materialHistory, setMaterialHistory] = useState<string[]>([]);
   const [materialUnits, setMaterialUnits] = useState<Record<string, string>>({});
+  const [subscriptionStatus, setSubscriptionStatus] = useState<'free' | 'pro' | 'cancelled' | 'past_due'>('free');
+  const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!appUser) return;
@@ -116,6 +121,22 @@ export function OrganizationProvider({ children }: { children: React.ReactNode }
       .then(setMasterProjects)
       .catch(() => null);
   }, [appUser]);
+
+  useEffect(() => {
+    if (!appUser?.companyId) return;
+    supabase
+      .from('organizations')
+      .select('subscription_status, stripe_customer_id')
+      .eq('id', appUser.companyId)
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          setSubscriptionStatus((data.subscription_status as 'free' | 'pro' | 'cancelled' | 'past_due') ?? 'free');
+          setStripeCustomerId(data.stripe_customer_id ?? null);
+        }
+      })
+      .catch(() => null);
+  }, [appUser?.companyId]);
 
   useEffect(() => {
     if (!entries.length) return;
@@ -242,7 +263,9 @@ export function OrganizationProvider({ children }: { children: React.ReactNode }
   return (
     <OrgContext.Provider value={{
       projects, entries, companyUsers, pendingInvitations,
-      sharedProjects, masterProjects, refreshMasterProjects, materialHistory, materialUnits,
+      sharedProjects, masterProjects, refreshMasterProjects,
+      subscriptionStatus, stripeCustomerId,
+      materialHistory, materialUnits,
       inviteUser, cancelInvitation, updateRole, deleteUser,
       createProject, completeProject, updateProjectPhase, deleteProject,
     }}>

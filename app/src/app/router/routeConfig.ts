@@ -12,6 +12,7 @@ export const ROUTES = {
   COMPANY_SETTINGS: '/settings/company',
   MASTER_WORKSPACE: '/master',
   SUPER_ADMIN: '/admin/approvals',
+  BILLING: '/billing',
   BRAND: '/brand',
 } as const;
 
